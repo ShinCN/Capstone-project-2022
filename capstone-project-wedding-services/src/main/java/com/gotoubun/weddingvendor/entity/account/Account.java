@@ -7,8 +7,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Data
 @Entity
 @Table(name = "account")
@@ -26,4 +35,17 @@ public class Account {
 
 	@Column(name="authorize")
 	private String authorize;
+
+	public Account( String userName, String password, String authorize) {
+		super();
+		this.userName = userName;
+		this.password = password;
+		this.authorize = authorize;
+	}
+
+	public Account() {
+		super();
+	}
+	
+	
 }

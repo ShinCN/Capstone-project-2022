@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gotoubun.weddingvendor.entity.account.Admin;
+import com.gotoubun.weddingvendor.entity.user.Admin;
 import com.gotoubun.weddingvendor.service.AdminService;
 
 @RestController

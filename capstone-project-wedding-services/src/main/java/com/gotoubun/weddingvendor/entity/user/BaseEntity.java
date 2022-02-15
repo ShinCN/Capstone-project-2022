@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.account;
+package com.gotoubun.weddingvendor.entity.user;
 
 import java.util.Date;
 
@@ -7,17 +7,13 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @Data
 @MappedSuperclass
@@ -30,6 +26,12 @@ public class BaseEntity {
 	@Column(name="fullname", columnDefinition = "TEXT")
 	private String fullName;
 	
+	@Column(name="username")
+	private String username;
+	
+	@Column(name="password")
+	private String password;
+	
 	@Column(name="phone")
 	private String phone;
 	
@@ -39,11 +41,8 @@ public class BaseEntity {
 	@Column(name="address", columnDefinition = "TEXT")
 	private String address;
 	
-	@OneToOne
-	@JoinColumn(name = "account_id", nullable = false)
-	@EqualsAndHashCode.Exclude
-    @ToString.Exclude
-	private Account account;
+	@Column(name="role")
+	private String role;
 	
 	@Column(name="created_date")
 	@CreatedDate

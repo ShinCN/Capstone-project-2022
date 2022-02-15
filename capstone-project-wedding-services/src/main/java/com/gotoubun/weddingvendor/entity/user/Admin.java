@@ -1,6 +1,5 @@
-package com.gotoubun.weddingvendor.entity.account;
+package com.gotoubun.weddingvendor.entity.user;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -10,6 +9,5 @@ import lombok.Data;
 @Entity
 @Table(name = "admin")
 public class Admin extends BaseEntity{
-	@Column(name="duty")
-	private String duty;
+	
 }

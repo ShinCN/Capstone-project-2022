@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.post;
+package com.gotoubun.weddingvendor.entity.vendor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,19 +14,18 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "photo")
-public class Photo extends BaseEntity {
-	
+@Table(name = "comment")
+public class Comment extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="caption")
-	private String caption;
+	@Column(name="content")
+	private String content;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")
-	private Post post;
+	private SinglePost singlePost;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "package_post_id")

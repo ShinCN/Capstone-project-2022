@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.post;
+package com.gotoubun.weddingvendor.entity.vendor;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;

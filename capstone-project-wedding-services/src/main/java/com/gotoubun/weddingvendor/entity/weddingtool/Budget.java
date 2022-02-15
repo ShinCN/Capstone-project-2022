@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.post;
+package com.gotoubun.weddingvendor.entity.weddingtool;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,27 +7,29 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.gotoubun.weddingvendor.entity.user.Customer;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "comment")
-public class Comment extends BaseEntity{
+@Table(name = "budget")
+public class Budget {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="content")
-	private String content;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "post_id")
-	private Post post;
+	@Column(name="category_name")
+	private String categoryName;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "package_post_id")
-	private PackagePost packagePost;
+	@Column(name="cost")
+	private double cost;
+	
 }

@@ -19,10 +19,14 @@ import com.gotoubun.weddingvendor.entity.weddingtool.CheckList;
 import com.gotoubun.weddingvendor.entity.weddingtool.GuestList;
 import com.gotoubun.weddingvendor.entity.weddingtool.SeatChart;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "customer")
@@ -51,4 +55,12 @@ public class Customer extends BaseEntity{
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<PackagePost> packagePosts;
+
+	public Customer(Long id, String fullName, String username, String password, String phone, String mail,
+			String address, Date createdDate, Date modifiedDate) {
+		super(id, fullName, username, password, phone, mail, address, 3, createdDate, modifiedDate);
+	
+	}
+	
+	
 }

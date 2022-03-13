@@ -59,9 +59,10 @@ public class SinglePost extends BasePost{
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @JoinTable(name = "single_list_in_package",
-            joinColumns = @JoinColumn(name = "single_post_id"),
-            inverseJoinColumns = @JoinColumn(name = "package_post_id")
+    @JoinTable(name = "single_post_list",
+            joinColumns = @JoinColumn(name = "package_post_id"),
+            inverseJoinColumns = @JoinColumn(name = "single_post_id")
     )
     private Collection<PackagePost> packagePosts;
+
 }

@@ -14,16 +14,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.gotoubun.weddingvendor.entity.user.Admin;
 import com.gotoubun.weddingvendor.entity.user.Customer;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
-@Data
+
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "package_service_post")
+@Getter
+@Setter
+@Accessors(fluent = true)
 public class PackagePost extends BasePost{
 	@Id
 	@Column(name = "package_post_id")
@@ -33,6 +43,11 @@ public class PackagePost extends BasePost{
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
 	private PackageCategory packageCategory;
+	
+	@ManyToOne
+	@JoinColumn(name = "admin_id",nullable = false)
+	private Admin admin;
+	
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
 	private Collection<Photo> photos;
@@ -48,6 +63,7 @@ public class PackagePost extends BasePost{
             inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
     private Collection<Customer> customers;
+
 	
 	@ManyToMany(mappedBy = "packagePosts")
     @EqualsAndHashCode.Exclude

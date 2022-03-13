@@ -40,6 +40,7 @@ public class SinglePost extends BasePost{
 	@JoinColumn(name = "category_id", nullable = false)
 	private SingleCategory singleCategory;
 	
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singlePost", cascade = CascadeType.ALL)
 	private Collection<Photo> photos;
 	
@@ -54,4 +55,13 @@ public class SinglePost extends BasePost{
             inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
     private Collection<Customer> customers;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JoinTable(name = "single_list_in_package",
+            joinColumns = @JoinColumn(name = "single_post_id"),
+            inverseJoinColumns = @JoinColumn(name = "package_post_id")
+    )
+    private Collection<PackagePost> packagePosts;
 }

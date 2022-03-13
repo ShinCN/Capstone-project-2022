@@ -48,4 +48,9 @@ public class PackagePost extends BasePost{
             inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
     private Collection<Customer> customers;
+	
+	@ManyToMany(mappedBy = "packagePosts")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<SinglePost> singlePosts;
 }

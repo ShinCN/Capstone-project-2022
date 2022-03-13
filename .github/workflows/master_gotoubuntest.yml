@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'gotoubuntest'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B471558EE8024C68BB3FA3407B83636D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_714C39FD503947E89D01A1F653F6F1C6 }}
           package: '*.war'

@@ -50,4 +50,4 @@ jobs:
           app-name: 'gotoubuntest'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0A204FF7BE43401688A8380AD568CE4B }}
-          package: '*.jar'
+          package: ${{ env.ASC_PACKAGE_PATH }}/**/*.jar

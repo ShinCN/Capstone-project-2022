@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'gotoubuntest'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9E1ACB213958415E8CFE4D841DC58031 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0A204FF7BE43401688A8380AD568CE4B }}
           package: '*.jar'

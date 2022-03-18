@@ -17,16 +17,15 @@ import javax.persistence.Table;
 import com.gotoubun.weddingvendor.entity.user.Customer;
 import com.gotoubun.weddingvendor.entity.user.VendorProvider;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 @Table(name = "single_service_post")
 public class SinglePost extends BasePost{
-	
+
 	@Id
 	@Column(name = "single_post_id")
 	@NonNull
@@ -39,13 +38,16 @@ public class SinglePost extends BasePost{
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
 	private SingleCategory singleCategory;
-	
+
+//	@ManyToOne
+//	@JoinColumn(name = "category_id", nullable = false)
+//	private SingleCategory singleCategory;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singlePost", cascade = CascadeType.ALL)
 	private Collection<Photo> photos;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singlePost", cascade = CascadeType.ALL)
-	private Collection<Comment> comments;
+	private Collection<Feedback> feedbacks;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude

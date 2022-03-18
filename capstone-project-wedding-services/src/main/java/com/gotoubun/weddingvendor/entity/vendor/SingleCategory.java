@@ -2,16 +2,10 @@ package com.gotoubun.weddingvendor.entity.vendor;
 
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.gotoubun.weddingvendor.entity.user.Customer;
+import com.gotoubun.weddingvendor.entity.user.VendorProvider;
 import lombok.Data;
 
 @Data
@@ -27,4 +21,7 @@ public class SingleCategory extends BaseEntity{
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
 	private Collection<SinglePost> singlePosts;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
+	private Collection<VendorProvider> vendorProviders;
 }

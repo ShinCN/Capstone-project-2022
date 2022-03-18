@@ -3,21 +3,11 @@ package com.gotoubun.weddingvendor.entity.user;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.gotoubun.weddingvendor.entity.vendor.PackagePost;
 import com.gotoubun.weddingvendor.entity.vendor.SinglePost;
-import com.gotoubun.weddingvendor.entity.weddingtool.Budget;
-import com.gotoubun.weddingvendor.entity.weddingtool.CheckList;
-import com.gotoubun.weddingvendor.entity.weddingtool.GuestList;
-import com.gotoubun.weddingvendor.entity.weddingtool.SeatChart;
+import com.gotoubun.weddingvendor.entity.weddingtool.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,6 +35,9 @@ public class Customer extends BaseEntity{
 	
 	@OneToOne(mappedBy = "customer")
     private Budget budget;
+
+	@OneToOne(mappedBy = "customer")
+	private PaymentHistory paymentHistory;
 	
 	@ManyToMany(mappedBy = "customers")
     @EqualsAndHashCode.Exclude
@@ -56,11 +49,16 @@ public class Customer extends BaseEntity{
     @ToString.Exclude
     private Collection<PackagePost> packagePosts;
 
-	public Customer(Long id, String fullName, String username, String password, String phone, String mail,
-			String address, Date createdDate, Date modifiedDate) {
-		super(id, fullName, username, password, phone, mail, address, 3, createdDate, modifiedDate);
-	
-	}
+	@OneToOne
+	@JoinColumn(name="account_id")
+	private Account account;
+
+
+//	public Customer(Long id, String fullName, String username, String password, String phone, String mail,
+//			String address, Date createdDate, Date modifiedDate) {
+//		super(id, fullName, username, password, phone, mail, address, 3, createdDate, modifiedDate);
+//
+//	}
 	
 	
 }

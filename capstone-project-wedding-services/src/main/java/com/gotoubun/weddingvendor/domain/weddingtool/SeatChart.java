@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.weddingtool;
+package com.gotoubun.weddingvendor.domain.weddingtool;
 
 import java.util.Date;
 
@@ -15,14 +15,14 @@ import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import com.gotoubun.weddingvendor.entity.user.Customer;
+import com.gotoubun.weddingvendor.domain.user.Customer;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "guest_list")
-public class GuestList {
+@Table(name = "seat_chart")
+public class SeatChart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -30,9 +30,6 @@ public class GuestList {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
-	
-	@Column(name="guest_list_name", columnDefinition = "TEXT")
-	private String guestListName;
 	
 	@Column(name="created_date")
 	@CreatedDate

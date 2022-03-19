@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.vendor;
+package com.gotoubun.weddingvendor.domain.vendor;
 
 import java.util.Collection;
 
@@ -16,15 +16,17 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "single_category")
-public class SingleCategory extends BaseEntity{
+@Table(name = "package_category")
+public class PackageCategory extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="category_name")
-	private String categoryName;
+	@Column(name="package_name")
+	private String packageName;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
-	private Collection<SinglePost> singlePosts;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packageCategory", cascade = CascadeType.ALL)
+	private Collection<PackagePost> packagePosts;
+	
+
 }

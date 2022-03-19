@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.user;
+package com.gotoubun.weddingvendor.domain.user;
 
 import java.util.Collection;
 import java.util.Date;
@@ -12,12 +12,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.gotoubun.weddingvendor.entity.vendor.PackagePost;
-import com.gotoubun.weddingvendor.entity.vendor.SinglePost;
-import com.gotoubun.weddingvendor.entity.weddingtool.Budget;
-import com.gotoubun.weddingvendor.entity.weddingtool.CheckList;
-import com.gotoubun.weddingvendor.entity.weddingtool.GuestList;
-import com.gotoubun.weddingvendor.entity.weddingtool.SeatChart;
+import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
+import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
+import com.gotoubun.weddingvendor.domain.weddingtool.Budget;
+import com.gotoubun.weddingvendor.domain.weddingtool.CheckList;
+import com.gotoubun.weddingvendor.domain.weddingtool.GuestList;
+import com.gotoubun.weddingvendor.domain.weddingtool.SeatChart;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

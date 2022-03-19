@@ -1,6 +1,7 @@
 package com.gotoubun.weddingvendor.service.impl.vendor;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.gotoubun.weddingvendor.entity.user.VendorProvider;
+import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import com.gotoubun.weddingvendor.service.IPageService;
@@ -37,7 +38,7 @@ public class VendorServiceImpl implements  IService<VendorProvider>, IPageServic
 	@Override
 	public Optional<VendorProvider> findById(Long id) {
 		// TODO Auto-generated method stub
-		 return Optional.ofNullable(vendorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(ConstantUtils.IDNOTESIST.getMessage()+id)));
+		 return vendorRepository.findById(id);
 	}
 //	public Optional<VendorProvider> findByPhone(String phone) {
 //		// TODO Auto-generated method stub
@@ -52,11 +53,12 @@ public class VendorServiceImpl implements  IService<VendorProvider>, IPageServic
 
 	@Override
 	public void deleteById(Long id) {
-		if(findById(id).isEmpty())
-		{
-			throw new ResourceNotFoundException("Id is not exist"+id);
-		}
-		vendorRepository.deleteById(id); 
+		 vendorRepository.deleteById(id);
+	}
+
+	@Override
+	public List<VendorProvider> saveAll(List<VendorProvider> t) {
+		return null;
 	}
 
 	@Override

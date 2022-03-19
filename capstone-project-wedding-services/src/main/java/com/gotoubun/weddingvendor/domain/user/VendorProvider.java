@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.user;
+package com.gotoubun.weddingvendor.domain.user;
 
 import java.util.Collection;
 import java.util.Date;
@@ -10,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.gotoubun.weddingvendor.entity.vendor.SinglePost;
+import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

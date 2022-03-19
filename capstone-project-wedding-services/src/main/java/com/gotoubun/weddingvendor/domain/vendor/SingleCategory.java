@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.vendor;
+package com.gotoubun.weddingvendor.domain.vendor;
 
 import java.util.Collection;
 
@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -17,17 +16,15 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "package_category")
-public class PackageCategory extends BaseEntity{
+@Table(name = "single_category")
+public class SingleCategory extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="package_name")
-	private String packageName;
+	@Column(name="category_name")
+	private String categoryName;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packageCategory", cascade = CascadeType.ALL)
-	private Collection<PackagePost> packagePosts;
-	
-
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
+	private Collection<SinglePost> singlePosts;
 }

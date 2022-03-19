@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.vendor;
+package com.gotoubun.weddingvendor.domain.vendor;
 
 import java.util.Collection;
 
@@ -14,8 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.gotoubun.weddingvendor.entity.user.Admin;
-import com.gotoubun.weddingvendor.entity.user.Customer;
+import com.gotoubun.weddingvendor.domain.user.Admin;
+import com.gotoubun.weddingvendor.domain.user.Customer;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

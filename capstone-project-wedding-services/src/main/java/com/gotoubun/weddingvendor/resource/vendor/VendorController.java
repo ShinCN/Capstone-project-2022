@@ -1,7 +1,8 @@
-package com.gotoubun.weddingvendor.controller.vendor;
+package com.gotoubun.weddingvendor.resource.vendor;
 
 import javax.validation.Valid;
 
+import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gotoubun.weddingvendor.controller.Resource;
-import com.gotoubun.weddingvendor.entity.user.VendorProvider;
+import com.gotoubun.weddingvendor.resource.Resource;
+import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.IPageService;
 import com.gotoubun.weddingvendor.service.IService;
 import com.gotoubun.weddingvendor.utils.ConstantUtils;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/vendor")
@@ -44,7 +47,11 @@ public class VendorController implements Resource<VendorProvider> {
 
 	@Override
 	public ResponseEntity<?> findById(Long id) {
-		return ResponseEntity.ok().body(vendorService.findById(id).get());
+		Optional<VendorProvider> vendor= vendorService.findById(id);
+		if(!vendor.isPresent()){
+			throw new ResourceNotFoundException(ConstantUtils.VENDORNOTFOUND.getMessage());
+		}
+		return ResponseEntity.ok().body(vendor);
 	}
 
 	@Override
@@ -64,7 +71,10 @@ public class VendorController implements Resource<VendorProvider> {
 	@Override
 	public ResponseEntity<?> deleteById(Long id) {
 		// TODO Auto-generated method stub
-		vendorService.deleteById(id);
+		Optional<VendorProvider> vendor= vendorService.findById(id);
+		if(!vendor.isPresent()){
+			throw new ResourceNotFoundException(ConstantUtils.VENDORNOTFOUND.getMessage());
+		}
 		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.DELETESUCCESS.getMessage()));
 	}
 }

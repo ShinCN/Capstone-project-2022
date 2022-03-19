@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.controller.vendor;
+package com.gotoubun.weddingvendor.resource.vendor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,11 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.gotoubun.weddingvendor.controller.Resource;
-import com.gotoubun.weddingvendor.entity.user.VendorProvider;
-import com.gotoubun.weddingvendor.entity.vendor.SingleCategory;
+import com.gotoubun.weddingvendor.resource.Resource;
+import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.message.MessageToUser;
-import com.gotoubun.weddingvendor.repository.SingleCategoryRepository;
 import com.gotoubun.weddingvendor.service.IPageService;
 import com.gotoubun.weddingvendor.service.IService;
 import com.gotoubun.weddingvendor.utils.ConstantUtils;

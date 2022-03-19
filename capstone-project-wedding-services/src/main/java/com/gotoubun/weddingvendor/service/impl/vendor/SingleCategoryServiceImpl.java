@@ -1,6 +1,7 @@
 package com.gotoubun.weddingvendor.service.impl.vendor;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.gotoubun.weddingvendor.entity.vendor.SingleCategory;
+import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.repository.SingleCategoryRepository;
 import com.gotoubun.weddingvendor.service.IPageService;
@@ -50,11 +51,16 @@ public class SingleCategoryServiceImpl implements IService<SingleCategory>, IPag
 	@Override
 	public void deleteById(Long id) {
 		// TODO Auto-generated method stub
-		if(findById(id).isEmpty())
+		if(!findById(id).isPresent())
 		{
 			throw new ResourceNotFoundException("Id is not exist "+id);
 		}
 		singleCategoryRepository.deleteById(id); 
+	}
+
+	@Override
+	public List<SingleCategory> saveAll(List<SingleCategory> t) {
+		return null;
 	}
 
 }

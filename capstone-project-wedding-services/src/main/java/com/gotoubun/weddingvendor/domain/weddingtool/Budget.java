@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.weddingtool;
+package com.gotoubun.weddingvendor.domain.weddingtool;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.gotoubun.weddingvendor.entity.user.Customer;
+import com.gotoubun.weddingvendor.domain.user.Customer;
 
 import lombok.Data;
 

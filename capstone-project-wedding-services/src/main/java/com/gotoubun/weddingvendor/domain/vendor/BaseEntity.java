@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.vendor;
+package com.gotoubun.weddingvendor.domain.vendor;
 
 import java.util.Date;
 

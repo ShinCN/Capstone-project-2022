@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.entity.user;
+package com.gotoubun.weddingvendor.domain.user;
 
 import java.util.Date;
 
@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

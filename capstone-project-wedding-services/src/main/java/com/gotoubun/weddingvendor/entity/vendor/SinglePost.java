@@ -38,10 +38,6 @@ public class SinglePost extends BasePost{
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
 	private SingleCategory singleCategory;
-
-//	@ManyToOne
-//	@JoinColumn(name = "category_id", nullable = false)
-//	private SingleCategory singleCategory;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singlePost", cascade = CascadeType.ALL)
 	private Collection<Photo> photos;

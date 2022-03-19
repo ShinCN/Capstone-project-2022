@@ -19,9 +19,9 @@ public class PaymentHistory {
     @JoinColumn(name="customer_id")
     private Customer customer;
 
-    @OneToOne
-    @JoinColumn(name="service_id")
-    private SinglePost singlePost;
+//    @OneToOne
+//    @JoinColumn(name="service_id")
+//    private SinglePost singlePost;
 
     @Column(name="paid_money")
     private float money;

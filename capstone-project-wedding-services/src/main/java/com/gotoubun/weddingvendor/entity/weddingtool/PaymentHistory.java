@@ -6,6 +6,7 @@ import com.gotoubun.weddingvendor.entity.vendor.SinglePost;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -15,13 +16,12 @@ public class PaymentHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="customer_id")
     private Customer customer;
 
-//    @OneToOne
-//    @JoinColumn(name="service_id")
-//    private SinglePost singlePost;
+    @Column(name="service_id")
+    private String serviceId;
 
     @Column(name="paid_money")
     private float money;

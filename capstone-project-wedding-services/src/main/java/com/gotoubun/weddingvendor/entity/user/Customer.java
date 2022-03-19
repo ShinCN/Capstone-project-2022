@@ -36,9 +36,9 @@ public class Customer extends BaseEntity{
 	@OneToOne(mappedBy = "customer")
     private Budget budget;
 
-	@OneToOne(mappedBy = "customer")
-	private PaymentHistory paymentHistory;
-	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
+	private Collection<PaymentHistory> paymentHistorys;
+
 	@ManyToMany(mappedBy = "customers")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

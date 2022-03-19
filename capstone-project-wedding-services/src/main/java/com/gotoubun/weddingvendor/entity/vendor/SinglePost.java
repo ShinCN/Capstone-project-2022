@@ -53,11 +53,11 @@ public class SinglePost extends BasePost{
             inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
     private Collection<Customer> customers;
-	
+
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @JoinTable(name = "single_post_list",
+    @JoinTable(name = "single_post_list_in_pack",
             joinColumns = @JoinColumn(name = "package_post_id"),
             inverseJoinColumns = @JoinColumn(name = "single_post_id")
     )

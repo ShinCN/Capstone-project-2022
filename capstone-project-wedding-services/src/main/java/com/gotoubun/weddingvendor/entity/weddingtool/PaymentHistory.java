@@ -23,23 +23,36 @@ public class PaymentHistory {
     @Column(name="service_id")
     private String serviceId;
 
-    @Column(name="paid_money")
+    @Column(name="vnp_tmncode")
+    private float tmnCode;
+
+    @Column(name="vnp_tnxRef")
+    private float tnxRef;
+
+    @Column(name="vnp_amount")
     private float money;
 
     @Column(name="response_code")
     private String responseCode;
 
-    @Column(name="vnpay_code")
-    private String vnpayCode;
+    @Column(name="bank_code")
+    private String bankCode;
 
-    @Column(name="code_bank")
-    private String codeBank;
+    @Column(name="bank_trans_no")
+    private String bankTransNo;
 
-    @Column(name="note")
-    private String note;
+    @Column(name="card_type")
+    private String cardType;
 
-    @Column(name="created_date")
-    @CreatedDate
-    private Date createdDate;
+    @Column(name="order_info")
+    private String orderInfo;
 
+    @Column(name="pay_date")
+    private Date payDate;
+
+    @Column(name="transaction_no")
+    private String transNo;
+
+    @Column(name="transaction_status")
+    private String transStatus;
 }

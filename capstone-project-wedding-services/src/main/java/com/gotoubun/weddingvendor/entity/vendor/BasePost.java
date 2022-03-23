@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BasePost extends BaseEntity{
+public class BasePost extends Auditable{
 	
 	@Column(name="about")
 	private String about;

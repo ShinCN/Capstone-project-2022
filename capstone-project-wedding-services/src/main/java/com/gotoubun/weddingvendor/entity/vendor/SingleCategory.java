@@ -4,24 +4,33 @@ import java.util.Collection;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.entity.user.Customer;
 import com.gotoubun.weddingvendor.entity.user.VendorProvider;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "single_category")
-public class SingleCategory extends BaseEntity{
+public class SingleCategory extends Auditable{
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(name = "id")
+	private String id;
 	
 	@Column(name="category_name")
 	private String categoryName;
-	
+
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
 	private Collection<SinglePost> singlePosts;
 
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
 	private Collection<VendorProvider> vendorProviders;
+
 }

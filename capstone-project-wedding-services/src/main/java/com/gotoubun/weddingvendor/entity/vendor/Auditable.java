@@ -2,9 +2,7 @@ package com.gotoubun.weddingvendor.entity.vendor;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,14 +15,17 @@ import lombok.Data;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity {
-	
-	@Column(name="created_date")
+public class Auditable {
+
+
+	@Column(name="created_date", updatable = false)
 	@CreatedDate
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
-	
-	@Column(name="modified_date")
+
+	@Column(name="modified_date", updatable = false)
 	@LastModifiedDate
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedDate;
 	
 	@Column(name="createdby")

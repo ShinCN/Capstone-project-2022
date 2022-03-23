@@ -6,9 +6,7 @@ import com.gotoubun.weddingvendor.entity.weddingtool.PaymentResult;
 import com.gotoubun.weddingvendor.utils.DataUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,9 +18,9 @@ import java.util.*;
 @RestController
 public class PaymentController {
 
-    @PostMapping("create-payment")
-    public ResponseEntity<?> createPayment(@RequestBody PaymentDTO requestParams) throws UnsupportedEncodingException, IOException {
-
+    @PostMapping("/create-payment")
+    public ResponseEntity<?> createPayment(@RequestBody PaymentDTO requestParams) throws Exception{
+        System.out.println("alo");
 //        Customer customer =
             int amount = requestParams.getAmount() * 100;
             Map<String, String> vnp_Params = new HashMap<>();
@@ -77,7 +75,7 @@ public class PaymentController {
                 }
             }
             String queryUrl = query.toString();
-            String vnp_SecureHash = DataUtils.hmacSHA512(PaymentConfig.CHECKSUM.getBytes(), hashData.toString());
+            String vnp_SecureHash = DataUtils.hmacSHA512(PaymentConfig.CHECKSUM, hashData.toString());
             queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
             String paymentUrl = PaymentConfig.VNPURL + "?" + queryUrl;
 //            com.google.gson.JsonObject job = new JsonObject();
@@ -91,6 +89,5 @@ public class PaymentController {
         paymentResult.setMessage("success");
         paymentResult.setUrl(paymentUrl);
         return ResponseEntity.status(HttpStatus.OK).body(paymentResult);
-
     }
 }

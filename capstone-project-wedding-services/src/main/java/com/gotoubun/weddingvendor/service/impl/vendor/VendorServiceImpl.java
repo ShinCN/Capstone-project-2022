@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.gotoubun.weddingvendor.entity.user.VendorProvider;
+import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import com.gotoubun.weddingvendor.service.IPageService;

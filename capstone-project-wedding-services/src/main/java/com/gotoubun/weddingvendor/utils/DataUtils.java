@@ -1,12 +1,10 @@
 package com.gotoubun.weddingvendor.utils;
 
-import com.gotoubun.weddingvendor.controller.payment.PaymentConfig;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
+import com.gotoubun.weddingvendor.resource.payment.PaymentConfig;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

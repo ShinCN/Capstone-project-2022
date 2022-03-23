@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.gotoubun.weddingvendor.domain.user.Account;
 import lombok.Data;
 
 @Data
@@ -19,15 +20,23 @@ public class Comment extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	//noi dung comment
 	@Column(name="content")
 	private String content;
-	
+
+	//so luot like
+	@Column(name="likes")
+	private int likes;
+
+	//1 blog co nhieu comment
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "post_id")
-	private SinglePost singlePost;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "package_post_id")
-	private PackagePost packagePost;
+	@JoinColumn(name = "blog_id")
+	private Blog blog;
+
+	//1 user co the tao ra nhieu comments
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private Account account;
+
 }

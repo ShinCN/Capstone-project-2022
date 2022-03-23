@@ -47,13 +47,12 @@ public class PackagePost extends BasePost{
 	@ManyToOne
 	@JoinColumn(name = "admin_id",nullable = false)
 	private Admin admin;
-	
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
 	private Collection<Photo> photos;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
-	private Collection<Comment> comments;
+	private Collection<Feedback> feedbacks;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
@@ -63,7 +62,7 @@ public class PackagePost extends BasePost{
             inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
     private Collection<Customer> customers;
-	
+
 	
 	@ManyToMany(mappedBy = "packagePosts")
     @EqualsAndHashCode.Exclude

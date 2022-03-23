@@ -24,57 +24,57 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/vendor")
-public class VendorController implements Resource<VendorProvider> {
-	@Autowired
-	private IService<VendorProvider> vendorService;
-
-	@Autowired
-	private IPageService<VendorProvider> vendorPageService;
-
-	
-	@Override
-	public ResponseEntity<Page<VendorProvider>> findAll(Pageable pageable, String searchText) {
-		// TODO Auto-generated method stub
-		return new ResponseEntity<>(vendorPageService.findAll(pageable, searchText), HttpStatus.OK);
-	}
-     
-	@Override
-	public ResponseEntity<Page<VendorProvider>> findAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
-		return new ResponseEntity<>(vendorPageService.findAll(PageRequest.of(pageNumber, pageSize
-//						sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()
-		)), HttpStatus.OK);
-	}
-
-	@Override
-	public ResponseEntity<?> findById(Long id) {
-		Optional<VendorProvider> vendor= vendorService.findById(id);
-		if(!vendor.isPresent()){
-			throw new ResourceNotFoundException(ConstantUtils.VENDORNOTFOUND.getMessage());
-		}
-		return ResponseEntity.ok().body(vendor);
-	}
-
-	@Override
-	public ResponseEntity<?> save(@Valid @RequestBody VendorProvider t) {
-		// TODO Auto-generated method stub
-		vendorService.saveOrUpdate(t);
-		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.ADDSUCCESS.getMessage()));
-	}
-
-	@Override
-	public ResponseEntity<?> update(VendorProvider t) {
-		// TODO Auto-generated method stub
-		vendorService.saveOrUpdate(t);
-		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.UPDATESUCCESS.getMessage()));
-	}
-
-	@Override
-	public ResponseEntity<?> deleteById(Long id) {
-		// TODO Auto-generated method stub
-		Optional<VendorProvider> vendor= vendorService.findById(id);
-		if(!vendor.isPresent()){
-			throw new ResourceNotFoundException(ConstantUtils.VENDORNOTFOUND.getMessage());
-		}
-		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.DELETESUCCESS.getMessage()));
-	}
+public class VendorController  {
+//	@Autowired
+//	private IService<VendorProvider> vendorService;
+//
+//	@Autowired
+//	private IPageService<VendorProvider> vendorPageService;
+//
+//
+//	@Override
+//	public ResponseEntity<Page<VendorProvider>> findAll(Pageable pageable, String searchText) {
+//		// TODO Auto-generated method stub
+//		return new ResponseEntity<>(vendorPageService.findAll(pageable, searchText), HttpStatus.OK);
+//	}
+//
+//	@Override
+//	public ResponseEntity<Page<VendorProvider>> findAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
+//		return new ResponseEntity<>(vendorPageService.findAll(PageRequest.of(pageNumber, pageSize
+////						sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()
+//		)), HttpStatus.OK);
+//	}
+//
+//	@Override
+//	public ResponseEntity<?> findById(Long id) {
+//		Optional<VendorProvider> vendor= vendorService.findById(id);
+//		if(!vendor.isPresent()){
+//			throw new ResourceNotFoundException(ConstantUtils.VENDORNOTFOUND.getMessage());
+//		}
+//		return ResponseEntity.ok().body(vendor);
+//	}
+//
+//	@Override
+//	public ResponseEntity<?> save(@Valid @RequestBody VendorProvider t) {
+//		// TODO Auto-generated method stub
+//		vendorService.saveOrUpdate(t);
+//		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.ADDSUCCESS.getMessage()));
+//	}
+//
+//	@Override
+//	public ResponseEntity<?> update(VendorProvider t) {
+//		// TODO Auto-generated method stub
+//		vendorService.saveOrUpdate(t);
+//		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.UPDATESUCCESS.getMessage()));
+//	}
+//
+//	@Override
+//	public ResponseEntity<?> deleteById(Long id) {
+//		// TODO Auto-generated method stub
+//		Optional<VendorProvider> vendor= vendorService.findById(id);
+//		if(!vendor.isPresent()){
+//			throw new ResourceNotFoundException(ConstantUtils.VENDORNOTFOUND.getMessage());
+//		}
+//		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.DELETESUCCESS.getMessage()));
+//	}
 }

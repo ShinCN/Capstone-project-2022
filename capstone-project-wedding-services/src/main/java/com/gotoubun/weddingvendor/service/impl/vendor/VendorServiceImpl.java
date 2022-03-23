@@ -19,8 +19,7 @@ import com.gotoubun.weddingvendor.utils.ConstantUtils;
 @Service
 public class VendorServiceImpl implements  IService<VendorProvider>, IPageService<VendorProvider> {
 
-	@Autowired
-	VendorRepository vendorRepository;
+	@Autowired VendorRepository vendorRepository;
 
 	@Override
 	public Page<VendorProvider> findAll(Pageable pageable, String searchText) {
@@ -32,7 +31,7 @@ public class VendorServiceImpl implements  IService<VendorProvider>, IPageServic
 	public Page<VendorProvider> findAll(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return vendorRepository.findAll(pageable);
-		
+
 	}
 
 	@Override
@@ -42,7 +41,7 @@ public class VendorServiceImpl implements  IService<VendorProvider>, IPageServic
 	}
 //	public Optional<VendorProvider> findByPhone(String phone) {
 //		// TODO Auto-generated method stub
-//		
+//
 //	}
 
 	@Override

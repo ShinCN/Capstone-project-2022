@@ -1,6 +1,7 @@
 package com.gotoubun.weddingvendor.service.impl.vendor;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,11 @@ public class SingleCategoryServiceImpl implements IService<SingleCategory>, IPag
 			throw new ResourceNotFoundException("Id is not exist "+id);
 		}
 		singleCategoryRepository.deleteById(id); 
+	}
+
+	@Override
+	public List<SingleCategory> saveAll(List<SingleCategory> t) {
+		return null;
 	}
 
 }

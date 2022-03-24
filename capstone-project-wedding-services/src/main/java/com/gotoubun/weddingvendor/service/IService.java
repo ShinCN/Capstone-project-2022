@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.service;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface IService<T> {
@@ -10,4 +11,6 @@ public interface IService<T> {
 	T saveOrUpdate(T t);
 	
 	void deleteById(Long id);
+
+	List<T> saveAll(List<T> t);
 }

@@ -32,4 +32,6 @@ public class BaseEntity {
 	@Column(name="address", columnDefinition = "TEXT")
 	private String address;
 
+	@Column(name="avatar")
+	private String avatar;
 }

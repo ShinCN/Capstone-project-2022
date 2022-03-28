@@ -1,6 +1,7 @@
 package com.gotoubun.weddingvendor.service.impl.vendor;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,11 @@ public class VendorServiceImpl implements  IService<VendorProvider>, IPageServic
 			throw new ResourceNotFoundException("Id is not exist"+id);
 		}
 		vendorRepository.deleteById(id); 
+	}
+
+	@Override
+	public List<VendorProvider> saveAll(List<VendorProvider> t) {
+		return null;
 	}
 
 	@Override

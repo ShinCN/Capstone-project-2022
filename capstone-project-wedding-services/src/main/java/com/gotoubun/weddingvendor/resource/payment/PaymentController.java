@@ -1,10 +1,18 @@
 package com.gotoubun.weddingvendor.resource.payment;
 
+import com.gotoubun.weddingvendor.domain.user.Customer;
+import com.gotoubun.weddingvendor.domain.weddingtool.HireDTO;
 import com.gotoubun.weddingvendor.domain.weddingtool.PaymentDTO;
 import com.gotoubun.weddingvendor.domain.weddingtool.PaymentResult;
+import com.gotoubun.weddingvendor.security.JwtAuthenticationFilter;
+import com.gotoubun.weddingvendor.security.JwtTokenProvider;
+import com.gotoubun.weddingvendor.service.impl.customer.CustomerServiceImpl;
+import com.gotoubun.weddingvendor.service.impl.customer.HireServiceImpl;
 import com.gotoubun.weddingvendor.utils.DataUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLEncoder;
@@ -15,10 +23,24 @@ import java.util.*;
 @RestController
 public class PaymentController {
 
+    @Autowired
+    private static CustomerServiceImpl customerService;
+
+    @Autowired
+    private static HireServiceImpl hireService;
+
+    @Autowired
+    private static JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private static JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private Authentication authentication;
     @PostMapping("/create-payment")
     public ResponseEntity<?> createPayment(@RequestBody PaymentDTO requestParams) throws Exception{
-        System.out.println("alo");
-//        Customer customer =
+           // Customer customer = customerService.findById(jwtTokenProvider.getUserIdFromJWT(token)).get();
+            //Customer customer = customerService.getCurrentUserByUserName(customAccountDetailsService.loadUserByUsername(this.authentication.getName()).getUsername());
+           // HireDTO hireDTO = hireService.setHireRequest(customer.getId(), requestParams.getSingleServiceID());
             int amount = requestParams.getAmount() * 100;
             Map<String, String> vnp_Params = new HashMap<>();
             vnp_Params.put("vnp_Version", PaymentConfig.VERSION);
@@ -30,7 +52,7 @@ public class PaymentController {
             if (bank_code != null && !bank_code.isEmpty()) {
                 vnp_Params.put("vnp_BankCode", bank_code);
             }
-            vnp_Params.put("vnp_TxnRef", "VNPAY001"); //cho ni get id cua service thanh toan
+            vnp_Params.put("vnp_TxnRef", "VNP105"); //cho ni get id cua service thanh toan
             vnp_Params.put("vnp_OrderInfo", requestParams.getPaymentDescription()); // cho ni get noi dung thanh toan
             vnp_Params.put("vnp_OrderType", PaymentConfig.ORDERTYPE);
             vnp_Params.put("vnp_Locale", PaymentConfig.LOCALEDEFAULT);

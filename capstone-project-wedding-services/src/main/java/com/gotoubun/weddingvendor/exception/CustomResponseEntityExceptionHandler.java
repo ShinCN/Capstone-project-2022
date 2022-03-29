@@ -36,4 +36,10 @@ public class CustomResponseEntityExceptionHandler {
         UsernameAlreadyExistsResponse exceptionResponse = new UsernameAlreadyExistsResponse(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleSinglePostNameExists(SinglePostNameAlreadyExistsException ex, WebRequest request){
+        SinglePostNameAlreadyExistsResponse exceptionResponse = new SinglePostNameAlreadyExistsResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }

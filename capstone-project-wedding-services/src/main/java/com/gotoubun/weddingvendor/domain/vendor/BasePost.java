@@ -4,11 +4,14 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Data;
 
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BasePost extends BaseEntity{
@@ -17,8 +20,8 @@ public class BasePost extends BaseEntity{
 	private String about;
 	
 	@Column(name="price")
-	private Double price;
+	private float price;
 	
 	@Column(name="rate")
-	private Integer rate;
+	private int rate;
 }

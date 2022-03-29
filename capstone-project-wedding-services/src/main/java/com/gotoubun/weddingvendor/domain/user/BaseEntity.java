@@ -19,7 +19,7 @@ public class BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name="fullname", columnDefinition = "TEXT")
+	@Column(name="full_name", columnDefinition = "TEXT")
 	private String fullName;
 	
 	@Size(max=9, message="so dien thoai chi duoc 9 chu so")

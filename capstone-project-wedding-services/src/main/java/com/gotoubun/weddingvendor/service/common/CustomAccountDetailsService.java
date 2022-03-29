@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
+
 @Service
 public class CustomAccountDetailsService implements UserDetailsService {
     @Autowired
@@ -28,4 +30,8 @@ public class CustomAccountDetailsService implements UserDetailsService {
         return account;
 
     }
+
+
+
+
 }

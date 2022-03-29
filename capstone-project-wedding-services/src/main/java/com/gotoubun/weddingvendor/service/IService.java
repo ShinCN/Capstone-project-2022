@@ -12,5 +12,4 @@ public interface IService<T> {
 
 	void deleteById(Long id);
 
-	List<T> saveAll(List<T> t);
 }

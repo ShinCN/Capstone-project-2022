@@ -58,9 +58,6 @@ public class SingleCategoryServiceImpl implements IService<SingleCategory>, IPag
 		singleCategoryRepository.deleteById(id); 
 	}
 
-	@Override
-	public List<SingleCategory> saveAll(List<SingleCategory> t) {
-		return null;
-	}
+
 
 }

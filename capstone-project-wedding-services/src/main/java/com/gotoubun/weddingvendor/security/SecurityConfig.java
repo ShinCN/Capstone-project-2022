@@ -15,8 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.gotoubun.weddingvendor.security.SecurityConstants.H2_URL;
-import static com.gotoubun.weddingvendor.security.SecurityConstants.SIGN_UP_URLS;
+import static com.gotoubun.weddingvendor.security.SecurityConstants.*;
 
 
 @Configuration
@@ -75,6 +74,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).permitAll()
                 .antMatchers(SIGN_UP_URLS).permitAll()
+                .antMatchers(SIGN_UP_ADMIN_URLS).permitAll()
+                .antMatchers(SIGN_UP_CUSTOMER_URLS).permitAll()
+                .antMatchers(SIGN_UP_VENDOR_URLS).permitAll()
                 .antMatchers(H2_URL).permitAll()
                 .anyRequest().authenticated();
 

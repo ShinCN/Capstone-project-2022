@@ -13,6 +13,7 @@ import lombok.Data;
 public class SingleCategory extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Column(name="single_category_id")
 	private Long id;
 	
 	@Column(name="category_name")

@@ -10,9 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 
+import java.util.List;
+
 @Repository
 public interface VendorRepository extends JpaRepository<VendorProvider, Long> {
 	@Query(value = "Select b FROM VendorProvider b WHERE b.address LIKE %:searchText% OR b.mail LIKE %:searchText% OR b.phone LIKE %:searchText%")
 	Page<VendorProvider> findAllVendors(Pageable pageable, @Param("searchText") String searchText);
+	@Query(value = "Select v FROM VendorProvider v join Account a on v.id=a.id")
+	VendorProvider findByUsername(String username);
 
 }

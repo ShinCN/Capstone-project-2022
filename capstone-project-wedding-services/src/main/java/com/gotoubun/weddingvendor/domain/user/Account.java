@@ -32,7 +32,7 @@ public class Account implements UserDetails {
     @NotBlank(message = "password is not null")
     private String password;
 
-    //admin=1,vendor=2,customer=3
+    //admin=1,vendor=2,customer=3,kol=4
 
     @Column(name="role")
     private int role;

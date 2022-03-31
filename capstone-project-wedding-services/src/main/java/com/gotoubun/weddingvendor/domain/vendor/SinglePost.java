@@ -21,7 +21,10 @@ public class SinglePost extends BasePost{
 	@NonNull
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long postID;
-	
+
+	@Column(name = "single_service_name")
+	private String serviceName;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vendor_id")
 	private VendorProvider vendorProvider;

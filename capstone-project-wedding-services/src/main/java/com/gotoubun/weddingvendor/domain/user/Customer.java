@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.gotoubun.weddingvendor.domain.vendor.Feedback;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.domain.weddingtool.*;
@@ -38,6 +39,9 @@ public class Customer extends BaseEntity{
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
 	private Collection<PaymentHistory> paymentHistorys;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
+	private Collection<Feedback> feedbacks;
 
 	@ManyToMany(mappedBy = "customers")
     @EqualsAndHashCode.Exclude

@@ -4,11 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 //@EntityScan("com.gotoubun.entity")
 //@EnableJpaRepositories(basePackages = {"com.gotoubun.repository"})
 @EnableSwagger2
+@EnableTransactionManagement
 @SpringBootApplication
 public class CapstoneProjectWeddingServicesApplication {
 	@Bean

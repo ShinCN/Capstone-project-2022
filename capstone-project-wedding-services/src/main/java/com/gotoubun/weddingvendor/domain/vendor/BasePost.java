@@ -15,7 +15,10 @@ public class BasePost extends Auditable{
 	
 	@Column(name="about")
 	private String about;
-	
+
+	@Column(name = "service_name")
+	private String serviceName;
+
 	@Column(name="price")
 	private Double price;
 	

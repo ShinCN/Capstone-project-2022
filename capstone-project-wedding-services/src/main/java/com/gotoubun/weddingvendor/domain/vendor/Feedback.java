@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.domain.vendor;
 
+import com.gotoubun.weddingvendor.domain.user.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,10 @@ public class Feedback extends Auditable{
 
     @Column(name="content")
     private String content;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")

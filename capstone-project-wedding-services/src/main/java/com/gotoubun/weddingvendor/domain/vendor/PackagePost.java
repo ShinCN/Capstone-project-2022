@@ -2,17 +2,7 @@ package com.gotoubun.weddingvendor.domain.vendor;
 
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.gotoubun.weddingvendor.domain.user.Admin;
 import com.gotoubun.weddingvendor.domain.user.Customer;
@@ -38,7 +28,8 @@ public class PackagePost extends BasePost{
 	@Id
 	@Column(name = "package_post_id")
 	@NonNull
-	private String packageID;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long postID;
 
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)

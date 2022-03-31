@@ -25,11 +25,9 @@ public class Account implements UserDetails {
     private Long id;
 
     @Column(name="username")
-    @NotBlank(message = "username is not null")
     private String username;
 
     @Column(name="password")
-    @NotBlank(message = "password is not null")
     private String password;
 
     //admin=1,vendor=2,customer=3,kol=4
@@ -45,19 +43,19 @@ public class Account implements UserDetails {
     @JsonIgnore
     private Date modifiedDate;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
     private Admin admin;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
     private VendorProvider vendorProvider;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
     private KOL kol;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
     private Customer customer;
 

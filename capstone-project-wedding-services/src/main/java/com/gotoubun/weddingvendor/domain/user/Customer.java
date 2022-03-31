@@ -49,7 +49,7 @@ public class Customer extends BaseEntity{
     @ToString.Exclude
     private Collection<PackagePost> packagePosts;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="account_id")
 	private Account account;
 

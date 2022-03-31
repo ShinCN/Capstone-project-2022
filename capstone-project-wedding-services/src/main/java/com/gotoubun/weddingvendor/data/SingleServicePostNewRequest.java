@@ -8,7 +8,7 @@ import java.util.Collection;
 @Value
 public class SingleServicePostNewRequest {
     String serviceName;
-    float price;
+    Float price;
     String description;
     Collection<Photo> photos;
 }

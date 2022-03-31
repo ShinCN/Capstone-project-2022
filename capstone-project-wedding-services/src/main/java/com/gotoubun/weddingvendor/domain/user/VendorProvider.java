@@ -30,9 +30,11 @@ public class VendorProvider extends BaseEntity{
 	@JoinColumn(name = "single_category_id")
 	private SingleCategory singleCategory;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="account_id")
 	private Account account;
 
+	@Column(name="nano_password", columnDefinition = "TEXT")
+	private String nanoPassword;
 	
 }

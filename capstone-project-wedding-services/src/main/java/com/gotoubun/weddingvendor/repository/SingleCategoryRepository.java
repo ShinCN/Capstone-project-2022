@@ -11,6 +11,7 @@ import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 @Repository
 public interface SingleCategoryRepository extends JpaRepository<SingleCategory, Long>{
 	 @Query(value = "Select b FROM SingleCategory b WHERE b.createdBy LIKE %:searchText% ")
-	 Page<SingleCategory> findAllSingleCategorys(Pageable pageable, @Param("searchText") String searchText); 
+	 Page<SingleCategory> findAllSingleCategorys(Pageable pageable, @Param("searchText") String searchText);
+
 
 }

@@ -6,7 +6,6 @@ import com.gotoubun.weddingvendor.payload.LoginRequest;
 import com.gotoubun.weddingvendor.security.JwtTokenProvider;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import com.gotoubun.weddingvendor.service.impl.account.AccountServiceImpl;
-import com.gotoubun.weddingvendor.validator.account.AccountValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,8 @@ public class AccountController {
     @Autowired
     private AccountServiceImpl accountService;
 
-    @Autowired
-    private AccountValidator accountValidator;
+//    @Autowired
+//    private AccountValidator accountValidator;
 
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -66,7 +65,7 @@ public class AccountController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
 
-        Account newUser = accountService.saveOrUpdate(account);
+        Account newUser = accountService.save(account);
 
         return  new ResponseEntity<Account>(newUser, HttpStatus.CREATED);
     }

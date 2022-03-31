@@ -39,7 +39,7 @@ public class SingleCategoryServiceImpl implements IService<SingleCategory>, IPag
 	@Override
 	public Optional<SingleCategory> findById(Long id) {
 		// TODO Auto-generated method stub
-		return Optional.of(singleCategoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Id is not exist ")));
+		return Optional.of(singleCategoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Category does not exist")));
 	}
 
 	@Override

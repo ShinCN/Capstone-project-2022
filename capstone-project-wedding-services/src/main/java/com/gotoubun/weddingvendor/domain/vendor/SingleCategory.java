@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import lombok.Data;
 
@@ -18,10 +19,12 @@ public class SingleCategory extends BaseEntity{
 	
 	@Column(name="category_name")
 	private String categoryName;
-	
+
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
 	private Collection<SinglePost> singlePosts;
 
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
 	private Collection<VendorProvider> vendorProviders;
 }

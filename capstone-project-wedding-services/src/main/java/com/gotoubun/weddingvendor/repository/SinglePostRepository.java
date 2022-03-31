@@ -15,4 +15,5 @@ public interface SinglePostRepository  extends JpaRepository<SinglePost, Long> {
 
 
 
+
 }

@@ -16,10 +16,10 @@ import lombok.NoArgsConstructor;
 public class Admin extends BaseEntity {
 
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "admin", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "admin", cascade = CascadeType.ALL)
 	private Collection<PackagePost> packagePosts;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="account_id")
 	private Account account;
 }

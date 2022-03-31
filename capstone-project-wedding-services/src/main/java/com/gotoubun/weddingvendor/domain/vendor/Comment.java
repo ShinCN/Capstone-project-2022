@@ -35,7 +35,7 @@ public class Comment extends BaseEntity{
 	private Blog blog;
 
 	//1 user co the tao ra nhieu comments
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private Account account;
 

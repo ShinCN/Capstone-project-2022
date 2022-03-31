@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.repository;
 
+import com.gotoubun.weddingvendor.domain.user.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,8 @@ import java.util.List;
 public interface VendorRepository extends JpaRepository<VendorProvider, Long> {
 	@Query(value = "Select b FROM VendorProvider b WHERE b.address LIKE %:searchText% OR b.mail LIKE %:searchText% OR b.phone LIKE %:searchText%")
 	Page<VendorProvider> findAllVendors(Pageable pageable, @Param("searchText") String searchText);
-	@Query(value = "Select v FROM VendorProvider v join Account a on v.id=a.id")
-	VendorProvider findByUsername(String username);
+
+	VendorProvider findByAccount(Account account);
+
 
 }

@@ -23,15 +23,14 @@ public class SinglePost extends BasePost{
 	@Column(name = "single_service_name")
 	private String serviceName;
 
-//	@Column(name = "vendor_id",updatable = false, insertable = false)
-//	private Long vendorId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vendor_id")
 	private VendorProvider vendorProvider;
 
+
 	@ManyToOne
-	@JoinColumn(name = "category_id", nullable = false)
+	@JoinColumn(name = "category_id")
 	private SingleCategory singleCategory;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singlePost", cascade = CascadeType.ALL)

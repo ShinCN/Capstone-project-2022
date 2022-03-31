@@ -20,8 +20,8 @@ public class BasePost extends BaseEntity{
 	private String about;
 	
 	@Column(name="price")
-	private float price;
+	private Float price;
 	
 	@Column(name="rate")
-	private int rate;
+	private Integer rate;
 }

@@ -1,6 +1,6 @@
 package com.gotoubun.weddingvendor.message;
 
-import com.gotoubun.weddingvendor.utils.ConstantUtils;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

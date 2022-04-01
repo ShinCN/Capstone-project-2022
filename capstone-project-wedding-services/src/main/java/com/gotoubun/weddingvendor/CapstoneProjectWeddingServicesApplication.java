@@ -1,19 +1,23 @@
 package com.gotoubun.weddingvendor;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-//@EntityScan("com.gotoubun.entity")
-//@EnableJpaRepositories(basePackages = {"com.gotoubun.repository"})
 @EnableSwagger2
 @SpringBootApplication
+//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+//@EnableJpaRepositories(basePackageClasses = VendorRepository.class)
 public class CapstoneProjectWeddingServicesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CapstoneProjectWeddingServicesApplication.class, args);
-	}
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(CapstoneProjectWeddingServicesApplication.class, args);
+    }
 
 }

@@ -16,6 +16,9 @@ import lombok.Data;
 @EntityListeners(AuditingEntityListener.class)
 public class BasePost extends BaseEntity{
 
+	@Column(name = "service_name")
+	private String serviceName;
+
 	@Column(name="about")
 	private String about;
 

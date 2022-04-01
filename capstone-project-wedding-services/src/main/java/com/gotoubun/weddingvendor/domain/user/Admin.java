@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "admin")
-public class Admin extends BaseEntity {
+public class Admin extends Auditable{
 
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "admin", cascade = CascadeType.ALL)

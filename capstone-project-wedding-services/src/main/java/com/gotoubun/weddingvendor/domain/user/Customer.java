@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.gotoubun.weddingvendor.domain.vendor.Feedback;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.domain.weddingtool.*;
@@ -32,6 +33,9 @@ public class Customer extends Auditable{
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
 	private Collection<CheckList> checkLists;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
+	private Collection<Feedback> feedbacks;
 
 	@OneToOne(mappedBy = "customer")
 	private Budget budget;

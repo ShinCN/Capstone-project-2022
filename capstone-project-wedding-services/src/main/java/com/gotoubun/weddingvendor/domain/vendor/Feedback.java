@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.domain.vendor;
 
+import com.gotoubun.weddingvendor.domain.user.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,11 @@ public class Feedback extends BaseEntity{
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "single_post_id")
     private SinglePost singlePost;
 
     @ManyToOne(fetch = FetchType.LAZY)

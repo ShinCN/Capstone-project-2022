@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "single_category")
-public class SingleCategory extends BaseEntity{
+public class SingleCategory{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 //	@Column(name="single_category_id")

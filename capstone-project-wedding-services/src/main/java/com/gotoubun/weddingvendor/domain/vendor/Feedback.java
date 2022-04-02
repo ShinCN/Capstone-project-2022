@@ -4,6 +4,8 @@ import com.gotoubun.weddingvendor.domain.user.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
 
@@ -31,4 +33,12 @@ public class Feedback extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "package_post_id")
     private PackagePost packagePost;
+
+    @Column(name="createdby")
+    @CreatedBy
+    private String createdBy;
+
+    @Column(name="modifiedby")
+    @LastModifiedBy
+    private String modifiedBy;
 }

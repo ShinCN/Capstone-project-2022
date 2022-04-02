@@ -1,72 +1,98 @@
 package com.gotoubun.weddingvendor.service.impl.vendor;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
+
+import com.gotoubun.weddingvendor.data.VendorProviderRequest;
+import com.gotoubun.weddingvendor.domain.user.Account;
+import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
+
+import com.gotoubun.weddingvendor.repository.AccountRepository;
+import com.gotoubun.weddingvendor.repository.SinglePostRepository;
+import com.gotoubun.weddingvendor.service.IService;
+import com.gotoubun.weddingvendor.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
-import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
-import com.gotoubun.weddingvendor.service.IPageService;
-import com.gotoubun.weddingvendor.service.IService;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomPassword;
 
 @Service
-public class VendorServiceImpl implements  IService<VendorProvider>, IPageService<VendorProvider> {
+public class VendorServiceImpl implements VendorService {
 
-	@Autowired VendorRepository vendorRepository;
+	@Autowired
+	IService<SingleCategory> singleCategoryIService;
+	@Autowired
+	VendorRepository vendorRepository;
+	@Autowired
+	AccountRepository accountRepository;
+	@Autowired
+	SinglePostRepository singlePostRepository;
+	@Autowired
+	public BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 	@Override
-	public Page<VendorProvider> findAll(Pageable pageable, String searchText) {
+	@Transactional
+	public VendorProvider save(VendorProviderRequest vendor) {
 		// TODO Auto-generated method stub
-		return vendorRepository.findAllVendors(pageable, searchText);
+			Account account = new Account();
+			VendorProvider vendorProvider = new VendorProvider();
+			String password=generateRandomPassword(10);
+
+			Optional<SingleCategory> singleCategory = singleCategoryIService.findById(vendor.getCategoryId());
+			//save account
+			account.setUsername(vendor.getUsername());
+			account.setPassword(bCryptPasswordEncoder.encode(password));
+			account.setRole(2);
+			accountRepository.save(account);
+			//save vendor
+			vendorProvider.setAccount(account);
+			vendorProvider.setNanoPassword(password);
+			vendorProvider.setFullName(vendor.getRepresentative());
+			vendorProvider.setCompany(vendor.getCompanyName());
+			vendorProvider.setMail(vendor.getEmail());
+			vendorProvider.setPhone(vendor.getPhone());
+			vendorProvider.setSingleCategory(singleCategory.get());
+			vendorProvider.setAddress(vendor.getAddress());
+			vendorRepository.save(vendorProvider);
+
+			return vendorProvider;
 	}
 
 	@Override
-	public Page<VendorProvider> findAll(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return vendorRepository.findAll(pageable);
+	public VendorProvider update(VendorProviderRequest vendor) {
+		Account account = accountRepository.findByUsername(vendor.getUsername());
+		VendorProvider vendorProvider = vendorRepository.findByAccount(account);
 
-	}
+			//save vendor
+			if (!vendor.getRepresentative().isEmpty()) {
+				vendorProvider.setFullName(vendor.getRepresentative());
+			}
 
-	@Override
-	public Optional<VendorProvider> findById(Long id) {
-		// TODO Auto-generated method stub
-		 return vendorRepository.findById(id);
-	}
-//	public Optional<VendorProvider> findByPhone(String phone) {
-//		// TODO Auto-generated method stub
-//
-//	}
+			if (!vendor.getCompanyName().isEmpty()) {
+				vendorProvider.setCompany(vendor.getCompanyName());
+			}
 
-	@Override
-	public VendorProvider saveOrUpdate(VendorProvider vendor) {
-		// TODO Auto-generated method stub
-		return vendorRepository.save(vendor);
-	}
+			if (!vendor.getEmail().isEmpty()) {
+				vendorProvider.setMail(vendor.getEmail());
+			}
 
-	@Override
-	public void deleteById(Long id) {
-		if(!findById(id).isPresent())
-		{
-			throw new ResourceNotFoundException("Id is not exist"+id);
-		}
-		vendorRepository.deleteById(id);
-	}
+			if (!vendor.getPhone().isEmpty()) {
+				vendorProvider.setPhone(vendor.getPhone());
+			}
 
-	@Override
-	public List<VendorProvider> saveAll(List<VendorProvider> t) {
-		return null;
-	}
+			if (!vendor.getAddress().isEmpty()) {
+				vendorProvider.setAddress(vendor.getAddress());
+			}
 
-	@Override
-	public Collection<VendorProvider> findAll() {
-		// TODO Auto-generated method stub
-		return (Collection<VendorProvider>) vendorRepository.findAll();
+			vendorRepository.save(vendorProvider);
+
+		return vendorProvider;
 	}
 
 }

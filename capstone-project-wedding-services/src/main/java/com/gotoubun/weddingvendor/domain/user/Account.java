@@ -5,15 +5,12 @@ import com.gotoubun.weddingvendor.domain.vendor.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -43,19 +40,19 @@ public class Account implements UserDetails {
     @JsonIgnore
     private Date modifiedDate;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "account")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
     private Admin admin;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "account")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
     private VendorProvider vendorProvider;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "account")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
     private KOL kol;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "account")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
     private Customer customer;
 

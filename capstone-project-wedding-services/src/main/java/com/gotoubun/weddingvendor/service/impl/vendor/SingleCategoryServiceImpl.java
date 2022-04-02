@@ -16,12 +16,13 @@ import com.gotoubun.weddingvendor.service.IPageService;
 import com.gotoubun.weddingvendor.service.IService;
 @Service
 public class SingleCategoryServiceImpl implements IService<SingleCategory>, IPageService<SingleCategory>{
-    @Autowired SingleCategoryRepository singleCategoryRepository;
-	
+	@Autowired
+	private SingleCategoryRepository singleCategoryRepository;
+
 	@Override
 	public Page<SingleCategory> findAll(Pageable pageable, String searchText) {
 		// TODO Auto-generated method stub
-	    return singleCategoryRepository.findAllSingleCategorys(pageable, searchText);
+		return singleCategoryRepository.findAllSingleCategorys(pageable, searchText);
 	}
 
 	@Override
@@ -39,7 +40,13 @@ public class SingleCategoryServiceImpl implements IService<SingleCategory>, IPag
 	@Override
 	public Optional<SingleCategory> findById(Long id) {
 		// TODO Auto-generated method stub
-		return Optional.of(singleCategoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Id is not exist ")));
+		return Optional.of(singleCategoryRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Category does not exist")));
+	}
+
+	@Override
+	public Optional<SingleCategory> findByCategoryName(String name) {
+		// TODO Auto-generated method stub
+		return Optional.of(singleCategoryRepository.findByName(name).orElseThrow(()-> new ResourceNotFoundException("Category does not exist")));
 	}
 
 	@Override
@@ -55,12 +62,9 @@ public class SingleCategoryServiceImpl implements IService<SingleCategory>, IPag
 		{
 			throw new ResourceNotFoundException("Id is not exist "+id);
 		}
-		singleCategoryRepository.deleteById(id); 
+		singleCategoryRepository.deleteById(id);
 	}
 
-	@Override
-	public List<SingleCategory> saveAll(List<SingleCategory> t) {
-		return null;
-	}
+
 
 }

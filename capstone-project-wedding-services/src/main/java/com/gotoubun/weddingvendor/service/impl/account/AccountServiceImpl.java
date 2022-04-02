@@ -1,19 +1,16 @@
 package com.gotoubun.weddingvendor.service.impl.account;
 
 import com.gotoubun.weddingvendor.domain.user.Account;
-import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
-import com.gotoubun.weddingvendor.service.IService;
+import com.gotoubun.weddingvendor.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 @Service
-public class AccountServiceImpl implements IService<Account> {
+public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -21,38 +18,31 @@ public class AccountServiceImpl implements IService<Account> {
     @Autowired
     public BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Override
-    public Collection<Account> findAll() {
-        return null;
-    }
+
 
     @Override
-    public Optional<Account> findById(Long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Account saveOrUpdate(Account account) {
+    public Account save(Account account) {
         try{
             account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
             //Username has to be unique (exception)
             account.setUsername(account.getUsername());
             // Make sure that password and confirmPassword match
             // We don't persist or show the confirmPassword
+
             return accountRepository.save(account);
 
         }catch (Exception e){
             throw new UsernameAlreadyExistsException("Username '"+account.getUsername()+"' already exists");
         }
     }
-
     @Override
-    public void deleteById(Long id) {
-
+    public Optional<Account> findByUserName(String username){
+        return Optional.ofNullable(accountRepository.findByUsername(username)) ;
+    }
+    public int getRole(String username)
+    {
+        return  findByUserName(username).get().getRole();
     }
 
-    @Override
-    public List<Account> saveAll(List<Account> t) {
-        return null;
-    }
+
 }

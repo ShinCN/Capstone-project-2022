@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import com.gotoubun.weddingvendor.domain.user.Account;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 @Data
 @Entity
@@ -39,4 +41,11 @@ public class Comment extends BaseEntity{
 	@JoinColumn(name = "user_id")
 	private Account account;
 
+	@Column(name="createdby")
+	@CreatedBy
+	private String createdBy;
+
+	@Column(name="modifiedby")
+	@LastModifiedBy
+	private String modifiedBy;
 }

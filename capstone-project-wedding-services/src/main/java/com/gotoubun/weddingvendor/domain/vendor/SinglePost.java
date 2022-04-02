@@ -8,6 +8,8 @@ import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,4 +56,12 @@ public class SinglePost extends BasePost{
     )
     private Collection<PackagePost> packagePosts;
 
+
+	@Column(name="createdby")
+	@CreatedBy
+	private String createdBy;
+
+	@Column(name="modifiedby")
+	@LastModifiedBy
+	private String modifiedBy;
 }

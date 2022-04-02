@@ -6,8 +6,12 @@ import lombok.Value;
 @Value
 public class VendorProviderRequest {
     String companyName;
+    String representative;
+    String email;
     String username;
     String phone;
     Long categoryId;
+    String anotherService;
     String address;
+    String password;
 }

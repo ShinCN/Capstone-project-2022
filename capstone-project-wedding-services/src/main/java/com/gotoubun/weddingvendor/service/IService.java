@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IService<T> {
-    Collection<T> findAll();
-	
+	Collection<T> findAll();
+
 	Optional<T> findById(Long id);
-	
+
+	Optional<T> findByCategoryName(String name);
+
 	T saveOrUpdate(T t);
 
 	void deleteById(Long id);
 
-	List<T> saveAll(List<T> t);
 }

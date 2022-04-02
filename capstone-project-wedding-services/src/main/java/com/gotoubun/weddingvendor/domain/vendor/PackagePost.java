@@ -15,6 +15,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 
 @Entity
@@ -59,4 +61,12 @@ public class PackagePost extends BasePost{
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<SinglePost> singlePosts;
+
+	@Column(name="createdby")
+	@CreatedBy
+	private String createdBy;
+
+	@Column(name="modifiedby")
+	@LastModifiedBy
+	private String modifiedBy;
 }

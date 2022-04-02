@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
 
@@ -32,4 +34,12 @@ public class Blog extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Account account;
+
+    @Column(name="createdby")
+    @CreatedBy
+    private String createdBy;
+
+    @Column(name="modifiedby")
+    @LastModifiedBy
+    private String modifiedBy;
 }

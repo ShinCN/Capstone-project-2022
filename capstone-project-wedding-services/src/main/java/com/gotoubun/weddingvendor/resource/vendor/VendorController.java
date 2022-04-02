@@ -2,79 +2,54 @@ package com.gotoubun.weddingvendor.resource.vendor;
 
 import javax.validation.Valid;
 
-import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
+import com.gotoubun.weddingvendor.data.VendorProviderRequest;
+import com.gotoubun.weddingvendor.service.AccountService;
+import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
+import com.gotoubun.weddingvendor.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
-import com.gotoubun.weddingvendor.resource.Resource;
-import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.message.MessageToUser;
-import com.gotoubun.weddingvendor.service.IPageService;
-import com.gotoubun.weddingvendor.service.IService;
-import com.gotoubun.weddingvendor.utils.ConstantUtils;
 
-import java.util.Optional;
+import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
+import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
 
 @RestController
 @RequestMapping("/vendor")
-public class VendorController  {
-//	@Autowired
-//	private IService<VendorProvider> vendorService;
+public class VendorController {
+    @Autowired
+    private VendorService vendorService;
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
+    @Autowired
+    private AccountService accountService;
+
+    public ResponseEntity<?> findById(Long id) {
+        return null;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult) {
+        // TODO Auto-generated method stub
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if (errorMap != null) return errorMap;
+
+        vendorService.save(vendorProviderRequest);
+
+        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+    }
+
+//    @PostMapping("/update")
+//    public ResponseEntity<?> update(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult) {
+//        // TODO Auto-generated method stub
+//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+//        if (errorMap != null) return errorMap;
 //
-//	@Autowired
-//	private IPageService<VendorProvider> vendorPageService;
+//        vendorService.update(vendorProviderRequest);
 //
-//
-//	@Override
-//	public ResponseEntity<Page<VendorProvider>> findAll(Pageable pageable, String searchText) {
-//		// TODO Auto-generated method stub
-//		return new ResponseEntity<>(vendorPageService.findAll(pageable, searchText), HttpStatus.OK);
-//	}
-//
-//	@Override
-//	public ResponseEntity<Page<VendorProvider>> findAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
-//		return new ResponseEntity<>(vendorPageService.findAll(PageRequest.of(pageNumber, pageSize
-////						sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()
-//		)), HttpStatus.OK);
-//	}
-//
-//	@Override
-//	public ResponseEntity<?> findById(Long id) {
-//		Optional<VendorProvider> vendor= vendorService.findById(id);
-//		if(!vendor.isPresent()){
-//			throw new ResourceNotFoundException(ConstantUtils.VENDORNOTFOUND.getMessage());
-//		}
-//		return ResponseEntity.ok().body(vendor);
-//	}
-//
-//	@Override
-//	public ResponseEntity<?> save(@Valid @RequestBody VendorProvider t) {
-//		// TODO Auto-generated method stub
-//		vendorService.saveOrUpdate(t);
-//		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.ADDSUCCESS.getMessage()));
-//	}
-//
-//	@Override
-//	public ResponseEntity<?> update(VendorProvider t) {
-//		// TODO Auto-generated method stub
-//		vendorService.saveOrUpdate(t);
-//		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.UPDATESUCCESS.getMessage()));
-//	}
-//
-//	@Override
-//	public ResponseEntity<?> deleteById(Long id) {
-//		// TODO Auto-generated method stub
-//		Optional<VendorProvider> vendor= vendorService.findById(id);
-//		if(!vendor.isPresent()){
-//			throw new ResourceNotFoundException(ConstantUtils.VENDORNOTFOUND.getMessage());
-//		}
-//		return ResponseEntity.ok().body(new MessageToUser(ConstantUtils.DELETESUCCESS.getMessage()));
-//	}
+//        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+//    }
 }

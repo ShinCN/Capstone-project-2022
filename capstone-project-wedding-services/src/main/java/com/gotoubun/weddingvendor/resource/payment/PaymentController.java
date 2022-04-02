@@ -76,7 +76,7 @@ public class PaymentController {
                 }
             }
             String queryUrl = query.toString();
-            String vnp_SecureHash = DataUtils.hmacSHA512(PaymentConfig.CHECKSUM.getBytes(), hashData.toString());
+            String vnp_SecureHash = DataUtils.hmacSHA512(PaymentConfig.CHECKSUM, hashData.toString());
             queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
             String paymentUrl = PaymentConfig.VNPURL + "?" + queryUrl;
 //            com.google.gson.JsonObject job = new JsonObject();

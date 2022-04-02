@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 @Data
 @Entity
@@ -37,4 +39,12 @@ public class Photo extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "package_id")
 	private PackagePost packagePost;
+
+	@Column(name="createdby")
+	@CreatedBy
+	private String createdBy;
+
+	@Column(name="modifiedby")
+	@LastModifiedBy
+	private String modifiedBy;
 }

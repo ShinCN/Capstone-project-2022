@@ -1,0 +1,145 @@
+[33mcommit 46437b1e631ca3776f99ceb8b0131bfd0542cb82[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 3f808fe 6ce26aa
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 12:08:34 2022 +0700
+
+    update workflow
+
+[33mcommit 3f808fe74b1b0777081b3af1ef7c8090842ef305[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 12:06:37 2022 +0700
+
+    hope
+
+[33mcommit 6ce26aa290a90ee0e22e16dbc7acd62291b89519[m
+Author: ShinCN <52348312+ShinCN@users.noreply.github.com>
+Date:   Sun Apr 3 09:44:10 2022 +0700
+
+    fix zeroday 3/4
+
+[33mcommit 5c1431e523d54f82351a271d6b5833272473f946[m
+Author: ShinCN <52348312+ShinCN@users.noreply.github.com>
+Date:   Sun Apr 3 09:41:55 2022 +0700
+
+    Add or update the Azure App Service build and deployment workflow config
+
+[33mcommit 4a357da4e619f4d34cde68b8504bcd387a6b7812[m
+Author: ShinCN <52348312+ShinCN@users.noreply.github.com>
+Date:   Sun Apr 3 09:38:51 2022 +0700
+
+    Remove the Azure App Service build and deployment workflow config
+
+[33mcommit 46ff062229b550f99bcd51faa73cd712437790c4[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 04:32:23 2022 +0700
+
+    met qua roi
+
+[33mcommit 8b7bc86e25d8d4a10e0594ecf10e8e71ad0e0730[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 04:07:56 2022 +0700
+
+    fix zero day log4j lan thu 10
+
+[33mcommit 1ea2d94db0a641ff3ef8a72647f44e91c57797de[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 03:40:55 2022 +0700
+
+    fix zero day
+
+[33mcommit 990d84b313a1165dc062d019ebfec4061e82bfd7[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 03:19:06 2022 +0700
+
+    fix log4j lan thu n
+
+[33mcommit 9832ac228c866d5c8faea803c7b9bd9a7e5c036a[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 02:46:51 2022 +0700
+
+    nice try fix zeroday
+
+[33mcommit fb31e45f3e546068ecb8195c3d134e3333ba7757[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 02:01:52 2022 +0700
+
+    fix log4j
+
+[33mcommit c7f753f1c17e077c203eb462584884477aef62f6[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 01:02:38 2022 +0700
+
+    add log4j
+
+[33mcommit 814412bce3beb6636fe266d508ea5de8c0b1410e[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sun Apr 3 00:08:04 2022 +0700
+
+    deploy api
+
+[33mcommit c8237614b13d237df3fc253b704eb47721aca834[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Fri Apr 1 13:02:47 2022 +0700
+
+    update deploy 1/4/2022
+
+[33mcommit e9404f65cc1e83a7c9debe2aa73753a288d48718[m
+Merge: 805854f d103bc5
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Fri Apr 1 10:39:30 2022 +0700
+
+    merge UpdateByHuy resolved
+
+[33mcommit d103bc5eac88a5693e0f904ed3faa75fc5848a01[m[33m ([m[1;31morigin/UpdateByHuy[m[33m)[m
+Author: = <=>
+Date:   Wed Mar 23 22:47:54 2022 +0700
+
+    update by Huy
+
+[33mcommit ed736b357518eb1d80cfee48a26bcabc704807c8[m
+Author: = <=>
+Date:   Wed Mar 23 22:10:38 2022 +0700
+
+    update Security
+
+[33mcommit 805854f51b5ca6d76744344ee93d325eae7c5e63[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Mon Mar 21 16:12:56 2022 +0700
+
+    commit changes for payment and swagger
+
+[33mcommit 5f505414e9dba8182897468902ea05adb0d76bb4[m
+Author: = <=>
+Date:   Sat Mar 19 19:38:33 2022 +0700
+
+    update by HUy
+
+[33mcommit db719319dd03ef1d9720f222fe02ddb3eec1ab44[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sat Mar 19 16:12:17 2022 +0700
+
+    update db
+
+[33mcommit 42272ece2e6ad3b7ec93bbc4fadf879cc81e520b[m
+Author: = <=>
+Date:   Sat Mar 19 14:43:35 2022 +0700
+
+    update by HUy
+
+[33mcommit 5e93f54bcc75f73cff0877e77eeabfe44886dea0[m
+Author: ShinCN <shincnielts@gmail.com>
+Date:   Sat Mar 19 13:59:40 2022 +0700
+
+    run đi thằng deploy kia
+
+[33mcommit bc47e725c753f465e212e5a0959d87f1284edd3f[m
+Author: ShinCN <52348312+ShinCN@users.noreply.github.com>
+Date:   Sat Mar 19 12:17:38 2022 +0700
+
+    update main deploy
+
+[33mcommit bc934571a8ef7169712c63b05d034dd0f310a396[m
+Author: ShinCN <52348312+ShinCN@users.noreply.github.com>
+Date:   Sat Mar 19 12:14:45 2022 +0700
+
+    Add or update the Azure App Service build and deployment workflow config

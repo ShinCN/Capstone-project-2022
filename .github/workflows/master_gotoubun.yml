@@ -2,7 +2,6 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy JAR app to Azure Web App - gotoubun
-
 on:
   push:
     branches:
@@ -49,5 +48,5 @@ jobs:
         with:
           app-name: 'gotoubun'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0FFEF4DA6A244492BB1C2FC687A5FC3F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B17AB260F4C74D9390E19FE551CB58F3 }}
           package: '*.jar'

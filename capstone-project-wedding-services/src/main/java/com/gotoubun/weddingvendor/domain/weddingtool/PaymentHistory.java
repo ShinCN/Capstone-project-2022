@@ -1,10 +1,16 @@
 package com.gotoubun.weddingvendor.domain.weddingtool;
 
 import com.gotoubun.weddingvendor.domain.user.Customer;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "payment_history")
 public class PaymentHistory {
@@ -22,11 +28,11 @@ public class PaymentHistory {
     @Column(name="vnp_tmncode")
     private float tmnCode;
 
-    @Column(name="vnp_tnxRef")
-    private float tnxRef;
+    @Column(name="vnp_txnRef")
+    private float txnRef;
 
     @Column(name="vnp_amount")
-    private float money;
+    private float amount;
 
     @Column(name="response_code")
     private String responseCode;
@@ -51,4 +57,10 @@ public class PaymentHistory {
 
     @Column(name="transaction_status")
     private String transStatus;
+
+    @Column(name="secure_hash_type")
+    private String secureHashType;
+
+    @Column(name="secure_hash")
+    private String secureHash;
 }

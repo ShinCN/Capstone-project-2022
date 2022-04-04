@@ -1,7 +1,7 @@
 package com.gotoubun.weddingvendor.resource.vendor;
 
-import com.gotoubun.weddingvendor.data.SingleServicePostNameRequest;
-import com.gotoubun.weddingvendor.data.SingleServicePostNewRequest;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNameRequest;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNewRequest;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
-import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
-import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
-
+import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/single-service")
 public class SingleServiceController {
@@ -71,6 +70,21 @@ public class SingleServiceController {
         SinglePost singlePost = singlePostService.updateName(id, serviceName.getServiceName(), principal.getName());
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteSingleService(@Valid @PathVariable Long id, Principal principal) {
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException("you need to login to get access");
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2) {
+            throw new AccountNotHaveAccess("you don't have permission to access");
+        }
+        singlePostService.delete(id);
+
+        return new ResponseEntity<MessageToUser>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }
 
 

@@ -40,9 +40,6 @@ public class PackagePost extends BasePost{
 	@ManyToOne
 	@JoinColumn(name = "admin_id",nullable = false)
 	private Admin admin;
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
-	private Collection<Photo> photos;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
 	private Collection<Feedback> feedbacks;

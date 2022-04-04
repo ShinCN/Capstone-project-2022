@@ -78,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SIGN_UP_CUSTOMER_URLS).permitAll()
                 .antMatchers(SIGN_UP_VENDOR_URLS).permitAll()
                 .antMatchers(SINGLE_SERVICE_URLS).permitAll()
+                .antMatchers(SERVICE_PACK_URLS).permitAll()
                 .antMatchers(H2_URL).permitAll()
                 .anyRequest().authenticated();
 

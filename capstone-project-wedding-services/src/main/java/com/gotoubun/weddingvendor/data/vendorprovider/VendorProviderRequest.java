@@ -1,6 +1,5 @@
-package com.gotoubun.weddingvendor.data;
+package com.gotoubun.weddingvendor.data.vendorprovider;
 
-import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import lombok.Value;
 
 @Value

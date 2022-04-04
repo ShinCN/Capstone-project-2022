@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.data;
+package com.gotoubun.weddingvendor.data.payment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

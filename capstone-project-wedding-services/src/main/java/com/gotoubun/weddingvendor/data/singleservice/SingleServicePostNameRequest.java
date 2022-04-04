@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.data;
+package com.gotoubun.weddingvendor.data.singleservice;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

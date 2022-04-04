@@ -2,7 +2,7 @@ package com.gotoubun.weddingvendor.resource.vendor;
 
 import javax.validation.Valid;
 
-import com.gotoubun.weddingvendor.data.VendorProviderRequest;
+import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderRequest;
 import com.gotoubun.weddingvendor.service.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import com.gotoubun.weddingvendor.service.VendorService;
@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
-import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/vendor")
 public class VendorController {

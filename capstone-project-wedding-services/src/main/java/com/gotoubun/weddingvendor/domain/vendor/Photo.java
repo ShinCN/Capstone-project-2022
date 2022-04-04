@@ -35,11 +35,6 @@ public class Photo extends BaseEntity {
 	@JoinColumn(name = "single_post_id")
 	private SinglePost singlePost;
 
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "package_id")
-	private PackagePost packagePost;
-
 	@Column(name="createdby")
 	@CreatedBy
 	private String createdBy;

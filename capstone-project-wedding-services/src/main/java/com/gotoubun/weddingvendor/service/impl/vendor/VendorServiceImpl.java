@@ -3,7 +3,7 @@ package com.gotoubun.weddingvendor.service.impl.vendor;
 import java.util.Optional;
 
 
-import com.gotoubun.weddingvendor.data.VendorProviderRequest;
+import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 

@@ -1,6 +1,6 @@
 package com.gotoubun.weddingvendor.service.impl.single_service;
 
-import com.gotoubun.weddingvendor.data.SingleServicePostNewRequest;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNewRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;

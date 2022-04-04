@@ -9,13 +9,8 @@ public class VendorProviderRequest {
     @NotBlank(message = "companyName field must not be blank")
     String companyName;
 
-    @NotBlank(message = "representative field must not be blank")
-    String representative;
-
     @NotBlank(message = "email field must not be blank")
     String email;
-
-    String username;
 
     @NotBlank(message = "phone field must not be blank")
     String phone;

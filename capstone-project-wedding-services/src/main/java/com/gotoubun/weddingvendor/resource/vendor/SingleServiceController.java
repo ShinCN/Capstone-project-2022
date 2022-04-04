@@ -21,6 +21,7 @@ import java.security.Principal;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/single-service")
 public class SingleServiceController {
     @Autowired

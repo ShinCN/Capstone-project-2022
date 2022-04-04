@@ -46,14 +46,13 @@ public class VendorServiceImpl implements VendorService {
 
 			Optional<SingleCategory> singleCategory = singleCategoryIService.findById(vendor.getCategoryId());
 			//save account
-			account.setUsername(vendor.getUsername());
+//			account.setUsername(vendor.getUsername());
 			account.setPassword(bCryptPasswordEncoder.encode(password));
 			account.setRole(2);
 			accountRepository.save(account);
 			//save vendor
 			vendorProvider.setAccount(account);
 			vendorProvider.setNanoPassword(password);
-			vendorProvider.setFullName(vendor.getRepresentative());
 			vendorProvider.setCompany(vendor.getCompanyName());
 			vendorProvider.setMail(vendor.getEmail());
 			vendorProvider.setPhone(vendor.getPhone());
@@ -66,11 +65,10 @@ public class VendorServiceImpl implements VendorService {
 
 	@Override
 	public VendorProvider update(VendorProviderRequest vendor) {
-		Account account = accountRepository.findByUsername(vendor.getUsername());
+		Account account = accountRepository.findByUsername(vendor.getEmail());
 		VendorProvider vendorProvider = vendorRepository.findByAccount(account);
 
 			//save vendor
-			vendorProvider.setFullName(vendor.getRepresentative());
 			vendorProvider.setCompany(vendor.getCompanyName());
 			vendorProvider.setMail(vendor.getEmail());
 			vendorProvider.setPhone(vendor.getPhone());

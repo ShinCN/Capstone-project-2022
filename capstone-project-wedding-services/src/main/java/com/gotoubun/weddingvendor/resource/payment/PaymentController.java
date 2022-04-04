@@ -25,6 +25,7 @@ import java.util.*;
 import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomPassword;
 
 @RestController
+@CrossOrigin
 public class PaymentController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;

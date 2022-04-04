@@ -23,6 +23,7 @@ import java.security.Principal;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/service-pack")
 public class ServicePackController {
     @Autowired

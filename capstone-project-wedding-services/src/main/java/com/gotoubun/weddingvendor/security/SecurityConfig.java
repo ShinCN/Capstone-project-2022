@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.security;
 
+import com.gotoubun.weddingvendor.filter.CorsFilter;
 import com.gotoubun.weddingvendor.service.common.CustomAccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +15,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 
 import static com.gotoubun.weddingvendor.security.SecurityConstants.*;
 
 
-@Configuration
+    @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
@@ -52,9 +54,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
+        @Bean
+        CorsFilter corsFilter() {
+            CorsFilter filter = new CorsFilter();
+            return filter;
+        }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http
+                .addFilterBefore(corsFilter(), SessionManagementFilter.class)
+                .cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

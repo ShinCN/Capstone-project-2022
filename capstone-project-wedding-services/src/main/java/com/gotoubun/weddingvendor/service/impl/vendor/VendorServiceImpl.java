@@ -70,25 +70,11 @@ public class VendorServiceImpl implements VendorService {
 		VendorProvider vendorProvider = vendorRepository.findByAccount(account);
 
 			//save vendor
-			if (!vendor.getRepresentative().isEmpty()) {
-				vendorProvider.setFullName(vendor.getRepresentative());
-			}
-
-			if (!vendor.getCompanyName().isEmpty()) {
-				vendorProvider.setCompany(vendor.getCompanyName());
-			}
-
-			if (!vendor.getEmail().isEmpty()) {
-				vendorProvider.setMail(vendor.getEmail());
-			}
-
-			if (!vendor.getPhone().isEmpty()) {
-				vendorProvider.setPhone(vendor.getPhone());
-			}
-
-			if (!vendor.getAddress().isEmpty()) {
-				vendorProvider.setAddress(vendor.getAddress());
-			}
+			vendorProvider.setFullName(vendor.getRepresentative());
+			vendorProvider.setCompany(vendor.getCompanyName());
+			vendorProvider.setMail(vendor.getEmail());
+			vendorProvider.setPhone(vendor.getPhone());
+			vendorProvider.setAddress(vendor.getAddress());
 
 			vendorRepository.save(vendorProvider);
 

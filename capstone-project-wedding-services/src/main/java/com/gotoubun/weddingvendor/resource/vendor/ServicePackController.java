@@ -21,7 +21,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 @RestController
 @RequestMapping("/service-pack")
 public class ServicePackController {

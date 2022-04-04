@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 @RestController
 @RequestMapping("/vendor")
 public class VendorController {

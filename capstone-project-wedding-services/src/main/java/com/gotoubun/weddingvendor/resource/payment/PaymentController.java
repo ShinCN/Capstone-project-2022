@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomPassword;
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 @RestController
 public class PaymentController {
     @Autowired

@@ -16,20 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //@EnableJpaRepositories(basePackageClasses = VendorRepository.class)
 public class CapstoneProjectWeddingServicesApplication {
     @Bean
-    public WebMvcConfigurer corsConfigurer(){
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("api/v1/**")
-                        .allowCredentials(true)
-                        .allowedMethods("GET", "POST", "PUT", "DELETE","PACTH")
-                        .allowedHeaders("*")
-                        .allowedOrigins("http://localhost:3000")
-                        .maxAge(3600);
-            }
-        };
-    }
-    @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }

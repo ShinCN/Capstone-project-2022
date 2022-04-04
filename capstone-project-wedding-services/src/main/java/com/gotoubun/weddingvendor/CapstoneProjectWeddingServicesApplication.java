@@ -20,10 +20,12 @@ public class CapstoneProjectWeddingServicesApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
+                registry.addMapping("api/v1/**")
+                        .allowCredentials(true)
                         .allowedMethods("GET", "POST", "PUT", "DELETE","PACTH")
                         .allowedHeaders("*")
-                        .allowedOrigins("http://localhost:3000");
+                        .allowedOrigins("http://localhost:3000")
+                        .maxAge(3600);
             }
         };
     }

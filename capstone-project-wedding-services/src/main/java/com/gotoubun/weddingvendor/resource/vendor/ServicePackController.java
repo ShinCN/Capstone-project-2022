@@ -23,7 +23,7 @@ import java.security.Principal;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 @RequestMapping("/service-pack")
 public class ServicePackController {
     @Autowired

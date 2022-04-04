@@ -3,14 +3,14 @@ package com.gotoubun.weddingvendor.data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Data
-public class SingleServicePostNameRequest {
-    @NotBlank(message = "service name field must not be blank")
-    @JsonProperty("service name")
-    String serviceName;
+public class SingleServicePostPriceRequest {
+    @NotNull
+    @JsonProperty("price")
+    Float price;
 }

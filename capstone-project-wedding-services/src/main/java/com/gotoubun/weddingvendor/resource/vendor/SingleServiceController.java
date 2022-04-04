@@ -1,9 +1,6 @@
 package com.gotoubun.weddingvendor.resource.vendor;
 
-import com.gotoubun.weddingvendor.data.SingleServicePostNameRequest;
-import com.gotoubun.weddingvendor.data.SingleServicePostNewRequest;
-import com.gotoubun.weddingvendor.data.SingleServicePostUpdateRequest;
-import com.gotoubun.weddingvendor.data.VendorProviderRequest;
+import com.gotoubun.weddingvendor.data.*;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
 import com.gotoubun.weddingvendor.exception.InvalidLoginResponse;
@@ -22,8 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
-import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
-import static com.gotoubun.weddingvendor.resource.MessageConstant.LOGIN_REQUIRED;
+import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
 @RestController
 @RequestMapping("/single-service")
@@ -55,8 +51,8 @@ public class SingleServiceController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<?> putSingleService(@Valid @PathVariable Long id,
+    @PutMapping("/service-name/{id}")
+    public ResponseEntity<?> putSingleServiceServiceName(@Valid @PathVariable Long id,
                                               @RequestBody SingleServicePostNameRequest serviceName,
                                               BindingResult bindingResult, Principal principal) {
         //check login
@@ -73,7 +69,70 @@ public class SingleServiceController {
 
         SinglePost singlePost = singlePostService.updateName(id, serviceName.getServiceName(), principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+    }
+
+    @PutMapping("price/{id}")
+    public ResponseEntity<?> putSingleServiceServicePrice(@Valid @PathVariable Long id,
+                                                          @RequestBody SingleServicePostPriceRequest priceRequest,
+                                                          BindingResult bindingResult, Principal principal) {
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException("you need to login to get access");
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2) {
+            throw new AccountNotHaveAccess("you don't have permission to access");
+        }
+        //check valid attributes
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if (errorMap != null) return errorMap;
+
+        SinglePost singlePost = singlePostService.updatePrice(id, priceRequest.getPrice(), principal.getName());
+
+        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+    }
+
+    @PutMapping("photos/{id}")
+    public ResponseEntity<?> putSingleServiceServicePhotos(@Valid @PathVariable Long id,
+                                                          @RequestBody SingleServicePostPhotosRequest photoRequest,
+                                                          BindingResult bindingResult, Principal principal) {
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException("you need to login to get access");
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2) {
+            throw new AccountNotHaveAccess("you don't have permission to access");
+        }
+        //check valid attributes
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if (errorMap != null) return errorMap;
+
+        SinglePost singlePost = singlePostService.updatePhotos(id, photoRequest.getPhotos(), principal.getName());
+
+        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+    }
+
+    @PutMapping("description/{id}")
+    public ResponseEntity<?> putSingleServiceServiceDescription(@Valid @PathVariable Long id,
+                                                           @RequestBody SingleServicePostDescriptionRequest descriptionRequest,
+                                                           BindingResult bindingResult, Principal principal) {
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException("you need to login to get access");
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2) {
+            throw new AccountNotHaveAccess("you don't have permission to access");
+        }
+        //check valid attributes
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if (errorMap != null) return errorMap;
+
+        SinglePost singlePost = singlePostService.updateDescription(id, descriptionRequest.getDescription(), principal.getName());
+
+        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 
 

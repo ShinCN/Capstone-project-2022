@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -23,9 +24,11 @@ public class Photo extends BaseEntity {
 	private Long id;
 
 	@Column(name="url")
+	@NotBlank(message = "url is not null")
 	private String url;
 
 	@Column(name="caption")
+	@NotBlank(message = "caption is not null")
 	private String caption;
 
 	@JsonIgnore

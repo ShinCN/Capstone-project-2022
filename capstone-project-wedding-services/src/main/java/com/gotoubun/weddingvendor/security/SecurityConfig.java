@@ -20,7 +20,7 @@ import org.springframework.security.web.session.SessionManagementFilter;
 import static com.gotoubun.weddingvendor.security.SecurityConstants.*;
 
 
-    @Configuration
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,

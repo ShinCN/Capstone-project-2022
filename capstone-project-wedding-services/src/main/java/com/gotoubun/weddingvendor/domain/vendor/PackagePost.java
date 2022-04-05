@@ -1,14 +1,9 @@
 package com.gotoubun.weddingvendor.domain.vendor;
 
 import java.util.Collection;
-
 import javax.persistence.*;
-
-import com.gotoubun.weddingvendor.domain.user.Admin;
 import com.gotoubun.weddingvendor.domain.user.Customer;
-
 import com.gotoubun.weddingvendor.domain.user.KOL;
-import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -34,9 +29,9 @@ public class PackagePost extends BasePost{
 	@JoinColumn(name = "category_id", nullable = false)
 	private PackageCategory packageCategory;
 	
-	@ManyToOne
-	@JoinColumn(name = "admin_id",nullable = false)
-	private Admin admin;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "kol_id")
+	private KOL kol;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
 	private Collection<Feedback> feedbacks;
@@ -49,10 +44,6 @@ public class PackagePost extends BasePost{
             inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
     private Collection<Customer> customers;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "kol_id")
-	private KOL kol;
 
 	@ManyToMany(mappedBy = "packagePosts")
     @EqualsAndHashCode.Exclude

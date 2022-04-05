@@ -32,6 +32,9 @@ public class Account implements UserDetails {
     @Column(name="role")
     private int role;
 
+    @Column(name="status")
+    private int status;
+
     @Column(name="created_date")
     @JsonIgnore
     private Date createdDate;

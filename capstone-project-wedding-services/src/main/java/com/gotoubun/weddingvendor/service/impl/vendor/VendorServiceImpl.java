@@ -47,7 +47,7 @@ public class VendorServiceImpl implements VendorService {
 			Optional<SingleCategory> singleCategory = singleCategoryIService.findById(vendor.getCategoryId());
 			Account account = accountRepository.findByUsername(vendor.getEmail());
 
-			if(account!=null) {
+			if(account==null) {
 				account = new Account();
 				//save account
 				account.setUsername(vendor.getEmail());

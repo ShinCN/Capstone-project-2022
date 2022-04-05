@@ -16,9 +16,6 @@ import lombok.NoArgsConstructor;
 public class Admin extends Auditable{
 
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "admin", cascade = CascadeType.ALL)
-	private Collection<PackagePost> packagePosts;
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="account_id")
 	private Account account;

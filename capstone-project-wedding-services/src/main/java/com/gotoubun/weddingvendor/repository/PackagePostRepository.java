@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 @Repository
-public interface PackagePostRepository extends JpaRepository<PackagePost, String>{
+public interface PackagePostRepository extends JpaRepository<PackagePost, Long>{
 
 }

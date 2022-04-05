@@ -1,9 +1,6 @@
 package com.gotoubun.weddingvendor.resource.vendor;
 
-import com.gotoubun.weddingvendor.data.servicepack.PackagePostNewRequest;
-import com.gotoubun.weddingvendor.data.servicepack.PackagePostUpdateAbout;
-import com.gotoubun.weddingvendor.data.servicepack.PackagePostUpdateTitleRequest;
-import com.gotoubun.weddingvendor.data.servicepack.PackageUpdateServiceList;
+import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
@@ -23,7 +20,6 @@ import java.security.Principal;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/service-pack")
 public class ServicePackController {
     @Autowired
@@ -37,15 +33,15 @@ public class ServicePackController {
 
     //add new service pack
     @PostMapping("new")
-    public ResponseEntity<?> postServicePack(@Valid @RequestBody PackagePostNewRequest packagePostNewRequest, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> postServicePack(@Valid @RequestBody PackagePostRequest packagePostNewRequest, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");
         //check role
         int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+        if (role != 4) {
+            throw new AccountNotHaveAccess("you are not kol");
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -59,65 +55,26 @@ public class ServicePackController {
 
     //update pack name
     @PostMapping("edit/{id}")
-    public ResponseEntity<?> putServicePackTitle(@Valid @PathVariable Long id, @RequestBody PackagePostUpdateTitleRequest packagePostUpdateTitleRequest, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> putServicePackTitle(@Valid @PathVariable Long id, @RequestBody PackagePostRequest packagePostRequest, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");
         //check role
         int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+        if (role != 4) {
+            throw new AccountNotHaveAccess("you are not kol");
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
 
         //save service pack
-        PackagePost packagePost = packagePostService.updateTitle(id, packagePostUpdateTitleRequest.getServiceTitle(), principal.getName());
+        PackagePost packagePost = packagePostService.update(id, packagePostRequest, principal.getName());
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 
-    //update pack about
-    @PostMapping("edit/{id}")
-    public ResponseEntity<?> putServicePackAbout(@Valid @PathVariable Long id, @RequestBody PackagePostUpdateAbout packagePostUpdateAbout, BindingResult bindingResult, Principal principal) {
-        // TODO Auto-generated method stub
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
-        }
-        //check valid attributes
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if (errorMap != null) return errorMap;
-
-        //save service pack
-        PackagePost packagePost = packagePostService.updateAbout(id, packagePostUpdateAbout.getAbout(), principal.getName());
-
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
-    }
-
-    //update pack service list
-    @PostMapping("edit/{id}")
-    public ResponseEntity<?> putPackSingleServiceList(@Valid @PathVariable Long id, @RequestBody PackageUpdateServiceList packageUpdateServiceList, Principal principal) {
-        // TODO Auto-generated method stub
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
-        }
-        //save service pack
-        PackagePost packagePost = packagePostService.updateServiceList(id, packageUpdateServiceList.getSinglePosts(), principal.getName());
-
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
-    }
 
     //delete 1 service pack
     @DeleteMapping("remove/{id}")
@@ -127,8 +84,8 @@ public class ServicePackController {
             throw new LoginRequiredException("you need to login to get access");
         //check role
         int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+        if (role != 4) {
+            throw new AccountNotHaveAccess("you are not kol");
         }
         packagePostService.delete(id);
 

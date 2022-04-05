@@ -20,7 +20,6 @@ import javax.validation.Valid;
 
 import static com.gotoubun.weddingvendor.security.SecurityConstants.TOKEN_PREFIX;
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/account")
 public class AccountController {
     @Autowired

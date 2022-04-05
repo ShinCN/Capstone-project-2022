@@ -40,26 +40,30 @@ public class VendorServiceImpl implements VendorService {
 	@Transactional
 	public VendorProvider save(VendorProviderRequest vendor) {
 		// TODO Auto-generated method stub
-			Account account = new Account();
+
 			VendorProvider vendorProvider = new VendorProvider();
 			String password=generateRandomPassword(10);
 
 			Optional<SingleCategory> singleCategory = singleCategoryIService.findById(vendor.getCategoryId());
-			//save account
-//			account.setUsername(vendor.getUsername());
-			account.setPassword(bCryptPasswordEncoder.encode(password));
-			account.setRole(2);
-			accountRepository.save(account);
-			//save vendor
-			vendorProvider.setAccount(account);
-			vendorProvider.setNanoPassword(password);
-			vendorProvider.setCompany(vendor.getCompanyName());
-			vendorProvider.setMail(vendor.getEmail());
-			vendorProvider.setPhone(vendor.getPhone());
-			vendorProvider.setSingleCategory(singleCategory.get());
-			vendorProvider.setAddress(vendor.getAddress());
-			vendorRepository.save(vendorProvider);
+			Account account = accountRepository.findByUsername(vendor.getEmail());
 
+			if(account!=null) {
+				account = new Account();
+				//save account
+				account.setUsername(vendor.getEmail());
+				account.setPassword(bCryptPasswordEncoder.encode(password));
+				account.setRole(2);
+				accountRepository.save(account);
+				//save vendor
+				vendorProvider.setAccount(account);
+				vendorProvider.setNanoPassword(password);
+				vendorProvider.setCompany(vendor.getCompanyName());
+				vendorProvider.setMail(vendor.getEmail());
+				vendorProvider.setPhone(vendor.getPhone());
+				vendorProvider.setSingleCategory(singleCategory.get());
+				vendorProvider.setAddress(vendor.getAddress());
+				vendorRepository.save(vendorProvider);
+			}
 			return vendorProvider;
 	}
 

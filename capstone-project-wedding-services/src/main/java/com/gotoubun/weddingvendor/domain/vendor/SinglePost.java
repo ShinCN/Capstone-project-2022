@@ -56,12 +56,7 @@ public class SinglePost extends BasePost{
     )
     private Collection<PackagePost> packagePosts;
 
-
-	@Column(name="createdby")
-	@CreatedBy
-	private String createdBy;
-
-	@Column(name="modifiedby")
-	@LastModifiedBy
-	private String modifiedBy;
+	//0 = not available, 1 = available
+	@Column(name="status")
+	private Integer status;
 }

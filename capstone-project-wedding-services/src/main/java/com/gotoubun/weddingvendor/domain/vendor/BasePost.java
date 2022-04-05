@@ -26,7 +26,4 @@ public class BasePost extends BaseEntity{
 	@Column(name="rate")
 	private Integer rate;
 
-	//0 = not available, 1 = available
-	@Column(name="status")
-	private Integer status;
 }

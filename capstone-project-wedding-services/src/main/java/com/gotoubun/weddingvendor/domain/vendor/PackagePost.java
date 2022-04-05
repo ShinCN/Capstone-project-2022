@@ -7,24 +7,21 @@ import javax.persistence.*;
 import com.gotoubun.weddingvendor.domain.user.Admin;
 import com.gotoubun.weddingvendor.domain.user.Customer;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import com.gotoubun.weddingvendor.domain.user.KOL;
+import com.gotoubun.weddingvendor.domain.user.VendorProvider;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 
-@Entity
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
+@Entity
 @Table(name = "package_service_post")
-@Getter
-@Setter
+
 @Accessors(fluent = true)
 public class PackagePost extends BasePost{
 	@Id
@@ -53,7 +50,10 @@ public class PackagePost extends BasePost{
     )
     private Collection<Customer> customers;
 
-	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "kol_id")
+	private KOL kol;
+
 	@ManyToMany(mappedBy = "packagePosts")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

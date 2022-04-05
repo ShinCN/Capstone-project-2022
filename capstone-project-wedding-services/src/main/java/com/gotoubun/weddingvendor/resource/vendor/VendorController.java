@@ -22,7 +22,6 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
 
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/vendor")
 public class VendorController {
     @Autowired

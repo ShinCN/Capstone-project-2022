@@ -21,6 +21,9 @@ import java.security.Principal;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
+/**
+ * The type Single service controller.
+ */
 @RestController
 @RequestMapping("/single-service")
 public class SingleServiceController {
@@ -31,6 +34,14 @@ public class SingleServiceController {
     @Autowired
     private AccountService accountService;
 
+    /**
+     * Post single service response entity.
+     *
+     * @param singleServicePost the single service post
+     * @param bindingResult     the binding result
+     * @param principal         the principal
+     * @return the response entity
+     */
     @PostMapping
     public ResponseEntity<?> postSingleService(@Valid @RequestBody SingleServicePostNewRequest singleServicePost, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
@@ -46,11 +57,21 @@ public class SingleServiceController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
         //save service
-        SinglePost singlePost = singlePostService.save(singleServicePost, principal.getName());
+        singlePostService.save(singleServicePost, principal.getName());
+
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
+    /**
+     * Put single service service name response entity.
+     *
+     * @param id            the id
+     * @param serviceName   the service name
+     * @param bindingResult the binding result
+     * @param principal     the principal
+     * @return the response entity
+     */
     @PutMapping("/service-name/{id}")
     public ResponseEntity<?> putSingleServiceServiceName(@Valid @PathVariable Long id,
                                               @RequestBody SingleServicePostNameRequest serviceName,
@@ -72,6 +93,15 @@ public class SingleServiceController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 
+    /**
+     * Put single service service price response entity.
+     *
+     * @param id            the id
+     * @param priceRequest  the price request
+     * @param bindingResult the binding result
+     * @param principal     the principal
+     * @return the response entity
+     */
     @PutMapping("price/{id}")
     public ResponseEntity<?> putSingleServiceServicePrice(@Valid @PathVariable Long id,
                                                           @RequestBody SingleServicePostPriceRequest priceRequest,
@@ -93,6 +123,15 @@ public class SingleServiceController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 
+    /**
+     * Put single service service photos response entity.
+     *
+     * @param id            the id
+     * @param photoRequest  the photo request
+     * @param bindingResult the binding result
+     * @param principal     the principal
+     * @return the response entity
+     */
     @PutMapping("photos/{id}")
     public ResponseEntity<?> putSingleServiceServicePhotos(@Valid @PathVariable Long id,
                                                           @RequestBody SingleServicePostPhotosRequest photoRequest,
@@ -114,6 +153,15 @@ public class SingleServiceController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 
+    /**
+     * Put single service service description response entity.
+     *
+     * @param id                 the id
+     * @param descriptionRequest the description request
+     * @param bindingResult      the binding result
+     * @param principal          the principal
+     * @return the response entity
+     */
     @PutMapping("description/{id}")
     public ResponseEntity<?> putSingleServiceServiceDescription(@Valid @PathVariable Long id,
                                                            @RequestBody SingleServicePostDescriptionRequest descriptionRequest,

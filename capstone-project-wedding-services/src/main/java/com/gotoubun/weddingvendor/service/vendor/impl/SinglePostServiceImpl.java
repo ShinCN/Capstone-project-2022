@@ -28,8 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class SinglePostServiceImpl implements SinglePostService {
-    @Autowired
-    IService<SingleCategory> singleCategoryIService;
+
     @Autowired
     VendorRepository vendorRepository;
     @Autowired
@@ -107,7 +106,7 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
 
     @Override
-    public SinglePost save(SingleServicePostNewRequest request, String username) {
+    public void save(SingleServicePostNewRequest request, String username) {
         Account account = accountRepository.findByUsername(username);
         VendorProvider vendorProvider = vendorRepository.findByAccount(account);
 
@@ -119,13 +118,15 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setRate(0);
         singlePost.setSingleCategory(vendorProvider.getSingleCategory());
         singlePost.setVendorProvider(vendorProvider);
+        singlePost.setCreatedBy(username);
 
         //check service name exist
         if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
             throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
         }
-        return singlePostRepository.save(singlePost);
-
+        singlePostRepository.save(singlePost);
+        singlePost.getPhotos().forEach(c->c.setSinglePost(singlePost));
+        singlePostRepository.save(singlePost);
     }
 
     List<SinglePost> findByVendorId(Long id) {

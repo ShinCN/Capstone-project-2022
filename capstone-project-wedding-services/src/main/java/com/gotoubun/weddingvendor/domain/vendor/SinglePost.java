@@ -13,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 @Entity
+@ToString
 @Table(name = "single_service_post")
 public class SinglePost extends BasePost{
 

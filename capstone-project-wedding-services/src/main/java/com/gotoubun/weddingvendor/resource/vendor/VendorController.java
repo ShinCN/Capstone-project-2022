@@ -32,6 +32,9 @@ import java.util.Optional;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
 
+/**
+ * The type Vendor controller.
+ */
 @RestController
 @RequestMapping("/vendor")
 public class VendorController {
@@ -42,12 +45,25 @@ public class VendorController {
     @Autowired
     private AccountService accountService;
 
+    /**
+     * Find by id response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     public ResponseEntity<?> findById(Long id) {
         return null;
     }
 
+    /**
+     * Post vendor response entity.
+     *
+     * @param vendorProviderRequest the vendor provider request
+     * @param bindingResult         the binding result
+     * @return the response entity
+     */
     @PostMapping
-    public ResponseEntity<?> register(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> postVendor(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult) {
         // TODO Auto-generated method stub
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;

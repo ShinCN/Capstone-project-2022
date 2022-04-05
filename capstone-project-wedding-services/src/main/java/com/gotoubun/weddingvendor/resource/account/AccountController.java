@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static com.gotoubun.weddingvendor.security.SecurityConstants.TOKEN_PREFIX;
+
+/**
+ * The type Account controller.
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/account")
@@ -39,6 +43,13 @@ public class AccountController {
     private AuthenticationManager authenticationManager;
 
 
+    /**
+     * Authenticate user response entity.
+     *
+     * @param loginRequest the login request
+     * @param result       the result
+     * @return the response entity
+     */
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -57,6 +68,13 @@ public class AccountController {
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 
+    /**
+     * Register user response entity.
+     *
+     * @param account the account
+     * @param result  the result
+     * @return the response entity
+     */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody Account account, BindingResult result){
         // Validate passwords match

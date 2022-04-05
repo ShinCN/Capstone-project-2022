@@ -14,9 +14,11 @@ import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
+import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.service.IService;
+import com.gotoubun.weddingvendor.service.singlecategory.SingleCategoryService;
 import com.gotoubun.weddingvendor.service.vendor.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +34,7 @@ import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordSe
 public class VendorServiceImpl implements VendorService {
 
     @Autowired
-    IService<SingleCategory> singleCategoryIService;
+    SingleCategoryService singleCategoryService;
     @Autowired
     VendorRepository vendorRepository;
     @Autowired
@@ -49,8 +51,12 @@ public class VendorServiceImpl implements VendorService {
         // TODO Auto-generated method stub
         Account account = new Account();
         VendorProvider vendorProvider = new VendorProvider();
-        Optional<SingleCategory> singleCategory= singleCategoryIService.findById(vendor.getCategoryId());
+        Optional<SingleCategory> singleCategory= singleCategoryService.findById(vendor.getCategoryId());
         String password=generateRandomPassword(10);
+        if(checkUserNameExisted(vendor.getUsername()))
+        {
+            throw new UsernameAlreadyExistsException("username: "+vendor.getUsername()+"already exist");
+        }
             //save account
             account.setUsername(vendor.getUsername());
             account.setPassword(bCryptPasswordEncoder.encode(password));
@@ -66,6 +72,9 @@ public class VendorServiceImpl implements VendorService {
 
 
         return vendorProvider;
+    }
+    boolean checkUserNameExisted(String username){
+        return accountRepository.findByUsername(username) != null;
     }
 
     @Override

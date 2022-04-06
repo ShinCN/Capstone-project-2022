@@ -33,7 +33,7 @@ import static com.gotoubun.weddingvendor.security.SecurityConstants.TOKEN_PREFIX
  * The type Account controller.
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/account")
 public class AccountController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -87,32 +87,31 @@ public class AccountController {
             throw new AccountNotHaveAccess("you don't have permission to access");
         }
         Collection<Account> accounts =  accountRepository.findAllByRole(2); //vendor list
-        accounts.addAll(accountRepository.findAllByRole(3)); //customer list
         accounts.addAll(accountRepository.findAllByRole(4)); //kol list
         return accounts;
     }
-//    /**
-//     * Register user response entity.
-//     *
-//     * @param account the account
-//     * @param result  the result
-//     * @return the response entity
-//     */
-//    @PostMapping("/register")
-//    public ResponseEntity<?> registerUser(@Valid @RequestBody Account account, BindingResult result){
-//        // Validate passwords match
-////        accountValidator.validate(account,result);
-//
-//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-//        if(errorMap != null) return errorMap;
-//
-//        Account newUser = accountService.save(account);
-//
-//        return  new ResponseEntity<Account>(newUser, HttpStatus.CREATED);
-//    }
+    /**
+     * Register user response entity.
+     *
+     * @param account the account
+     * @param result  the result
+     * @return the response entity
+     */
+    @PostMapping("admin/register")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody Account account, BindingResult result){
+        // Validate passwords match
+//        accountValidator.validate(account,result);
+
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap != null) return errorMap;
+
+        Account newUser = accountService.save(account);
+
+        return  new ResponseEntity<Account>(newUser, HttpStatus.CREATED);
+    }
     //get all account
-    @PutMapping("/status-update")
-    public ResponseEntity<?> putSingleServiceServiceName(@Valid  @RequestBody AccountStatusRequest accountStatusRequest,
+    @PutMapping("/status-update/{id}")
+    public ResponseEntity<?> putSingleServiceServiceName(@Valid @PathVariable Long id,  @RequestBody AccountStatusRequest accountStatusRequest,
                                                           Principal principal) {
         //check login
         if (principal == null)
@@ -123,7 +122,7 @@ public class AccountController {
             throw new AccountNotHaveAccess("you don't have permission to access");
         }
 
-        Account account = accountService.updateStatus(accountStatusRequest, principal.getName());
+        Account account = accountService.updateStatus(id, accountStatusRequest);
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }

@@ -58,6 +58,9 @@ public class VendorServiceImpl implements VendorService {
             vendorProvider.setAccount(account);
             vendorProvider.setNanoPassword(password);
             vendorProvider.setCompany(vendor.getCompanyName());
+            vendorProvider.setFullName(vendor.getRepresentative());
+            vendorProvider.setPhone(vendor.getPhone());
+            vendorProvider.setEmail(vendor.getUsername());
             vendorProvider.setSingleCategory(singleCategory.get());
             vendorProvider.setAddress(vendor.getAddress());
             vendorRepository.save(vendorProvider);

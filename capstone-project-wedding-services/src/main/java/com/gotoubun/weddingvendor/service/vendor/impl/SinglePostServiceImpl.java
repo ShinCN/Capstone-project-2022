@@ -112,14 +112,15 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setAbout(request.getDescription());
         singlePost.setPhotos(request.getPhotos());
         singlePost.setRate(0);
+        singlePost.setStatus(1);
         singlePost.setSingleCategory(vendorProvider.getSingleCategory());
         singlePost.setVendorProvider(vendorProvider);
         singlePost.setCreatedBy(username);
 
-        //check service name exist
-        if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
-            throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
-        }
+//        //check service name exist
+//        if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
+//            throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
+//        }
         singlePostRepository.save(singlePost);
         singlePost.getPhotos().forEach(c->c.setSinglePost(singlePost));
         singlePostRepository.save(singlePost);

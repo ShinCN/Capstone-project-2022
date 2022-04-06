@@ -1,5 +1,8 @@
 package com.gotoubun.weddingvendor.data.kol;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
@@ -7,7 +10,9 @@ import javax.validation.constraints.NotBlank;
 /**
  * The type Kol request.
  */
-@Value
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class KOLRequest {
     @NotBlank(message = "name is not blank")
     String fullName;

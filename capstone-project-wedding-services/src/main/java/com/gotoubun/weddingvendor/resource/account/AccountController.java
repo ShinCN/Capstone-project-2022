@@ -97,7 +97,7 @@ public class AccountController {
      * @param result  the result
      * @return the response entity
      */
-    @PostMapping("/admin/register")
+    @PostMapping("/admin-register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody Account account, BindingResult result){
         // Validate passwords match
 //        accountValidator.validate(account,result);

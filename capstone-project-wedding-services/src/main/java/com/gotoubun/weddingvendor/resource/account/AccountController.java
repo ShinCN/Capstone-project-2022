@@ -33,7 +33,7 @@ import static com.gotoubun.weddingvendor.security.SecurityConstants.TOKEN_PREFIX
  * The type Account controller.
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/account")
 public class AccountController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;

@@ -1,19 +1,15 @@
-package com.gotoubun.weddingvendor.service.impl.service_pack;
+package com.gotoubun.weddingvendor.service.service_pack.impl;
 
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.KOL;
-import com.gotoubun.weddingvendor.domain.vendor.PackageCategory;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
-import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.KolRepository;
 import com.gotoubun.weddingvendor.repository.PackagePostRepository;
-import com.gotoubun.weddingvendor.repository.SinglePostRepository;
-import com.gotoubun.weddingvendor.service.IService;
-import com.gotoubun.weddingvendor.service.PackagePostService;
+import com.gotoubun.weddingvendor.service.service_pack.PackagePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,7 +51,7 @@ public class ServicePackImpl implements PackagePostService {
         return Optional.ofNullable(packagePostRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Service does not exist")));
     }
 
-
+    //add 1 service pack
     @Override
     public PackagePost save(PackagePostRequest request, String username) {
         Account account= accountRepository.findByUsername(username);
@@ -77,7 +73,7 @@ public class ServicePackImpl implements PackagePostService {
     }
 
     @Override
-    public PackagePost update(Long id, PackagePostRequest request, String username) {
+    public PackagePost updateDescription(Long id, PackagePostRequest request, String username) {
         Account account = accountRepository.findByUsername(username);
         PackagePost existingSinglePost = getServicePostById(id).get();
         //check service in current account
@@ -86,12 +82,10 @@ public class ServicePackImpl implements PackagePostService {
         }
 
         existingSinglePost.setServiceName(request.getPackTitle());
-
         existingSinglePost.setAbout(request.getDescription());
-        existingSinglePost.singlePosts(request.getSinglePosts());
-        //Auto update
-        existingSinglePost.setPrice(request.getPrice());
-        existingSinglePost.setRate(0);
+//        //Auto update
+//        existingSinglePost.setPrice(request.getPrice());
+//        existingSinglePost.setRate(0);
         return packagePostRepository.save(existingSinglePost);
     }
 

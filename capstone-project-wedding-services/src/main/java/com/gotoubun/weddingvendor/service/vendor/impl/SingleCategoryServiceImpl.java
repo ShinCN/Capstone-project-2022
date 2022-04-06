@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.service.impl.vendor;
+package com.gotoubun.weddingvendor.service.vendor.impl;
 
 import java.util.Collection;
 import java.util.List;

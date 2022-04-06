@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.service.impl.vendor;
+package com.gotoubun.weddingvendor.service.vendor.impl;
 
 import java.util.Optional;
 
@@ -10,7 +10,7 @@ import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.service.IService;
-import com.gotoubun.weddingvendor.service.VendorService;
+import com.gotoubun.weddingvendor.service.vendor.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

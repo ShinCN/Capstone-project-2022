@@ -4,7 +4,7 @@ import com.gotoubun.weddingvendor.data.payment.PaymentRequest;
 import com.gotoubun.weddingvendor.data.payment.PaymentResponse;
 import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
-import com.gotoubun.weddingvendor.service.AccountService;
+import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import com.gotoubun.weddingvendor.utils.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;

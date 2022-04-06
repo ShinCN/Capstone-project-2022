@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.service;
+package com.gotoubun.weddingvendor.service.kol;
 
 import com.gotoubun.weddingvendor.data.kol.KolRequest;
 import com.gotoubun.weddingvendor.data.kol.KolUpdateNameRequest;

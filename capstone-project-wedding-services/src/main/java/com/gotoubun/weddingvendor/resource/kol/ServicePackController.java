@@ -5,8 +5,8 @@ import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
-import com.gotoubun.weddingvendor.service.AccountService;
-import com.gotoubun.weddingvendor.service.PackagePostService;
+import com.gotoubun.weddingvendor.service.account.AccountService;
+import com.gotoubun.weddingvendor.service.service_pack.PackagePostService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,8 +54,8 @@ public class ServicePackController {
     }
 
     //update pack name
-    @PutMapping("edit/{id}")
-    public ResponseEntity<?> putServicePackTitle(@Valid @PathVariable Long id, @RequestBody PackagePostRequest packagePostRequest, BindingResult bindingResult, Principal principal) {
+    @PutMapping("edit/description/{id}")
+    public ResponseEntity<?> putServicePackDescription(@Valid @PathVariable Long id, @RequestBody PackagePostRequest packagePostRequest, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)
@@ -70,7 +70,7 @@ public class ServicePackController {
         if (errorMap != null) return errorMap;
 
         //save service pack
-        PackagePost packagePost = packagePostService.update(id, packagePostRequest, principal.getName());
+        PackagePost packagePost = packagePostService.updateDescription(id, packagePostRequest, principal.getName());
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }

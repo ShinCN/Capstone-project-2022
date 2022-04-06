@@ -1,10 +1,10 @@
-package com.gotoubun.weddingvendor.service.impl.account;
+package com.gotoubun.weddingvendor.service.account.impl;
 
 import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
-import com.gotoubun.weddingvendor.service.AccountService;
+import com.gotoubun.weddingvendor.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

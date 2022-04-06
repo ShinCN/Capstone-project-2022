@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.service.impl.single_service;
+package com.gotoubun.weddingvendor.service.single_service;
 
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNewRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
@@ -11,7 +11,7 @@ import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import com.gotoubun.weddingvendor.service.IService;
-import com.gotoubun.weddingvendor.service.SinglePostService;
+import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

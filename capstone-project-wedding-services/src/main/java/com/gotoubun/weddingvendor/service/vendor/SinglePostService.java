@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.service;
+package com.gotoubun.weddingvendor.service.vendor;
 
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNewRequest;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;

@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.service;
+package com.gotoubun.weddingvendor.service.account;
 
 import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;

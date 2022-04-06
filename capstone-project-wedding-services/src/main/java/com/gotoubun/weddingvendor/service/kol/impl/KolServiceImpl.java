@@ -8,7 +8,7 @@
 //import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 //import com.gotoubun.weddingvendor.repository.AccountRepository;
 //import com.gotoubun.weddingvendor.repository.KolRepository;
-//import com.gotoubun.weddingvendor.service.KOLService;
+//import com.gotoubun.weddingvendor.service.kol.KOLService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.stereotype.Service;

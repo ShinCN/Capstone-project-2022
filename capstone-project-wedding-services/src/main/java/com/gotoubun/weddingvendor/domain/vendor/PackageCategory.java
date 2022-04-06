@@ -17,13 +17,16 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "package_category")
-public class PackageCategory extends BaseEntity{
+public class PackageCategory{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name="package_name")
 	private String packageName;
+
+	@Column(name="description")
+	private String description;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packageCategory", cascade = CascadeType.ALL)
 	private Collection<PackagePost> packagePosts;

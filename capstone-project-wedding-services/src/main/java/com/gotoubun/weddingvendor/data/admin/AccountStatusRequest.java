@@ -1,8 +1,13 @@
 package com.gotoubun.weddingvendor.data.admin;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class AccountStatusRequest {
     Integer status;
 }

@@ -32,6 +32,7 @@ public class Account implements UserDetails {
     @Column(name="role")
     private int role;
 
+    //1: active, 0: de-active
     @Column(name="status")
     private int status;
 

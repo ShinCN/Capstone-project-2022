@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface AccountService {
     Account save(Account account);
     Optional<Account> findByUserName(String username);
-    Account updateStatus(AccountStatusRequest accountStatusRequest, String username);
+    Account updateStatus(Long id, AccountStatusRequest accountStatusRequest);
     int getRole(String username);
+    int getStatus(String username);
 }

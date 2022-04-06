@@ -27,6 +27,8 @@ public class AccountServiceImpl implements AccountService {
             account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
             //Username has to be unique (exception)
             account.setUsername(account.getUsername());
+            account.setRole(1);
+            account.setStatus(1);
             // Make sure that password and confirmPassword match
             // We don't persist or show the confirmPassword
 
@@ -37,8 +39,8 @@ public class AccountServiceImpl implements AccountService {
         }
     }
     @Override
-    public Account updateStatus(AccountStatusRequest accountStatusRequest, String username) {
-        Account account = accountRepository.findByUsername(username);
+    public Account updateStatus(Long id, AccountStatusRequest accountStatusRequest) {
+        Account account = accountRepository.getById(id);
         account.setStatus(accountStatusRequest.getStatus());
         return accountRepository.save(account);
     }
@@ -53,4 +55,8 @@ public class AccountServiceImpl implements AccountService {
         return  findByUserName(username).get().getRole();
     }
 
+    public int getStatus(String username)
+    {
+        return  findByUserName(username).get().getStatus();
+    }
 }

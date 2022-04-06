@@ -48,7 +48,7 @@ public class ServicePackController {
         if (errorMap != null) return errorMap;
 
         //save service pack
-        PackagePost packagePost = packagePostService.save(packagePostNewRequest, principal.getName());
+        packagePostService.save(packagePostNewRequest, principal.getName());
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }

@@ -31,45 +31,25 @@ public class ServicePackImpl implements PackagePostService {
     @Autowired
     public BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-    List<PackagePost> findByKolId(Long id) {
-        List<PackagePost> packagePosts;
-        packagePosts = packagePostRepository.findAll().stream()
-                .filter(c -> c.kol().getId().equals(id)).collect(Collectors.toList());
-        if (packagePosts.size() == 0) {
-            throw new SingleServicePostNotFoundException("KOL does not have service pack");
-        }
-        return packagePosts;
-    }
-    boolean checkServiceNameExisted(String serviceName, Long id) {
-        List<String> serviceNames = new ArrayList<>();
-        List<PackagePost> pack = findByKolId(id);
-        pack.forEach(c -> serviceNames.add(c.getServiceName()));
-        return serviceNames.contains(serviceName);
-    }
-    public Optional<PackagePost> getServicePostById(Long id) {
-        return Optional.ofNullable(packagePostRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Service does not exist")));
-    }
-
-
     @Override
-    public PackagePost save(PackagePostRequest request, String username) {
+    public void save(PackagePostRequest request, String username) {
         Account account= accountRepository.findByUsername(username);
         KOL kol = kolRepository.findByAccount(account);
 
         PackagePost packagePost = new PackagePost();
         packagePost.setServiceName(request.getPackTitle());
-        //check pack title exist
-        if (checkServiceNameExisted(request.getPackTitle(), kol.getId())) {
-            throw new SingleServicePostNotFoundException("Service Name " + request.getSinglePosts() + " has already existed in your account");
-        }
         packagePost.setPrice(request.getPrice());
         packagePost.setAbout(request.getDescription());
         packagePost.singlePosts(request.getSinglePosts());
         packagePost.setRate(0);
         packagePost.kol(kol);
-        return packagePostRepository.save(packagePost);
-
+        //check pack title exist
+        if (checkServiceNameExisted(request.getPackTitle(), kol.getId())) {
+            throw new SingleServicePostNotFoundException("Service Name " + request.getSinglePosts() + " has already existed in your account");
+        }
+        packagePostRepository.save(packagePost);
+        packagePost.singlePosts().forEach(c->c.setPackagePosts(packagePost.kol().getPackagePosts()));
+        packagePostRepository.save(packagePost);
     }
 
     @Override
@@ -94,4 +74,20 @@ public class ServicePackImpl implements PackagePostService {
     @Override
     public void delete(Long id) {packagePostRepository.delete(getServicePostById(id).get());}
 
+    List<PackagePost> findByKolId(Long id) {
+        List<PackagePost> packagePosts;
+        packagePosts = packagePostRepository.findAll().stream()
+                .filter(c -> c.kol().getId().equals(id)).collect(Collectors.toList());
+
+        return packagePosts;
+    }
+    boolean checkServiceNameExisted(String serviceName, Long id) {
+        List<String> serviceNames = new ArrayList<>();
+        List<PackagePost> pack = findByKolId(id);
+        pack.forEach(c -> serviceNames.add(c.getServiceName()));
+        return serviceNames.contains(serviceName);
+    }
+    public Optional<PackagePost> getServicePostById(Long id) {
+        return Optional.ofNullable(packagePostRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Service does not exist")));
+    }
 }

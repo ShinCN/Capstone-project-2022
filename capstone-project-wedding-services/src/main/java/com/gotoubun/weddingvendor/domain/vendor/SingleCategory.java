@@ -20,6 +20,9 @@ public class SingleCategory{
 	@Column(name="category_name")
 	private String categoryName;
 
+	@Column(name="description")
+	private String description;
+
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
 	private Collection<SinglePost> singlePosts;

@@ -11,4 +11,6 @@ public class LoginRequiredResponse {
     public LoginRequiredResponse(String message) {
         this.message = "you have to login to get access";
     }
+
 }
+

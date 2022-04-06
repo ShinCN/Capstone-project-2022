@@ -5,19 +5,16 @@ import javax.validation.Valid;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderRequest;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
-import com.gotoubun.weddingvendor.service.AccountService;
+import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
-import com.gotoubun.weddingvendor.service.VendorService;
+import com.gotoubun.weddingvendor.service.vendor.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import com.gotoubun.weddingvendor.message.MessageToUser;
-
 import java.security.Principal;
-
 import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
 
@@ -30,19 +27,28 @@ public class VendorController {
     private MapValidationErrorService mapValidationErrorService;
     @Autowired
     private AccountService accountService;
-
+    /**
+     * Find by id response entity.
+     *
+     * @param id the id
+     * @return the response entity
+     */
     public ResponseEntity<?> findById(Long id) {
         return null;
     }
-
+    /**
+     * Post vendor response entity.
+     *
+     * @param vendorProviderRequest the vendor provider request
+     * @param bindingResult         the binding result
+     * @return the response entity
+     */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult) {
+    public ResponseEntity<?> postVendor(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult) {
         // TODO Auto-generated method stub
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
-
         vendorService.save(vendorProviderRequest);
-
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
@@ -65,3 +71,4 @@ public class VendorController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 }
+

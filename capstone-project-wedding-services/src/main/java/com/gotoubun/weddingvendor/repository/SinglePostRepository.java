@@ -12,8 +12,5 @@ public interface SinglePostRepository  extends JpaRepository<SinglePost, Long> {
     @Override
     List<SinglePost> findAll();
 //    SinglePost findBySinglePostIdentifier(String serviceId);
-
-
-
-
 }
+

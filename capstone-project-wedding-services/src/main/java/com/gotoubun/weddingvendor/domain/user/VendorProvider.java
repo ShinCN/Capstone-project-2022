@@ -1,12 +1,9 @@
 package com.gotoubun.weddingvendor.domain.user;
 
 import java.util.Collection;
-
 import javax.persistence.*;
-
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
-
 import lombok.*;
 
 @AllArgsConstructor

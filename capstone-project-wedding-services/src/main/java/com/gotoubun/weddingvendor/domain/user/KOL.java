@@ -1,7 +1,6 @@
 package com.gotoubun.weddingvendor.domain.user;
 
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
-import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,4 +23,9 @@ public class KOL extends Auditable{
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="kol", cascade = CascadeType.ALL)
     private Collection<PackagePost> packagePosts;
+
+    @Column(name="description", columnDefinition = "TEXT")
+    private String description;
 }
+
+

@@ -10,7 +10,7 @@ import com.gotoubun.weddingvendor.payload.LoginRequest;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.security.JwtTokenProvider;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
-import com.gotoubun.weddingvendor.service.impl.account.AccountServiceImpl;
+import com.gotoubun.weddingvendor.service.account.impl.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,15 +28,17 @@ import java.util.Collection;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
 import static com.gotoubun.weddingvendor.security.SecurityConstants.TOKEN_PREFIX;
+
+/**
+ * The type Account controller.
+ */
 @RestController
 @RequestMapping("/admin")
 public class AccountController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
-
     @Autowired
     private AccountServiceImpl accountService;
-
     @Autowired
     AccountRepository accountRepository;
 //    @Autowired
@@ -48,7 +50,13 @@ public class AccountController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-
+    /**
+     * Authenticate user response entity.
+     *
+     * @param loginRequest the login request
+     * @param result       the result
+     * @return the response entity
+     */
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -67,18 +75,7 @@ public class AccountController {
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<?> registerUser(@Valid @RequestBody Account account, BindingResult result){
-//        // Validate passwords match
-////        accountValidator.validate(account,result);
-//
-//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-//        if(errorMap != null) return errorMap;
-//
-//        Account newUser = accountService.save(account);
-//
-//        return  new ResponseEntity<Account>(newUser, HttpStatus.CREATED);
-//    }
+
     //get all account
     @GetMapping("/manage")
     public Collection<Account> getAllAccounts(Principal principal){
@@ -94,7 +91,25 @@ public class AccountController {
         accounts.addAll(accountRepository.findAllByRole(4)); //kol list
         return accounts;
     }
-
+//    /**
+//     * Register user response entity.
+//     *
+//     * @param account the account
+//     * @param result  the result
+//     * @return the response entity
+//     */
+//    @PostMapping("/register")
+//    public ResponseEntity<?> registerUser(@Valid @RequestBody Account account, BindingResult result){
+//        // Validate passwords match
+////        accountValidator.validate(account,result);
+//
+//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+//        if(errorMap != null) return errorMap;
+//
+//        Account newUser = accountService.save(account);
+//
+//        return  new ResponseEntity<Account>(newUser, HttpStatus.CREATED);
+//    }
     //get all account
     @PutMapping("/status-update")
     public ResponseEntity<?> putSingleServiceServiceName(@Valid  @RequestBody AccountStatusRequest accountStatusRequest,

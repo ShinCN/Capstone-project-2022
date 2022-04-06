@@ -9,4 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SinglePostNameAlreadyExistsResponse {
     private String singlePostName;
+
 }
+

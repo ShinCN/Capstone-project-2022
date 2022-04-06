@@ -4,6 +4,7 @@ import lombok.Value;
 
 @Value
 public class PhotoRequest {
+
     String caption;
     String url;
 }

@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "admin")
 public class Admin extends Auditable{
 
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="account_id")
 	private Account account;

@@ -1,10 +1,10 @@
-package com.gotoubun.weddingvendor.service.impl.account;
+package com.gotoubun.weddingvendor.service.account.impl;
 
 import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
-import com.gotoubun.weddingvendor.service.AccountService;
+import com.gotoubun.weddingvendor.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,6 @@ public class AccountServiceImpl implements AccountService {
             throw new UsernameAlreadyExistsException("Username '"+account.getUsername()+"' already exists");
         }
     }
-
     @Override
     public Account updateStatus(AccountStatusRequest accountStatusRequest, String username) {
         Account account = accountRepository.findByUsername(username);
@@ -48,10 +47,10 @@ public class AccountServiceImpl implements AccountService {
     public Optional<Account> findByUserName(String username){
         return Optional.ofNullable(accountRepository.findByUsername(username)) ;
     }
+
     public int getRole(String username)
     {
         return  findByUserName(username).get().getRole();
     }
-
 
 }

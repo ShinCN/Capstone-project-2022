@@ -8,7 +8,7 @@ import java.util.Collection;
 public class SingleServicePostUpdateRequest {
     Long id;
     String serviceName;
-    Float price;
+    float price;
     String description;
     Collection<Photo> imgUrl;
 }

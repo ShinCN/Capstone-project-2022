@@ -10,4 +10,6 @@ public class SingleServicePostNotFoundException extends RuntimeException {
     public SingleServicePostNotFoundException(String message) {
         super(message);
     }
+
 }
+

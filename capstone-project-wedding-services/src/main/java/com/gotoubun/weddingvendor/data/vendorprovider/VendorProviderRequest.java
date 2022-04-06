@@ -1,23 +1,27 @@
 package com.gotoubun.weddingvendor.data.vendorprovider;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import lombok.Value;
-import javax.validation.constraints.NotBlank;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+/**
+ * The type Vendor provider request.
+ */
+@Value
 public class VendorProviderRequest {
-    @NotBlank(message = "companyName field must not be blank")
+
+    @NotBlank(message = "companyName is not blank")
     String companyName;
-    @NotBlank(message = "email field must not be blank")
-    String email;
-    @NotBlank(message = "phone field must not be blank")
+
+    @NotBlank(message = "username is not blank")
+    String username;
+
     String phone;
+
+    @NotNull(message = "category is necessary to register")
     Long categoryId;
-    String anotherService;
-    @NotBlank(message = "address field must not be blank")
+
     String address;
 }

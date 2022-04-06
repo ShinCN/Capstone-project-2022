@@ -8,4 +8,5 @@ public class SinglePostNameAlreadyExistsException extends RuntimeException{
     public SinglePostNameAlreadyExistsException(String message) {
         super(message);
     }
+
 }

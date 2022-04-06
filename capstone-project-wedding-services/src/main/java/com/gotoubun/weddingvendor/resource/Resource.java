@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 
 public interface Resource<T> {
-	//	//search text
+
+//search text
 //	@GetMapping("/search/{searchText}")
 //	ResponseEntity<Page<T>> findAll(Pageable pageable, @PathVariable String searchText);
 //

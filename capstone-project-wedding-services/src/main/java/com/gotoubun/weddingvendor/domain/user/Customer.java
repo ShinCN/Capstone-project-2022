@@ -1,10 +1,8 @@
 package com.gotoubun.weddingvendor.domain.user;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
-
 import javax.persistence.*;
-
 import com.gotoubun.weddingvendor.domain.vendor.Feedback;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
@@ -23,7 +21,7 @@ import lombok.ToString;
 @Table(name = "customer")
 public class Customer extends Auditable{
 	@Column(name="planning_date")
-	private Date planningDate;
+	private LocalDate planningDate;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
 	private Collection<GuestList> guestLists;

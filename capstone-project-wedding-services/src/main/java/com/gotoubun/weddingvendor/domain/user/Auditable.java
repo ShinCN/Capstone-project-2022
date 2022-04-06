@@ -22,12 +22,11 @@ public class Auditable {
 	@Column(name="full_name", columnDefinition = "TEXT")
 	private String fullName;
 
-	@Size(max=9, message="so dien thoai chi duoc 9 chu so")
 	@Column(name="phone")
 	private String phone;
-
-	@Column(name="mail")
-	private String mail;
+	
+	@Column(name="email")
+	private String email;
 
 	@Column(name="address", columnDefinition = "TEXT")
 	private String address;

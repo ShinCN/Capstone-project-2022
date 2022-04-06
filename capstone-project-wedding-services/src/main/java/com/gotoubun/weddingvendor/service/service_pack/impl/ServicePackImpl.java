@@ -1,19 +1,15 @@
-package com.gotoubun.weddingvendor.service.impl.service_pack;
+package com.gotoubun.weddingvendor.service.service_pack.impl;
 
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.KOL;
-import com.gotoubun.weddingvendor.domain.vendor.PackageCategory;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
-import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.KolRepository;
 import com.gotoubun.weddingvendor.repository.PackagePostRepository;
-import com.gotoubun.weddingvendor.repository.SinglePostRepository;
-import com.gotoubun.weddingvendor.service.IService;
-import com.gotoubun.weddingvendor.service.PackagePostService;
+import com.gotoubun.weddingvendor.service.service_pack.PackagePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -10,4 +10,6 @@ public class AccountNotHaveAccess  extends RuntimeException{
     public AccountNotHaveAccess(String message) {
         super(message);
     }
+
 }
+

@@ -22,4 +22,6 @@ public class GenerateRandomPasswordService {
             return sb.toString();
         }
     }
+
 }
+

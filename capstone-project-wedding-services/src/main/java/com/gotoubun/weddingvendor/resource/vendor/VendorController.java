@@ -43,7 +43,7 @@ public class VendorController {
      * @param bindingResult         the binding result
      * @return the response entity
      */
-    @PostMapping("/register")
+    @PostMapping
     public ResponseEntity<?> postVendor(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult) {
         // TODO Auto-generated method stub
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -52,8 +52,8 @@ public class VendorController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> update(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult, Principal principal) {
+    @PutMapping
+    public ResponseEntity<?> putVendor(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)

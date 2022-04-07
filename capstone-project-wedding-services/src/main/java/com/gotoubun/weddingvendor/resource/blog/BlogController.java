@@ -18,7 +18,7 @@ import java.security.Principal;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/ideas")
+@RequestMapping("/blog")
 public class BlogController {
 
     @Autowired

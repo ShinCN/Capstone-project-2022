@@ -1,12 +1,18 @@
 package com.gotoubun.weddingvendor.data.customer;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
-@Value
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class CustomerRequest {
     @NotBlank(message = "name is not blank")
     String fullName;

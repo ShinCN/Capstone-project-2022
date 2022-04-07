@@ -49,6 +49,10 @@ public class SingleServiceController {
         if (role != 2) {
             throw new AccountNotHaveAccess("you don't have permission to access");
         }
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new AccountNotHaveAccess("your account has not been activated yet");
+        }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
@@ -89,13 +93,17 @@ public class SingleServiceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSingleService(@Valid @PathVariable Long id, Principal principal) {
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new AccountNotHaveAccess("your account has not been activated yet");
+        }
         singlePostService.delete(id);
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }
 
 
-
+//price cap nhat tu dong
     @PutMapping("price/{id}")
     public ResponseEntity<?> putSingleServiceServicePrice(@Valid @PathVariable Long id,
                                                           @RequestBody SingleServicePostPriceRequest priceRequest,
@@ -107,6 +115,10 @@ public class SingleServiceController {
         int role = accountService.getRole(principal.getName());
         if (role != 2) {
             throw new AccountNotHaveAccess("you don't have permission to access");
+        }
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new AccountNotHaveAccess("your account has not been activated yet");
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -129,6 +141,10 @@ public class SingleServiceController {
         if (role != 2) {
             throw new AccountNotHaveAccess("you don't have permission to access");
         }
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new AccountNotHaveAccess("your account has not been activated yet");
+        }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
@@ -150,7 +166,10 @@ public class SingleServiceController {
         if (role != 2) {
             throw new AccountNotHaveAccess("you don't have permission to access");
         }
-
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new AccountNotHaveAccess("your account has not been activated yet");
+        }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;

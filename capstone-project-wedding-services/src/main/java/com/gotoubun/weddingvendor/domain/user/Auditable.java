@@ -3,6 +3,7 @@ package com.gotoubun.weddingvendor.domain.user;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Nationalized;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +20,8 @@ public class Auditable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name="full_name", columnDefinition = "TEXT")
+	@Nationalized
+	@Column(name="full_name")
 	private String fullName;
 
 	@Column(name="phone")
@@ -28,7 +30,8 @@ public class Auditable {
 	@Column(name="email")
 	private String email;
 
-	@Column(name="address", columnDefinition = "TEXT")
+	@Nationalized
+	@Column(name="address")
 	private String address;
 
 }

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
 @Data
 @Entity
@@ -20,6 +21,8 @@ public class SingleCategory{
 	@Column(name="category_name")
 	private String categoryName;
 
+	@Lob
+	@Nationalized
 	@Column(name="description")
 	private String description;
 

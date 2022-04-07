@@ -4,6 +4,7 @@ import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -24,7 +25,9 @@ public class KOL extends Auditable{
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="kol", cascade = CascadeType.ALL)
     private Collection<PackagePost> packagePosts;
 
-    @Column(name="description", columnDefinition = "TEXT")
+    @Lob
+    @Nationalized
+    @Column(name="description")
     private String description;
 }
 

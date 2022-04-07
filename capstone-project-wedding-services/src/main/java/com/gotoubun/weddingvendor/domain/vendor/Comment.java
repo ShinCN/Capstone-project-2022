@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import com.gotoubun.weddingvendor.domain.user.Account;
 import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
@@ -24,6 +25,7 @@ public class Comment extends BaseEntity{
 	private Long id;
 
 	//noi dung comment
+	@Nationalized
 	@Column(name="content")
 	private String content;
 

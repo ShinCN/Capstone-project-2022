@@ -47,9 +47,9 @@ public class SinglePostServiceImpl implements SinglePostService {
         }
 
         //check service name exist
-        if (checkServiceNameExisted(serviceName, vendorProvider.getId())) {
-            throw new SingleServicePostNotFoundException("Service Name " + serviceName + " has already existed in your account");
-        }
+//        if (checkServiceNameExisted(serviceName, vendorProvider.getId())) {
+//            throw new SingleServicePostNotFoundException("Service Name " + serviceName + " has already existed in your account");
+//        }
 
         existingSinglePost.setServiceName(serviceName);
 

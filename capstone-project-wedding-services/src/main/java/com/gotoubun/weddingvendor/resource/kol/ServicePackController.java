@@ -32,7 +32,7 @@ public class ServicePackController {
     private MapValidationErrorService mapValidationErrorService;
 
     //add new service pack
-    @PostMapping("new")
+    @PostMapping
     public ResponseEntity<?> postServicePack(@Valid @RequestBody PackagePostRequest packagePostNewRequest, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
@@ -54,7 +54,7 @@ public class ServicePackController {
     }
 
     //update pack name
-    @PutMapping("edit/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<?> putServicePackTitle(@Valid @PathVariable Long id, @RequestBody PackagePostRequest packagePostRequest, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
@@ -77,7 +77,7 @@ public class ServicePackController {
 
 
     //delete 1 service pack
-    @DeleteMapping("remove/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<?> deleteServicePack(@Valid @PathVariable Long id, Principal principal) {
         //check login
         if (principal == null)

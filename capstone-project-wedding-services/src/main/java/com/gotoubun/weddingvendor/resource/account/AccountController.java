@@ -75,10 +75,23 @@ public class AccountController {
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 
+    //get all kols
+    @GetMapping("/kols")
+    public Collection<Account> getKols(Principal principal){
+        if (principal == null)
+            throw new LoginRequiredException("you need to login to get access");
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 1) {
+            throw new AccountNotHaveAccess("you don't have permission to access");
+        }
+        Collection<Account> accounts = accountRepository.findAllByRole(4); //kol list
+        return accounts;
+    }
 
-    //get all account
-    @GetMapping("/manage")
-    public Collection<Account> getAllAccounts(Principal principal){
+    //get all vendors
+    @GetMapping("/vendors")
+    public Collection<Account> getVendors(Principal principal){
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");
         //check role
@@ -87,7 +100,6 @@ public class AccountController {
             throw new AccountNotHaveAccess("you don't have permission to access");
         }
         Collection<Account> accounts =  accountRepository.findAllByRole(2); //vendor list
-        accounts.addAll(accountRepository.findAllByRole(4)); //kol list
         return accounts;
     }
     /**
@@ -97,8 +109,8 @@ public class AccountController {
      * @param result  the result
      * @return the response entity
      */
-    @PostMapping("/admin-register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody Account account, BindingResult result){
+    @PostMapping
+    public ResponseEntity<?> postAccount(@Valid @RequestBody Account account, BindingResult result){
         // Validate passwords match
 //        accountValidator.validate(account,result);
 
@@ -109,9 +121,9 @@ public class AccountController {
 
         return  new ResponseEntity<Account>(newUser, HttpStatus.CREATED);
     }
-    //get all account
-    @PutMapping("/status-update/{id}")
-    public ResponseEntity<?> putSingleServiceServiceName(@Valid @PathVariable Long id,  @RequestBody AccountStatusRequest accountStatusRequest,
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<?> putStatusAccount(@Valid @PathVariable Long id,  @RequestBody AccountStatusRequest accountStatusRequest,
                                                           Principal principal) {
         //check login
         if (principal == null)

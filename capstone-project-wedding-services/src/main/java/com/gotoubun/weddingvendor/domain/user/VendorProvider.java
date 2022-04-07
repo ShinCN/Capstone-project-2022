@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +15,8 @@ import lombok.*;
 @Table(name = "vendor")
 public class VendorProvider extends Auditable{
 
-	@Column(name="company", columnDefinition = "TEXT")
+	@Nationalized
+	@Column(name="company")
 	private String company;
 
 //	@Column(name="single_category_id", columnDefinition = "TEXT")

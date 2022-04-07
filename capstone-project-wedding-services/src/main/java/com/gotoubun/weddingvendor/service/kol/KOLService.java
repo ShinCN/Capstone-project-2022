@@ -5,5 +5,5 @@ import com.gotoubun.weddingvendor.domain.user.KOL;
 
 public interface KOLService {
     KOL save(KOLRequest kolRequest);
-
+    KOL update(KOLRequest kolRequest, String username);
 }

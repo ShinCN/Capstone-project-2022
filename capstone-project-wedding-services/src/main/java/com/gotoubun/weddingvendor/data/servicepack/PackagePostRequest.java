@@ -8,18 +8,18 @@ import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class PackagePostRequest {
-    @NotBlank(message = "pack title field must not be blank")
+    @NotBlank(message = "pack title should not be blank")
     String packTitle;
-    Float price;
-    @NotBlank(message = "about field must not be blank")
+    @NotNull(message = "full name is not blank")
+    Long packCategory;
+    @NotBlank(message = "description should not be blank")
     String description;
-    @NotEmpty(message = "services must be added")
     Collection<SinglePost> singlePosts;
-
 }

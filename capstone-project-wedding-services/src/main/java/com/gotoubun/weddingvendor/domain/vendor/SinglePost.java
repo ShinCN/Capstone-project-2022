@@ -56,8 +56,8 @@ public class SinglePost extends BasePost{
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JoinTable(name = "single_post_list_in_pack",
-            joinColumns = @JoinColumn(name = "package_post_id"),
-            inverseJoinColumns = @JoinColumn(name = "single_post_id")
+            joinColumns = @JoinColumn(name = "single_post_id"),
+            inverseJoinColumns = @JoinColumn(name = "package_post_id")
     )
     private Collection<PackagePost> packagePosts;
 

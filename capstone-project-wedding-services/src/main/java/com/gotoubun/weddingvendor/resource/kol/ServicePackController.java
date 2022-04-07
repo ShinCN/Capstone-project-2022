@@ -43,6 +43,10 @@ public class ServicePackController {
         if (role != 4) {
             throw new AccountNotHaveAccess("you are not kol");
         }
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new AccountNotHaveAccess("your account has not been activated yet");
+        }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
@@ -65,6 +69,10 @@ public class ServicePackController {
         if (role != 4) {
             throw new AccountNotHaveAccess("you are not kol");
         }
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new AccountNotHaveAccess("your account has not been activated yet");
+        }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
@@ -86,6 +94,10 @@ public class ServicePackController {
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
             throw new AccountNotHaveAccess("you are not kol");
+        }
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new AccountNotHaveAccess("your account has not been activated yet");
         }
         packagePostService.delete(id);
 

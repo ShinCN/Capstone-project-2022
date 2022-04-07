@@ -16,8 +16,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 @Data
 @Entity
 @Table(name = "package_service_post")
-
-@Accessors(fluent = true)
 public class PackagePost extends BasePost{
 	@Id
 	@Column(name = "package_post_id")

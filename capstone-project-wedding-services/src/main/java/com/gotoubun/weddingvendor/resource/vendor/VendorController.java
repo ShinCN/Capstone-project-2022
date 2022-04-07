@@ -53,7 +53,7 @@ public class VendorController {
     }
 
     @PutMapping
-    public ResponseEntity<?> putVendor(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> update(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)

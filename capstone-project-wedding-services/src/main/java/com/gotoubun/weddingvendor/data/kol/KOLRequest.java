@@ -14,19 +14,15 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Data
 public class KOLRequest {
-    @NotBlank(message = "name is not blank")
+    @NotBlank(message = "full name should not be blank")
     String fullName;
-
-    @NotBlank(message = "email is not blank")
+    @NotBlank(message = "email should not be blank")
     String email;
-
-    @NotBlank(message = "password is not blank")
+    @NotBlank(message = "password should not be blank")
     String password;
-
-    @NotBlank(message = "phone is not blank")
+    @NotBlank(message = "phone should not be blank")
     String phone;
-
+    @NotBlank(message = "address should not be blank")
     String address;
-
     String description;
 }

@@ -39,7 +39,7 @@ public class SingleServiceController {
      * @return the response entity
      */
     @PostMapping
-    public ResponseEntity<?> postSingleService(@Valid @RequestBody SingleServicePostNewRequest singleServicePost, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> postSingleService(@Valid @RequestBody SingleServicePostRequest singleServicePost, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)
@@ -53,20 +53,21 @@ public class SingleServiceController {
         if (status == 0) {
             throw new AccountNotHaveAccess("your account has not been activated yet");
         }
+
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
+
         //save service
         singlePostService.save(singleServicePost, principal.getName());
-
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
-    //Update single service name
+    //Update single service
     @PutMapping("/{id}")
-    public ResponseEntity<?> putSingleServiceName(@Valid @PathVariable Long id,
-                                              @RequestBody SingleServicePostNameRequest serviceName,
+    public ResponseEntity<?> putSingleService(@Valid @PathVariable Long id,
+                                              @RequestBody SingleServicePostRequest request,
                                               BindingResult bindingResult, Principal principal) {
         //check login
         if (principal == null)
@@ -85,10 +86,12 @@ public class SingleServiceController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
 
-        SinglePost singlePost = singlePostService.updateName(id, serviceName.getServiceName(), principal.getName());
+        //update service
+        singlePostService.update(id, request, principal.getName());
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
+
 
 
     @DeleteMapping("/{id}")
@@ -103,7 +106,7 @@ public class SingleServiceController {
     }
 
 
-//price cap nhat tu dong
+    //price cap nhat tu dong
     @PutMapping("price/{id}")
     public ResponseEntity<?> putSingleServiceServicePrice(@Valid @PathVariable Long id,
                                                           @RequestBody SingleServicePostPriceRequest priceRequest,
@@ -131,8 +134,8 @@ public class SingleServiceController {
 
     @PutMapping("photos/{id}")
     public ResponseEntity<?> putSingleServiceServicePhotos(@Valid @PathVariable Long id,
-                                                          @RequestBody SingleServicePostPhotosRequest photoRequest,
-                                                          BindingResult bindingResult, Principal principal) {
+                                                           @RequestBody SingleServicePostPhotosRequest photoRequest,
+                                                           BindingResult bindingResult, Principal principal) {
         //check login
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");
@@ -156,8 +159,8 @@ public class SingleServiceController {
 
     @PutMapping("description/{id}")
     public ResponseEntity<?> putSingleServiceServiceDescription(@Valid @PathVariable Long id,
-                                                           @RequestBody SingleServicePostDescriptionRequest descriptionRequest,
-                                                           BindingResult bindingResult, Principal principal) {
+                                                                @RequestBody SingleServicePostDescriptionRequest descriptionRequest,
+                                                                BindingResult bindingResult, Principal principal) {
         //check login
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");

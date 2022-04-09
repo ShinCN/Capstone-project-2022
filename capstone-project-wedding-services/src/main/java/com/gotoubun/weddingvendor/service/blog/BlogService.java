@@ -1,7 +1,6 @@
 package com.gotoubun.weddingvendor.service.blog;
 
 import com.gotoubun.weddingvendor.data.blog.BlogRequest;
-import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNewRequest;
 import com.gotoubun.weddingvendor.domain.vendor.Blog;
 
 import java.util.Collection;

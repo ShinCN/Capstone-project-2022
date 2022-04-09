@@ -13,7 +13,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SingleServicePostNewRequest {
+public class SingleServicePostRequest {
     @NotBlank(message = "service name is required")
     String serviceName;
     @NotNull

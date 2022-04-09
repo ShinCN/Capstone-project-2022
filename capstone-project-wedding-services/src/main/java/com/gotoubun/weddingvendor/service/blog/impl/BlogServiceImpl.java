@@ -1,11 +1,8 @@
 package com.gotoubun.weddingvendor.service.blog.impl;
 
 import com.gotoubun.weddingvendor.data.blog.BlogRequest;
-import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNewRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
-import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.vendor.Blog;
-import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.BlogRepository;

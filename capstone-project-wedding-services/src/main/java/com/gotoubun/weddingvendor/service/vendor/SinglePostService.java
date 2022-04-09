@@ -1,13 +1,14 @@
 package com.gotoubun.weddingvendor.service.vendor;
 
-import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNewRequest;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
 import com.gotoubun.weddingvendor.domain.vendor.Photo;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 
 import java.util.Collection;
 
 public interface SinglePostService {
-    void save(SingleServicePostNewRequest singleServicePostRequest, String username);
+    void save(SingleServicePostRequest singleServicePostRequest, String username);
+    void update(Long id, SingleServicePostRequest singleServicePostRequest, String username);
     SinglePost updateName(Long id, String serviceName, String username);
     SinglePost updatePrice(Long id, Float price, String username);
     SinglePost updateDescription(Long id, String description, String username);

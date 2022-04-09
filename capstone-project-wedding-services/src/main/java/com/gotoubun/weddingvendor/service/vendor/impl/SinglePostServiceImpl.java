@@ -1,6 +1,6 @@
 package com.gotoubun.weddingvendor.service.vendor.impl;
 
-import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostNewRequest;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.vendor.Photo;
@@ -102,7 +102,7 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
 
     @Override
-    public void save(SingleServicePostNewRequest request, String username) {
+    public void save(SingleServicePostRequest request, String username) {
         Account account = accountRepository.findByUsername(username);
         VendorProvider vendorProvider = vendorRepository.findByAccount(account);
 
@@ -117,6 +117,7 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setVendorProvider(vendorProvider);
         singlePost.setCreatedBy(username);
 
+
 //        //check service name exist
 //        if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
 //            throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
@@ -126,19 +127,55 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePostRepository.save(singlePost);
     }
 
+    @Override
+    public void update(Long id, SingleServicePostRequest request, String username) {
+        Account account = accountRepository.findByUsername(username);
+        VendorProvider vendorProvider = vendorRepository.findByAccount(account);
+
+        //check service in current account
+        if (getServicePostById(id).isPresent() && (!getServicePostById(id).get().getVendorProvider().getAccount().getUsername().equals(username))) {
+            throw new SingleServicePostNotFoundException("Service not found in your account");
+        }
+
+        SinglePost singlePost = new SinglePost();
+        singlePost.setServiceName(request.getServiceName());
+        singlePost.setPrice(request.getPrice());
+        singlePost.setAbout(request.getDescription());
+        singlePost.setPhotos(request.getPhotos());
+        singlePost.setRate(0);
+        singlePost.setStatus(1);
+        singlePost.setSingleCategory(vendorProvider.getSingleCategory());
+        singlePost.setVendorProvider(vendorProvider);
+        singlePost.setCreatedBy(username);
+
+        //set photos
+        singlePost.getPhotos().forEach(c->c.setSinglePost(singlePost));
+
+        //check service name exist
+        if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
+            throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
+        }
+
+        singlePostRepository.save(singlePost);
+    }
+
     List<SinglePost> findByVendorId(Long id) {
         List<SinglePost> singlePosts;
         singlePosts = singlePostRepository.findAll().stream()
                 .filter(c -> c.getVendorProvider().getId().equals(id)).collect(Collectors.toList());
-        if (singlePosts.size() == 0) {
-            throw new SingleServicePostNotFoundException("Vendor does not have singlePost");
-        }
+//        if (singlePosts.size() == 0) {
+//            throw new SingleServicePostNotFoundException("Vendor does not have singlePost");
+//        }
         return singlePosts;
     }
 
     boolean checkServiceNameExisted(String serviceName, Long id) {
         List<String> serviceNames = new ArrayList<>();
         List<SinglePost> singlePost = findByVendorId(id);
+        if(singlePost.size() == 0)
+        {
+            return false;
+        }
         singlePost.forEach(c -> serviceNames.add(c.getServiceName()));
         return serviceNames.contains(serviceName);
     }

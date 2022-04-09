@@ -3,7 +3,7 @@ package com.gotoubun.weddingvendor.resource.vendor;
 import javax.validation.Valid;
 
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderRequest;
-import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
+import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
@@ -61,7 +61,7 @@ public class VendorController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 2) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+            throw new AccountNotHaveAccessException("you don't have permission to access");
         }
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;

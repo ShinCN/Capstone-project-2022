@@ -2,7 +2,7 @@ package com.gotoubun.weddingvendor.resource.kol;
 
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
-import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
+import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
@@ -41,11 +41,11 @@ public class ServicePackController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
-            throw new AccountNotHaveAccess("you are not kol");
+            throw new AccountNotHaveAccessException("you are not kol");
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccess("your account has not been activated yet");
+            throw new AccountNotHaveAccessException("your account has not been activated yet");
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -67,11 +67,11 @@ public class ServicePackController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
-            throw new AccountNotHaveAccess("you are not kol");
+            throw new AccountNotHaveAccessException("you are not kol");
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccess("your account has not been activated yet");
+            throw new AccountNotHaveAccessException("your account has not been activated yet");
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -93,11 +93,11 @@ public class ServicePackController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
-            throw new AccountNotHaveAccess("you are not kol");
+            throw new AccountNotHaveAccessException("you are not kol");
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccess("your account has not been activated yet");
+            throw new AccountNotHaveAccessException("your account has not been activated yet");
         }
         packagePostService.delete(id);
 

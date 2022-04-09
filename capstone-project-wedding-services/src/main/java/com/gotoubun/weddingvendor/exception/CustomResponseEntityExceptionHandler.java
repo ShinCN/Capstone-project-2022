@@ -37,7 +37,7 @@ public class CustomResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler
-    public final ResponseEntity<Object> handleAuthorization(AccountNotHaveAccess ex, WebRequest request){
+    public final ResponseEntity<Object> handleAuthorization(AccountNotHaveAccessException ex, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }

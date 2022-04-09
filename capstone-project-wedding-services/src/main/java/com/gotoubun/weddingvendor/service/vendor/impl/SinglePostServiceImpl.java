@@ -118,10 +118,11 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setCreatedBy(username);
 
 
-//        //check service name exist
-//        if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
-//            throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
-//        }
+        //check service name exist
+        if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
+            throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
+        }
+
         singlePostRepository.save(singlePost);
         singlePost.getPhotos().forEach(c->c.setSinglePost(singlePost));
         singlePostRepository.save(singlePost);
@@ -179,6 +180,8 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.forEach(c -> serviceNames.add(c.getServiceName()));
         return serviceNames.contains(serviceName);
     }
+
+
 
     @Override
     public void delete(Long id) {

@@ -3,7 +3,6 @@ package com.gotoubun.weddingvendor.service.kol.impl;
 import com.gotoubun.weddingvendor.data.kol.KOLRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.KOL;
-import com.gotoubun.weddingvendor.exception.PhoneAlreadyExisted;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.KolRepository;

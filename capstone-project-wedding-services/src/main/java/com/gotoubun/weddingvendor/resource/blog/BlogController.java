@@ -1,9 +1,7 @@
 package com.gotoubun.weddingvendor.resource.blog;
 
-import com.gotoubun.weddingvendor.data.blog.BlogRequest;
-import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.vendor.Blog;
-import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
+import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.service.account.impl.AccountServiceImpl;
@@ -45,7 +43,7 @@ public class BlogController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role == 1) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+            throw new AccountNotHaveAccessException("you don't have permission to access");
         }
         Collection<Blog> blogs = blogService.findAllByUserName(principal.getName());
         return blogs;
@@ -59,7 +57,7 @@ public class BlogController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role == 1) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+            throw new AccountNotHaveAccessException("you don't have permission to access");
         }
         Blog blog = blogService.getBlogDetailById(id);
         return blog;

@@ -2,7 +2,7 @@ package com.gotoubun.weddingvendor.resource.account;
 
 import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
-import com.gotoubun.weddingvendor.exception.AccountNotHaveAccess;
+import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.payload.JWTLoginSuccessResponse;
@@ -83,7 +83,7 @@ public class AccountController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 1) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+            throw new AccountNotHaveAccessException("you don't have permission to access");
         }
         Collection<Account> accounts = accountRepository.findAllByRole(4); //kol list
         return accounts;
@@ -97,7 +97,7 @@ public class AccountController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 1) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+            throw new AccountNotHaveAccessException("you don't have permission to access");
         }
         Collection<Account> accounts =  accountRepository.findAllByRole(2); //vendor list
         return accounts;
@@ -131,7 +131,7 @@ public class AccountController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 1) {
-            throw new AccountNotHaveAccess("you don't have permission to access");
+            throw new AccountNotHaveAccessException("you don't have permission to access");
         }
 
         Account account = accountService.updateStatus(id, accountStatusRequest);

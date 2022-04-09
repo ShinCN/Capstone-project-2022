@@ -7,6 +7,7 @@ import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 
+import com.gotoubun.weddingvendor.exception.PhoneAlreadyExistException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.SinglePostRepository;
@@ -48,6 +49,10 @@ public class VendorServiceImpl implements VendorService {
         if(checkUserNameExisted(vendor.getUsername()))
         {
             throw new UsernameAlreadyExistsException("username: "+vendor.getUsername()+"already exist");
+        }
+        if(vendorRepository.findByPhone(vendor.getPhone())!=null)
+        {
+            throw new PhoneAlreadyExistException("Phone number already existed");
         }
             //save account
             account.setUsername(vendor.getUsername());

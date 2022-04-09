@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface KolRepository extends JpaRepository<KOL, Long> {
     KOL findByAccount(Account account);
+    KOL findByPhone(String phoneNumber);
 }

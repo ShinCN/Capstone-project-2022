@@ -45,8 +45,8 @@ public class KOLServiceImpl implements KOLService {
         kol.setAccount(account);
         kol.setEmail(kolRequest.getEmail());
         kol.setFullName(kolRequest.getFullName());
-        kol.setPhone(kolRequest.getAddress());
-        kol.setAddress(kolRequest.getPhone());
+        kol.setPhone(kolRequest.getPhone());
+        kol.setAddress(kolRequest.getAddress());
         kol.setDescription(kolRequest.getDescription());
         kolRepository.save(kol);
         return kol;

@@ -2,6 +2,8 @@ package com.gotoubun.weddingvendor.domain.vendor;
 
 import java.util.Collection;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.domain.user.KOL;
 import lombok.*;
@@ -23,17 +25,21 @@ public class PackagePost extends BasePost{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
 	private PackageCategory packageCategory;
-	
+
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "kol_id")
 	private KOL kol;
-	
+
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
 	private Collection<Feedback> feedbacks;
-	
+
+
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -43,6 +49,7 @@ public class PackagePost extends BasePost{
     )
     private Collection<Customer> customers;
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "packagePosts")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

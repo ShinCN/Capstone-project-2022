@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SINGLE_SERVICE_URLS).permitAll()
                 .antMatchers(SERVICE_PACK_URLS).permitAll()
                 .antMatchers(SIGN_UP_KOL_URLS).permitAll()
+                .antMatchers(BLOG_URLS).permitAll()
                 .antMatchers(H2_URL).permitAll()
                 .anyRequest().authenticated();
 

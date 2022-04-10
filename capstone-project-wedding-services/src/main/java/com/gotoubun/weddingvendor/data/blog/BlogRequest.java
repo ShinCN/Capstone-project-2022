@@ -4,14 +4,14 @@ package com.gotoubun.weddingvendor.data.blog;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class BlogRequest {
-    String title;
-    String content;
-    String createdBy;
+    @NotBlank(message = "title must not be blank")
+    String blogTitle;
+    @NotBlank(message = "content must not be blank")
+    String blogContent;
 }

@@ -8,6 +8,7 @@ public class SecurityConstants {
     public static final String SINGLE_SERVICE_URLS = "/single-service/**";
     public static final String SERVICE_PACK_URLS = "/service-pack/**";
     public static final String SIGN_UP_KOL_URLS = "/kol/**";
+    public static final String BLOG_URLS = "/blog/**";
     public static final String H2_URL = "h2-console/**";
     public static final String SECRET ="SecretKeyToGenJWTs";
     public static final String TOKEN_PREFIX= "Bearer ";

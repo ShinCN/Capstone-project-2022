@@ -26,37 +26,43 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Collection<Blog> findAll() {
         Collection<Blog> blogs = blogRepository.findAll();
-        return  blogs;
+        return blogs;
     }
 
-    //Add 1 new blog
+    //view 1 blog details
+    @Override
+    public Blog getBlogDetailById(Long id) {
+        return blogRepository.findById(id).get();
+    }
+    //Add new blog
     @Override
     public Blog save(BlogRequest request, String username) {
         Account account = accountRepository.findByUsername(username);
-
         Blog blog = new Blog();
-        blog.setTitle(request.getTitle());
-        blog.setContent(request.getContent());
+        blog.setTitle(request.getBlogTitle());
+        blog.setContent(request.getBlogContent());
         blog.setCreatedBy(account.getUsername());
+        blog.setAccount(account);
         return blogRepository.save(blog);
-
     }
 
     @Override
     public Collection<Blog> findAllByUserName(String username) {
-        return null;
+        Account account = accountRepository.findByUsername(username);
+        Collection<Blog> blogs = blogRepository.findAllByAccount(account);
+        return blogs;
     }
 
+    //update a service
     @Override
-    public Blog getBlogDetailById(Long id) {
-        return null;
+    public Blog update(Long id, BlogRequest request, String username) {
+        Account account = accountRepository.findByUsername(username);
+        Blog blog = blogRepository.getById(id);
+        blog.setTitle(request.getBlogTitle());
+        blog.setContent(request.getBlogContent());
+        blog.setModifiedBy(account.getUsername());
+        return blogRepository.save(blog);
     }
-
-    @Override
-    public Blog update(Long id, BlogRequest blogRequest) {
-        return null;
-    }
-
 
     //delete 1 blog
     @Override

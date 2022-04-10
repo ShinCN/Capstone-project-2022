@@ -1,26 +1,27 @@
 package com.gotoubun.weddingvendor.resource.blog;
 
+import com.gotoubun.weddingvendor.data.blog.BlogRequest;
 import com.gotoubun.weddingvendor.domain.vendor.Blog;
-import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
+import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
-import com.gotoubun.weddingvendor.service.account.impl.AccountServiceImpl;
 import com.gotoubun.weddingvendor.service.blog.BlogService;
+import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
+
+import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
 @RestController
 @RequestMapping("/blog")
 public class BlogController {
-
-    @Autowired
-    private AccountServiceImpl accountService;
 
     @Autowired
     AccountRepository accountRepository;
@@ -28,40 +29,68 @@ public class BlogController {
     @Autowired
     BlogService blogService;
 
-    //get all blog
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
+
+    //get all blogs to show on ideas of all actors
     @GetMapping
     public Collection<Blog> getAllBlogs(){
-        Collection<Blog> blogs = blogService.findAll();
-        return blogs;
+        return blogService.findAll();
     }
 
-    //get all blog by user
+    //view a blog by id
+    @GetMapping("detail/{id}")
+    public Blog getBlogDetail(@PathVariable Long id){
+        return blogService.getBlogDetailById(id);
+    }
+
+    //create new blog after login
+    @PostMapping
+    public ResponseEntity<?> postBlog(@Valid @RequestBody BlogRequest request, BindingResult bindingResult, Principal principal){
+        if (principal == null)
+            throw new LoginRequiredException("you need to login to get access");
+        //check valid attributes
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if (errorMap != null) return errorMap;
+
+        blogService.save(request, principal.getName());
+        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+    }
+
+
+    //update a blog after login
+    @PutMapping("{id}")
+    public ResponseEntity<?> putBlog(@Valid @PathVariable Long id, @RequestBody BlogRequest request, BindingResult bindingResult, Principal principal){
+        if (principal == null)
+            throw new LoginRequiredException("you need to login to get access");
+        //check valid attributes
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if (errorMap != null) return errorMap;
+
+        blogService.update(id, request, principal.getName());
+        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+    }
+
+
+    //get all blogs by user
     @GetMapping("my-blogs")
     public Collection<Blog> getAllBlogsByUser(Principal principal){
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role == 1) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
-        }
-        Collection<Blog> blogs = blogService.findAllByUserName(principal.getName());
-        return blogs;
+
+        return blogService.findAllByUserName(principal.getName());
     }
 
-    //get blog detail by user id
-    @GetMapping("detail/{id}")
-    public Blog getBlogDetail(@PathVariable Long id, Principal principal){
+
+    //delete a blog
+    @DeleteMapping
+    public ResponseEntity<?> deleteBlog(@PathVariable Long id, Principal principal){
+        //check login
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role == 1) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
-        }
-        Blog blog = blogService.getBlogDetailById(id);
-        return blog;
-    }
 
+        blogService.delete(id);
+        return new ResponseEntity<MessageToUser>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
+    }
 
 }

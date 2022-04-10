@@ -10,6 +10,6 @@ public interface BlogService {
     Blog save(BlogRequest blogRequest, String username);
     Collection<Blog> findAllByUserName(String username);
     Blog getBlogDetailById(Long id);
-    Blog update(Long id, BlogRequest blogRequest);
+    Blog update(Long id, BlogRequest blogRequest, String username);
     void delete(Long id);
 }

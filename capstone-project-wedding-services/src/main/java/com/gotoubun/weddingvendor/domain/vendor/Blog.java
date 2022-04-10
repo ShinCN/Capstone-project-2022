@@ -3,7 +3,6 @@ package com.gotoubun.weddingvendor.domain.vendor;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 import org.springframework.data.annotation.CreatedBy;
@@ -30,10 +29,6 @@ public class Blog extends BaseEntity{
     @Nationalized
     @Column(name="content")
     private String content;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "blog_id")
-    private Blog blog;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

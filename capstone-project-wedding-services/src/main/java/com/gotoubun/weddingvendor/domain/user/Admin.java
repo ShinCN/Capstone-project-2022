@@ -7,10 +7,13 @@ import javax.persistence.*;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "admin")
 public class Admin extends Auditable{

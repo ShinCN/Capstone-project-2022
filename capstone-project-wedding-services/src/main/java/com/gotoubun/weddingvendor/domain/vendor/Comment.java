@@ -12,11 +12,14 @@ import javax.persistence.Table;
 
 import com.gotoubun.weddingvendor.domain.user.Account;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "comment")
 public class Comment extends BaseEntity{

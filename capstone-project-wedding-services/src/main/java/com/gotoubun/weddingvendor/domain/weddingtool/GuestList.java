@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -19,7 +21,8 @@ import com.gotoubun.weddingvendor.domain.user.Customer;
 
 import lombok.Data;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "guest_list")
 public class GuestList {

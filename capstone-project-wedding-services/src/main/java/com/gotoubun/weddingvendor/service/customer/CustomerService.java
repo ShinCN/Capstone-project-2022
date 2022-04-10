@@ -5,4 +5,5 @@ import com.gotoubun.weddingvendor.domain.user.Customer;
 
 public interface CustomerService {
     Customer save(CustomerRequest customerRequest);
+
 }

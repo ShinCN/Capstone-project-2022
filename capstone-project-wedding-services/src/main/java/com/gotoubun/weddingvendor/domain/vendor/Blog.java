@@ -1,9 +1,6 @@
 package com.gotoubun.weddingvendor.domain.vendor;
 
 import com.gotoubun.weddingvendor.domain.user.Account;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -13,7 +10,9 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+
+@Getter
+@Setter
 @Entity
 @Table(name = "blog")
 public class Blog extends BaseEntity{
@@ -29,6 +28,7 @@ public class Blog extends BaseEntity{
     @Nationalized
     @Column(name="content")
     private String content;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")

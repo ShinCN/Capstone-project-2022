@@ -3,16 +3,14 @@ package com.gotoubun.weddingvendor.domain.user;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class Auditable {

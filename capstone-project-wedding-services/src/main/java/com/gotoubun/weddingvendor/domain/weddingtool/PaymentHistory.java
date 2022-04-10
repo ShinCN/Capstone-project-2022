@@ -1,16 +1,15 @@
 package com.gotoubun.weddingvendor.domain.weddingtool;
 
 import com.gotoubun.weddingvendor.domain.user.Customer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "payment_history")
 public class PaymentHistory {

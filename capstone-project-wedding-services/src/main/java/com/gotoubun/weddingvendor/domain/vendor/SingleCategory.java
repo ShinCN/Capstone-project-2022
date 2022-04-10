@@ -7,9 +7,12 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "single_category")
 public class SingleCategory{

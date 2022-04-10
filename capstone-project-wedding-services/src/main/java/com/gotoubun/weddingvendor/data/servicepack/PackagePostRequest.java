@@ -25,6 +25,6 @@ public class PackagePostRequest {
     String description;
     @NotNull
     Float price;
-//    @NotNull(message = "you have add at least one single service post")
+    @NotNull(message = "you have add at least one single service post")
     List<Long> singlePostIds;
 }

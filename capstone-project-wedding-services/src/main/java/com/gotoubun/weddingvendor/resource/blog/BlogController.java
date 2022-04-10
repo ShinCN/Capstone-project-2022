@@ -1,6 +1,7 @@
 package com.gotoubun.weddingvendor.resource.blog;
 
 import com.gotoubun.weddingvendor.data.blog.BlogRequest;
+import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.vendor.Blog;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Optional;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
@@ -40,8 +42,8 @@ public class BlogController {
 
     //view a blog by id
     @GetMapping("detail/{id}")
-    public Blog getBlogDetail(@PathVariable Long id){
-        return blogService.getBlogDetailById(id);
+    public Optional<Blog> getBlogDetail(@PathVariable Long id){
+        return blogService.findBlogById(id);
     }
 
     //create new blog after login
@@ -77,8 +79,8 @@ public class BlogController {
     public Collection<Blog> getAllBlogsByUser(Principal principal){
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");
-
-        return blogService.findAllByUserName(principal.getName());
+        Account account = accountRepository.findByUsername(principal.getName());
+        return blogService.findAllByAccount(account);
     }
 
 

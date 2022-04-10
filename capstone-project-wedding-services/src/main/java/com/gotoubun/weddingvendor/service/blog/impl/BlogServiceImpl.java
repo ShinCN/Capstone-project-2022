@@ -31,8 +31,8 @@ public class BlogServiceImpl implements BlogService {
 
     //view 1 blog details
     @Override
-    public Blog getBlogDetailById(Long id) {
-        return blogRepository.findById(id).get();
+    public Optional<Blog> findBlogById(Long id) {
+        return Optional.ofNullable(blogRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service does not exist")));
     }
     //Add new blog
     @Override
@@ -47,11 +47,10 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Collection<Blog> findAllByUserName(String username) {
-        Account account = accountRepository.findByUsername(username);
-        Collection<Blog> blogs = blogRepository.findAllByAccount(account);
-        return blogs;
+    public Collection<Blog> findAllByAccount(Account account) {
+        return blogRepository.findAllByAccount(account) ;
     }
+
 
     //update a service
     @Override
@@ -67,9 +66,7 @@ public class BlogServiceImpl implements BlogService {
     //delete 1 blog
     @Override
     public void delete(Long id) {
-        blogRepository.delete(getServicePostById(id).get());
+        blogRepository.delete(findBlogById(id).get());
     }
-    public Optional<Blog> getServicePostById(Long id) {
-        return Optional.ofNullable(blogRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service does not exist")));
-    }
+
 }

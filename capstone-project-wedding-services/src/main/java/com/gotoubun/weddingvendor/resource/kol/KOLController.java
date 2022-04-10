@@ -56,7 +56,6 @@ public class KOLController {
         //check validate
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
-
         //save
         kolService.save(request);
 

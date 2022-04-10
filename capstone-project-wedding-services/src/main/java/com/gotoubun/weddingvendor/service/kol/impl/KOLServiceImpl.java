@@ -43,6 +43,7 @@ public class KOLServiceImpl implements KOLService {
         account.setStatus(0 );
         accountRepository.save(account);
         //save kol
+
         keyOpinionLeader.setAccount(account);
         keyOpinionLeader.setNanoPassword(kolRequest.getPassword());
         keyOpinionLeader.setEmail(kolRequest.getEmail());
@@ -52,6 +53,7 @@ public class KOLServiceImpl implements KOLService {
         keyOpinionLeader.setDescription(kolRequest.getDescription());
         kolRepository.save(keyOpinionLeader);
         return keyOpinionLeader;
+
     }
 
     @Override

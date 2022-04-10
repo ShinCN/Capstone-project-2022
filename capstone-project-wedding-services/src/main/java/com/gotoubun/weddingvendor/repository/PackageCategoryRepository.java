@@ -13,9 +13,5 @@ import java.util.Optional;
 
 @Repository
 public interface PackageCategoryRepository extends JpaRepository<PackageCategory, Long> {
-    @Query(nativeQuery=true, value = "Select b FROM PackageCategory b WHERE b.createdby LIKE %:searchText% ")
-    Page<SingleCategory> findAllSingleCategorys(Pageable pageable, @Param("searchText") String searchText);
 
-    @Query(nativeQuery=true, value = "Select  FROM PackageCategory b WHERE b.category_name LIKE %:searchText% ")
-    Optional<SingleCategory> findByName(@Param("searchText") String searchText);
 }

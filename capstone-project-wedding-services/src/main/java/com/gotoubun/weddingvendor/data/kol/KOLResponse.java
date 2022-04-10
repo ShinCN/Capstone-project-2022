@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.data.kol;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Nationalized;
@@ -23,4 +24,5 @@ public class KOLResponse {
     String address;
     String nanoPassword;
     String description;
+
 }

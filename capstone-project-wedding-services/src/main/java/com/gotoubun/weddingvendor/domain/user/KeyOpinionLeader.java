@@ -19,6 +19,10 @@ public class KeyOpinionLeader extends Auditable{
     @JoinColumn(name="account_id")
     private Account account;
 
+    @Column(name="avatar_url", columnDefinition = "varchar(255)")
+    private String avatarUrl;
+
+
     @Column(name="nano_password", columnDefinition = "TEXT")
     private String nanoPassword;
 

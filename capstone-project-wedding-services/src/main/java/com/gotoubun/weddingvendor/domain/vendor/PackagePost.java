@@ -30,14 +30,10 @@ public class PackagePost extends BasePost{
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "kol_id")
-
 	private KeyOpinionLeader keyOpinionLeader;
 	
-=======
-	private KOL kol;
 
-
-
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
 	private Collection<Feedback> feedbacks;
 

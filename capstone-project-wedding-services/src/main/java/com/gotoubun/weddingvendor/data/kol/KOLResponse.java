@@ -25,4 +25,5 @@ public class KOLResponse {
     String nanoPassword;
     String description;
 
+
 }

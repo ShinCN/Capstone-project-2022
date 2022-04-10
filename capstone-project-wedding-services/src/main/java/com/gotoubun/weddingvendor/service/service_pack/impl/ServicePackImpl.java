@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.service.service_pack.impl;
 
+import com.gotoubun.weddingvendor.data.kol.KOLMiniResponse;
 import com.gotoubun.weddingvendor.data.kol.KOLResponse;
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostResponse;
@@ -10,6 +11,7 @@ import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.Photo;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
+import com.gotoubun.weddingvendor.exception.ServicePackAlreadyExistedException;
 import com.gotoubun.weddingvendor.exception.ServicePackNotFound;
 import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.IPageService;
@@ -26,6 +28,7 @@ import java.util.Optional;
 import javax.persistence.PreRemove;
 import java.util.*;
 
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,40 +50,24 @@ public class ServicePackImpl implements PackagePostService, IPageService<Package
     @Override
     public void save(PackagePostRequest request, String username) {
 
-        Account account= accountRepository.findByUsername(username);
+        Account account = accountRepository.findByUsername(username);
         KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(account);
 
-     
-        float price = 0;
-
         PackageCategory packageCategory = packageCategoryRepository.getById(request.getPackCategory());
-//        if (checkServiceNameExisted(request.getPackTitle(), kol.getId())) {
-//            throw new ServicePackAlreadyExistedException("Service Pack Name " + request.getPackTitle() + " has already existed in your account");
-//        }
-
-            PackagePost packagePost = new PackagePost();
-
-            packagePost.setServiceName(request.getPackTitle());
-            packagePost.setAbout(request.getDescription());
-            packagePost.setPackageCategory(packageCategory);
-            packagePost.setRate(0);
-            packagePost.setKeyOpinionLeader(keyOpinionLeader);
-            packagePost.setCreatedBy(account.getKeyOpinionLeader().getFullName());
-            packagePost.setSinglePosts(request.getSinglePosts());
-            packagePost.getSinglePosts().addAll(request.getSinglePosts().stream().map(v -> {
-                SinglePost singlePost = singlePostRepository.getById(v.getId());
-                singlePost.getPackagePosts().add(packagePost);
-                return  singlePost;
-            }).collect(Collectors.toList()));
-
-    
-//            packagePostRepository.save(packagePost);
-        for (SinglePost c : packagePost.getSinglePosts()) {
-            if (c.getPrice() != null) {
-                price += c.getPrice();
-            }
+        if (checkServiceNameExisted(request.getPackTitle(), keyOpinionLeader.getId())) {
+            throw new ServicePackAlreadyExistedException("Service Pack Name " + request.getPackTitle() + " has already existed in your account");
         }
-        packagePost.setPrice(price);
+
+        PackagePost packagePost = new PackagePost();
+
+        packagePost.setServiceName(request.getPackTitle());
+        packagePost.setAbout(request.getDescription());
+        packagePost.setPackageCategory(packageCategory);
+        packagePost.setRate(0);
+        packagePost.setKeyOpinionLeader(keyOpinionLeader);
+        packagePost.setSinglePosts(request.getSinglePostIds().stream().map(c ->
+                singlePostRepository.getById(c)).collect(Collectors.toList()));
+        packagePost.setPrice(request.getPrice());
         packagePostRepository.save(packagePost);
 
     }
@@ -123,10 +110,14 @@ public class ServicePackImpl implements PackagePostService, IPageService<Package
         return packagePosts;
     }
 
+
     boolean checkServiceNameExisted(String serviceName, Long id) {
         List<String> serviceNames = new ArrayList<>();
-        List<PackagePost> pack = findByKolId(id);
-        pack.forEach(c -> serviceNames.add(c.getServiceName()));
+        List<PackagePost> packagePosts = findByKolId(id);
+        if (packagePosts.size() == 0) {
+            return false;
+        }
+        packagePosts.forEach(c -> serviceNames.add(c.getServiceName()));
         return serviceNames.contains(serviceName);
     }
 
@@ -163,7 +154,7 @@ public class ServicePackImpl implements PackagePostService, IPageService<Package
                                 new ArrayList<>(new ArrayList<>(c.getSinglePosts())
                                         .get(0).getPhotos())
                                         .get(0).getUrl(),
-                                new KOLResponse( c.getKol().getAvatarUrl(),c.getKol().getFullName())
+                                new KOLMiniResponse(c.getKeyOpinionLeader().getFullName(), c.getKeyOpinionLeader().getAvatarUrl())
                         )
                 ));
 

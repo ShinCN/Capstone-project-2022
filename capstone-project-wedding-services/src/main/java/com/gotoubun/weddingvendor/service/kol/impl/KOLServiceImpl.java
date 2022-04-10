@@ -2,6 +2,7 @@ package com.gotoubun.weddingvendor.service.kol.impl;
 
 import com.gotoubun.weddingvendor.data.kol.KOLRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
+
 import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.exception.PhoneAlreadyExistException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
@@ -27,10 +28,13 @@ public class KOLServiceImpl implements KOLService {
     @Autowired
     AccountRepository accountRepository;
     @Override
+  
     public KeyOpinionLeader save(KOLRequest kolRequest) {
         // TODO Auto-generated method stub
         Account account = new Account();
+   
         KeyOpinionLeader keyOpinionLeader = new KeyOpinionLeader();
+        String password = generateRandomPassword(10);
         //check username existed
         if(checkUserNameExisted(kolRequest.getEmail()))
         {
@@ -38,22 +42,20 @@ public class KOLServiceImpl implements KOLService {
         }
         //save account
         account.setUsername(kolRequest.getEmail());
-        account.setPassword(bCryptPasswordEncoder.encode(kolRequest.getPassword()));
+        account.setPassword(bCryptPasswordEncoder.encode(password));
         account.setRole(4);
         account.setStatus(0 );
         accountRepository.save(account);
         //save kol
-
         keyOpinionLeader.setAccount(account);
-        keyOpinionLeader.setNanoPassword(kolRequest.getPassword());
         keyOpinionLeader.setEmail(kolRequest.getEmail());
         keyOpinionLeader.setFullName(kolRequest.getFullName());
         keyOpinionLeader.setPhone(kolRequest.getAddress());
         keyOpinionLeader.setAddress(kolRequest.getPhone());
+        keyOpinionLeader.setNanoPassword(password);
         keyOpinionLeader.setDescription(kolRequest.getDescription());
         kolRepository.save(keyOpinionLeader);
         return keyOpinionLeader;
-
     }
 
     @Override
@@ -65,20 +67,25 @@ public class KOLServiceImpl implements KOLService {
         {
             throw new UsernameAlreadyExistsException("email: "+kolRequest.getEmail()+" already exist");
         }
+   
         KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(account);
         keyOpinionLeader.getAccount().setUsername(kolRequest.getEmail());
         keyOpinionLeader.getAccount().setPassword(bCryptPasswordEncoder.encode(kolRequest.getPassword()));
         keyOpinionLeader.setEmail(kolRequest.getEmail());
         keyOpinionLeader.setFullName(kolRequest.getFullName());
         for(Account acc : accountRepository.findAll()){
+     
             if(acc.getKeyOpinionLeader().getPhone() != kolRequest.getPhone()
                     && acc.getVendorProvider().getPhone() != kolRequest.getPhone()
                     && acc.getCustomer().getPhone() != kolRequest.getPhone()){
+            
                 keyOpinionLeader.setPhone(kolRequest.getPhone());
             }else{
+            
                 throw new PhoneAlreadyExistException("This phone was registered! Input another one.");
             }
         }
+   
         keyOpinionLeader.setAddress(kolRequest.getAddress());
         keyOpinionLeader.setDescription(kolRequest.getDescription());
         kolRepository.save(keyOpinionLeader);

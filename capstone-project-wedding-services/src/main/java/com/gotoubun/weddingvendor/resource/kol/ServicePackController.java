@@ -49,11 +49,11 @@ public class ServicePackController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
-            throw new AccountNotHaveAccess(NO_PERMISSION);
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccess(NO_ACTIVATE);
+            throw new AccountNotHaveAccessException(NO_ACTIVATE);
         }
        List<PackagePostResponse> packagePostResponseList =packagePostService.findAll(keyword, packageId, price);
         if(packagePostResponseList.size()==0)
@@ -74,11 +74,11 @@ public class ServicePackController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
-            throw new AccountNotHaveAccess(NO_PERMISSION);
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccess(NO_ACTIVATE);
+            throw new AccountNotHaveAccessException(NO_ACTIVATE);
         }
 
         return new ResponseEntity<>(packagePostIPageService.findAll(pageable, searchText), HttpStatus.OK);
@@ -100,7 +100,7 @@ public class ServicePackController {
         }
         int status = accountService.getStatus(principal.getName());
            if (status == 0) {
-            throw new AccountNotHaveAccess(NO_ACTIVATE);
+            throw new AccountNotHaveAccessException(NO_ACTIVATE);
 
         }
         //check valid attributes
@@ -127,7 +127,7 @@ public class ServicePackController {
         }
         int status = accountService.getStatus(principal.getName());
              if (status == 0) {
-            throw new AccountNotHaveAccess(NO_ACTIVATE);
+            throw new AccountNotHaveAccessException(NO_ACTIVATE);
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -155,7 +155,7 @@ public class ServicePackController {
     
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccess(NO_ACTIVATE);
+            throw new AccountNotHaveAccessException(NO_ACTIVATE);
 
         }
         packagePostService.delete(id);

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface SinglePostRepository  extends JpaRepository<SinglePost, Long> {
-    @Override
+
     List<SinglePost> findAll();
     List<SinglePost> findAllByVendorProvider(VendorProvider vendorProvider);
 //    SinglePost findBySinglePostIdentifier(String serviceId);

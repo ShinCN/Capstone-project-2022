@@ -14,7 +14,7 @@ import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import java.util.List;
 
 @Repository
-public interface PackagePostRepository extends PagingAndSortingRepository<PackagePost, Long> {
+public interface PackagePostRepository extends JpaRepository<PackagePost, Long> {
     @Query("FROM PackagePost p WHERE p.serviceName LIKE %:keyWord%")
     Page<PackagePost> findAllPackagePost(Pageable pageable, @Param("keyWord") String keyWord);
 

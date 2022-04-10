@@ -2,22 +2,18 @@ package com.gotoubun.weddingvendor.service.service_pack.impl;
 
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
-import com.gotoubun.weddingvendor.domain.user.KOL;
+import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.domain.vendor.PackageCategory;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
-import com.gotoubun.weddingvendor.exception.ServicePackAlreadyExistedException;
 import com.gotoubun.weddingvendor.exception.ServicePackNotFound;
-import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.service_pack.PackagePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.PreRemove;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +38,7 @@ public class ServicePackImpl implements PackagePostService {
     @Override
     public void save(PackagePostRequest request, String username) {
         Account account= accountRepository.findByUsername(username);
-        KOL kol = kolRepository.findByAccount(account);
+        KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(account);
         float price = 0;
         try {
             PackageCategory packageCategory = packageCategoryRepository.getById(request.getPackCategory());
@@ -55,8 +51,8 @@ public class ServicePackImpl implements PackagePostService {
             packagePost.setAbout(request.getDescription());
             packagePost.setPackageCategory(packageCategory);
             packagePost.setRate(0);
-            packagePost.setKol(kol);
-            packagePost.setCreatedBy(account.getKol().getFullName());
+            packagePost.setKeyOpinionLeader(keyOpinionLeader);
+            packagePost.setCreatedBy(account.getKeyOpinionLeader().getFullName());
             packagePost.setSinglePosts(request.getSinglePosts());
             packagePost.getSinglePosts().addAll(request.getSinglePosts().stream().map(v -> {
                 SinglePost singlePost = singlePostRepository.getById(v.getId());
@@ -83,7 +79,7 @@ public class ServicePackImpl implements PackagePostService {
         PackagePost existingServicePack = getServicePostById(id).get();
         float price = 0;
         //check service in current account
-        if (getServicePostById(id).isPresent() && (!getServicePostById(id).get().getKol().getAccount().getUsername().equals(username))) {
+        if (getServicePostById(id).isPresent() && (!getServicePostById(id).get().getKeyOpinionLeader().getAccount().getUsername().equals(username))) {
             throw new ServicePackNotFound("This service pack is not found in your account");
         }
             existingServicePack.setServiceName(request.getPackTitle());
@@ -109,7 +105,7 @@ public class ServicePackImpl implements PackagePostService {
     List<PackagePost> findByKolId(Long id) {
         List<PackagePost> packagePosts;
         packagePosts = packagePostRepository.findAll().stream()
-                .filter(c -> c.getKol().getId().equals(id)).collect(Collectors.toList());
+                .filter(c -> c.getKeyOpinionLeader().getId().equals(id)).collect(Collectors.toList());
         return packagePosts;
     }
     boolean checkServiceNameExisted(String serviceName, Long id) {

@@ -3,9 +3,8 @@ package com.gotoubun.weddingvendor.domain.vendor;
 import java.util.Collection;
 import javax.persistence.*;
 import com.gotoubun.weddingvendor.domain.user.Customer;
-import com.gotoubun.weddingvendor.domain.user.KOL;
+import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import lombok.*;
-import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
@@ -29,7 +28,7 @@ public class PackagePost extends BasePost{
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "kol_id")
-	private KOL kol;
+	private KeyOpinionLeader keyOpinionLeader;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
 	private Collection<Feedback> feedbacks;

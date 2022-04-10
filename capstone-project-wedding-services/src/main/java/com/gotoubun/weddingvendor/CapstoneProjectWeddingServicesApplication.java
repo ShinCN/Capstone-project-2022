@@ -17,6 +17,7 @@ public class CapstoneProjectWeddingServicesApplication {
     BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
     public static void main(String[] args) {
         SpringApplication.run(CapstoneProjectWeddingServicesApplication.class, args);
     }

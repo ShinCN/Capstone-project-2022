@@ -14,7 +14,7 @@ import java.util.Collection;
 @Data
 @Entity
 @Table(name = "kol")
-public class KOL extends Auditable{
+public class KeyOpinionLeader extends Auditable{
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="account_id")
     private Account account;
@@ -22,7 +22,7 @@ public class KOL extends Auditable{
     @Column(name="nano_password", columnDefinition = "TEXT")
     private String nanoPassword;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy ="kol", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="keyOpinionLeader", cascade = CascadeType.ALL)
     private Collection<PackagePost> packagePosts;
 
     @Lob

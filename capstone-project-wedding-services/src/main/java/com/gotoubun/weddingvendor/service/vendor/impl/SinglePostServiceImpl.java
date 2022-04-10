@@ -1,6 +1,8 @@
 package com.gotoubun.weddingvendor.service.vendor.impl;
 
+import com.gotoubun.weddingvendor.data.singleservice.PhotoResponse;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.vendor.Photo;
@@ -186,6 +188,58 @@ public class SinglePostServiceImpl implements SinglePostService {
     @Override
     public void delete(Long id) {
         singlePostRepository.delete(getServicePostById(id).get());
+    }
+
+    @Override
+    public Collection<SingleServicePostResponse> findAllByVendors(String username) {
+
+        Account account = accountRepository.findByUsername(username);
+        VendorProvider vendorProvider = vendorRepository.findByAccount(account);
+
+        List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
+        List<SinglePost> singlePosts= singlePostRepository.findAllByVendorProvider(vendorProvider);
+
+       if(singlePosts.size() == 0)
+       {
+           throw new SingleServicePostNotFoundException("vendor does not have single post");
+       }
+       singlePosts.forEach(c->{
+           Collection<PhotoResponse> photoResponses = new ArrayList<>();
+           SingleServicePostResponse singleServicePostResponse= SingleServicePostResponse.builder()
+                   .serviceName(c.getServiceName())
+                   .price(c.getPrice())
+                   .description(c.getAbout())
+                   .build();
+           c.getPhotos().forEach(b->photoResponses.add(new PhotoResponse(b.getCaption(),b.getUrl())));
+           singleServicePostResponse.setPhotos(photoResponses);
+           singleServicePostResponses.add(singleServicePostResponse);
+       });
+        return singleServicePostResponses;
+    }
+
+    @Override
+    public Collection<SingleServicePostResponse> findAll() {
+
+        List<SinglePost> singlePosts= singlePostRepository.findAll();
+        List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
+
+        if(singlePosts.size() == 0)
+        {
+            throw new SingleServicePostNotFoundException("vendor does not have single post");
+        }
+        singlePosts.forEach(c->{
+            Collection<PhotoResponse> photoResponses = new ArrayList<>();
+            SingleServicePostResponse singleServicePostResponse= SingleServicePostResponse.builder()
+                    .serviceName(c.getServiceName())
+                    .price(c.getPrice())
+                    .description(c.getAbout())
+                    .build();
+            c.getPhotos().forEach(b->photoResponses.add(new PhotoResponse(b.getCaption(),b.getUrl())));
+            singleServicePostResponse.setPhotos(photoResponses);
+            singleServicePostResponses.add(singleServicePostResponse);
+        });
+        return singleServicePostResponses;
+
     }
 
     public Optional<SinglePost> getServicePostById(Long id) {

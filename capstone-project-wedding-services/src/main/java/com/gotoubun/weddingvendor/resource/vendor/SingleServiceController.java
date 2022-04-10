@@ -1,9 +1,12 @@
 package com.gotoubun.weddingvendor.resource.vendor;
 
 import com.gotoubun.weddingvendor.data.singleservice.*;
+import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
+import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
+import com.gotoubun.weddingvendor.exception.VendorNotFoundException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collection;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
@@ -62,6 +66,19 @@ public class SingleServiceController {
         singlePostService.save(singleServicePost, principal.getName());
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleService(Principal principal) {
+        if (principal == null)
+            throw new LoginRequiredException("you need to login to get access");
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2) {
+            throw new AccountNotHaveAccessException("you don't have permission to access");
+        }
+
+        return new ResponseEntity<>(singlePostService.findAllByVendors(principal.getName()),HttpStatus.OK);
     }
 
     //Update single service

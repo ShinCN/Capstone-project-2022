@@ -1,9 +1,9 @@
 package com.gotoubun.weddingvendor.service.kol;
 
 import com.gotoubun.weddingvendor.data.kol.KOLRequest;
-import com.gotoubun.weddingvendor.domain.user.KOL;
+import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 
 public interface KOLService {
-    KOL save(KOLRequest kolRequest);
-    KOL update(KOLRequest kolRequest, String username);
+    KeyOpinionLeader save(KOLRequest kolRequest);
+    KeyOpinionLeader update(KOLRequest kolRequest, String username);
 }

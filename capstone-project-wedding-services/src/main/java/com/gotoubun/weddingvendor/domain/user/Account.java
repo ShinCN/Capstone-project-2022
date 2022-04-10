@@ -54,7 +54,7 @@ public class Account implements UserDetails {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
-    private KOL kol;
+    private KeyOpinionLeader keyOpinionLeader;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore

@@ -1,7 +1,7 @@
 package com.gotoubun.weddingvendor.resource.kol;
 
 import com.gotoubun.weddingvendor.data.kol.KOLRequest;
-import com.gotoubun.weddingvendor.domain.user.KOL;
+import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.DeactivatedException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
@@ -81,7 +81,7 @@ public class KOLController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
         //update
-        KOL kol = kolService.update(request, principal.getName());
+        KeyOpinionLeader keyOpinionLeader = kolService.update(request, principal.getName());
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 

@@ -12,7 +12,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "package_service_post")
 public class PackagePost extends BasePost{
@@ -49,8 +50,6 @@ public class PackagePost extends BasePost{
 
 	@JsonIgnore
 	@ManyToMany(mappedBy = "packagePosts")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private Collection<SinglePost> singlePosts;
 
 	@Column(name="createdby")

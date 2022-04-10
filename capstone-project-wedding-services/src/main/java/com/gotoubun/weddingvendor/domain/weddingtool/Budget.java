@@ -13,8 +13,11 @@ import javax.persistence.Table;
 import com.gotoubun.weddingvendor.domain.user.Customer;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "budget")
 public class Budget {

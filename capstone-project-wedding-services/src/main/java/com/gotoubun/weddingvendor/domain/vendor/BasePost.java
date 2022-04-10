@@ -10,7 +10,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BasePost extends BaseEntity{

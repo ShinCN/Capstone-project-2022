@@ -12,10 +12,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "photo")
 public class Photo extends BaseEntity {

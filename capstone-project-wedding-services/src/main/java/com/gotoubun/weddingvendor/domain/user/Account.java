@@ -2,9 +2,7 @@ package com.gotoubun.weddingvendor.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.domain.vendor.Comment;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
@@ -13,7 +11,8 @@ import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "account")
 public class Account implements UserDetails {

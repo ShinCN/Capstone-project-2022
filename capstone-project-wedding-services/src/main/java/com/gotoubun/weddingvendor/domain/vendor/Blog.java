@@ -1,10 +1,7 @@
 package com.gotoubun.weddingvendor.domain.vendor;
 
 import com.gotoubun.weddingvendor.domain.user.Account;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -14,7 +11,8 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "blog")
 public class Blog extends BaseEntity{

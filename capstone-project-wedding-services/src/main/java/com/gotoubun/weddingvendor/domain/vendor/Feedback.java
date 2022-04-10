@@ -1,9 +1,7 @@
 package com.gotoubun.weddingvendor.domain.vendor;
 
 import com.gotoubun.weddingvendor.domain.user.Customer;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -12,7 +10,8 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "feedback")
 public class Feedback extends BaseEntity{

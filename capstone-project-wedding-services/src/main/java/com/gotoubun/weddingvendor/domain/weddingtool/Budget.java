@@ -1,18 +1,10 @@
 package com.gotoubun.weddingvendor.domain.weddingtool;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import com.gotoubun.weddingvendor.domain.user.Customer;
-
 import lombok.Data;
+
+import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -25,11 +17,7 @@ public class Budget {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
-	
-	@Column(name="category_name")
-	private String categoryName;
-	
-	@Column(name="cost")
-	private double cost;
-	
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="budget", cascade = CascadeType.ALL)
+	private Collection<BudgetCategory> budgetCategories;
 }

@@ -42,7 +42,7 @@ public class PaymentController {
 
         Customer customer = accountService.findByUserName(principal.getName()).get().getCustomer();
 
-            int amount = requestParams.getAmount() * 100;
+            float amount = requestParams.getAmount() * 100;
             String suffix_txn =generateRandomPassword(3);
             Map<String, String> vnp_Params = new HashMap<>();
             vnp_Params.put("vnp_Version", PaymentConfig.VERSION);

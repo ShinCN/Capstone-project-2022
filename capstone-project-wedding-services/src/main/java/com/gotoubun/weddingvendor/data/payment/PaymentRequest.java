@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 public class PaymentRequest {
 
     Long singleServiceID;
-    int amount;
+    float amount;
     String paymentDescription;
     @NotBlank(message = "bank code field must not be blank")
     String bankCode;

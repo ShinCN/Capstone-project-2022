@@ -1,18 +1,14 @@
 package com.gotoubun.weddingvendor.domain.user;
 
-import java.time.LocalDate;
-import java.util.Collection;
-import javax.persistence.*;
 import com.gotoubun.weddingvendor.domain.vendor.Feedback;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.domain.weddingtool.*;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Collection;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +18,9 @@ import lombok.ToString;
 public class Customer extends Auditable{
 	@Column(name="planning_date")
 	private LocalDate planningDate;
+
+	@Column(name="planning_budget")
+	private Long planningBudget;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
 	private Collection<GuestList> guestLists;

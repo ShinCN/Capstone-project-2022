@@ -45,13 +45,15 @@ public class KOLController {
     /**
      * Post customer response entity.
      *
-     * @param request    the kol request
+     * @param request       the kol request
      * @param bindingResult the binding result
      * @param principal     the principal
      * @return the response entity
      */
     @PostMapping
-    public ResponseEntity<?> postKOL(@Valid @RequestBody KOLRequest request, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> postKOL(@Valid @RequestBody KOLRequest request,
+                                     BindingResult bindingResult,
+                                     Principal principal) {
         // TODO Auto-generated method stub
         //check validate
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -62,8 +64,18 @@ public class KOLController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
+    /**
+     * Put kol response entity.
+     *
+     * @param request       the request
+     * @param bindingResult the binding result
+     * @param principal     the principal
+     * @return the response entity
+     */
     @PutMapping
-    public ResponseEntity<?> putKOL(@Valid @RequestBody KOLRequest request, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> putKOL(@Valid @RequestBody KOLRequest request,
+                                    BindingResult bindingResult,
+                                    Principal principal) {
         // TODO Auto-generated method stub
         if (principal == null)
             throw new LoginRequiredException("you need to login to get access");

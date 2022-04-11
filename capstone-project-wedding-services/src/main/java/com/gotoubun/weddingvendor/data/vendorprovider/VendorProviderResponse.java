@@ -10,8 +10,8 @@ import java.util.Date;
 @Builder
 public class VendorProviderResponse {
 
+    Long id;
     String username;
-    String password;
     int status;
     Date createdDate;
     Date modifiedDate;

@@ -81,8 +81,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SERVICE_PACK_URLS).permitAll()
                 .antMatchers(SIGN_UP_KOL_URLS).permitAll()
                 .antMatchers(BLOG_URLS).permitAll()
-                .antMatchers(BUDGET_URL).permitAll()
-                .antMatchers(H2_URL).permitAll()
+               .antMatchers(BUDGET_URL).permitAll()
+                .antMatchers(SINGLE_CATEGORY_URLS).permitAll()
+                .antMatchers(PACKAGE_CATEGORY_URLS).permitAll()                .antMatchers(H2_URL).permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

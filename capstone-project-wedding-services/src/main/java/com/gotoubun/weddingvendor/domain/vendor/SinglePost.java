@@ -13,7 +13,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @ToString
 @Table(name = "single_service_post")

@@ -10,9 +10,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "customer")
 public class Customer extends Auditable{

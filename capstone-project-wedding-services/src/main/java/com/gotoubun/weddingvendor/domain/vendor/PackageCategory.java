@@ -5,9 +5,12 @@ import java.util.Collection;
 import javax.persistence.*;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "package_category")
 public class PackageCategory{

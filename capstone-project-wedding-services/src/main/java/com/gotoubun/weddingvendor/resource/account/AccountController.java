@@ -33,7 +33,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
 
-import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
+import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 import static com.gotoubun.weddingvendor.security.SecurityConstants.TOKEN_PREFIX;
 
 /**
@@ -87,21 +87,20 @@ public class AccountController {
      * @param principal the principal
      * @return the collection
      */
-
     @GetMapping("/kols")
-    public Collection<KOLResponse> getAllKol(Principal principal) {
+    public ResponseEntity<Collection<KOLResponse> > getAllKol(Principal principal) {
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 1) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         Collection<KOLResponse> kolResponses = accountService.findAllKOL();
         if (kolResponses.size() == 0) {
-            throw new KolNotFoundException("Kol is not found");
+            throw new KolNotFoundException(NO_RESULTS);
         }
-        return accountService.findAllKOL();
+        return new ResponseEntity<>(kolResponses,HttpStatus.OK);
     }
 
     /**
@@ -110,36 +109,51 @@ public class AccountController {
      * @param principal the principal
      * @return the collection
      */
-
     @GetMapping("/vendors")
-    public Collection<VendorProviderResponse> getAllVendor(Principal principal) {
+    public ResponseEntity<Collection<VendorProviderResponse>> getAllVendor(Principal principal) {
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 1) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         Collection<VendorProviderResponse> vendorProviderResponses = accountService.findAllVendor();
         if (vendorProviderResponses.size() == 0) {
             throw new VendorNotFoundException("Kol is not found");
         }
-        return vendorProviderResponses;
+        return new ResponseEntity<>(vendorProviderResponses,HttpStatus.OK);
     }
 
-    @GetMapping("/password")
-    public ResponseEntity<MessageToUser> putPassword(AccountPasswordRequest passwordRequest, Principal principal) {
+    /**
+     * Put password response entity.
+     *
+     * @param passwordRequest the password request
+     * @param principal       the principal
+     * @return the response entity
+     */
+    @PutMapping("/password")
+    public ResponseEntity<?> putAccountPassword(AccountPasswordRequest passwordRequest,
+                                                     BindingResult result,
+                                                     Principal principal) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+
         accountService.updatePassword(passwordRequest, principal.getName());
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
-
-
+    /**
+     * Post account response entity.
+     *
+     * @param account the account
+     * @param result  the result
+     * @return the response entity
+     */
     @PostMapping
     public ResponseEntity<?> postAccount(@Valid @RequestBody Account account, BindingResult result) {
-        // Validate passwords match
-//        accountValidator.validate(account,result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
@@ -149,7 +163,14 @@ public class AccountController {
         return new ResponseEntity<Account>(newUser, HttpStatus.CREATED);
     }
 
-
+    /**
+     * Put status account response entity.
+     *
+     * @param id                   the id
+     * @param accountStatusRequest the account status request
+     * @param principal            the principal
+     * @return the response entity
+     */
     @PutMapping("/status/{id}")
     public ResponseEntity<?> putStatusAccount(@Valid @PathVariable Long id, @RequestBody AccountStatusRequest accountStatusRequest,
                                               Principal principal) {

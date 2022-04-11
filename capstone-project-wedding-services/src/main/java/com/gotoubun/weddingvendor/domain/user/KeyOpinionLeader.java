@@ -1,9 +1,7 @@
 package com.gotoubun.weddingvendor.domain.user;
 
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
@@ -11,7 +9,8 @@ import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "kol")
 public class KeyOpinionLeader extends Auditable{

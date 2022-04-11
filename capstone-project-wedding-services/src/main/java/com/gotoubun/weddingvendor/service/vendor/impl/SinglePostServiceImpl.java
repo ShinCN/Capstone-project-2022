@@ -142,6 +142,7 @@ public class SinglePostServiceImpl implements SinglePostService {
        singlePosts.forEach(c->{
            Collection<PhotoResponse> photoResponses = new ArrayList<>();
            SingleServicePostResponse singleServicePostResponse= SingleServicePostResponse.builder()
+                   .id(c.getId())
                    .serviceName(c.getServiceName())
                    .price(c.getPrice())
                    .description(c.getAbout())

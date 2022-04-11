@@ -13,9 +13,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KOLResponse {
-
+    Long id;
     String username;
-    String password;
     int status;
     Date createdDate;
     Date modifiedDate;

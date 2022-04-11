@@ -1,12 +1,9 @@
 package com.gotoubun.weddingvendor.resource.vendor;
 
-import com.gotoubun.weddingvendor.data.singleservice.*;
-import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
-import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
-import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
-import com.gotoubun.weddingvendor.exception.VendorNotFoundException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
@@ -24,6 +21,9 @@ import java.util.Collection;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
 
+/**
+ * The type Single service controller.
+ */
 @RestController
 @RequestMapping("/single-service")
 public class SingleServiceController {
@@ -47,15 +47,15 @@ public class SingleServiceController {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 2) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccessException("your account has not been activated yet");
+            throw new AccountNotHaveAccessException(NO_ACTIVATE);
         }
 
         //check valid attributes
@@ -68,36 +68,74 @@ public class SingleServiceController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
+    /**
+     * Gets all single service.
+     *
+     * @param principal the principal
+     * @return the all single service
+     */
+    @GetMapping("/category/{id}")
+    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleServiceByCategory(Principal principal,
+                                                                                              @PathVariable Long id) {
+        return new ResponseEntity<>(singlePostService.findAllByCategories(id),HttpStatus.OK);
+    }
+
+    /**
+     * Gets all single service.
+     *
+     * @param principal the principal
+     * @return the all single service
+     */
+    @GetMapping("/vendor/{id}")
+    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleServiceByVendor(@PathVariable Long id,
+                                                                                             Principal principal) {
+        return new ResponseEntity<>(singlePostService.findAllByVendors(id),HttpStatus.OK);
+    }
+
+    /**
+     * Gets all single service.
+     *
+     * @param principal the principal
+     * @return the all single service
+     */
     @GetMapping
     public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleService(Principal principal) {
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 2) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
 
-        return new ResponseEntity<>(singlePostService.findAllByVendors(principal.getName()),HttpStatus.OK);
+        return new ResponseEntity<>(singlePostService.findAll(),HttpStatus.OK);
     }
 
-    //Update single service
+    /**
+     * Put single service response entity.
+     *
+     * @param id            the id
+     * @param request       the request
+     * @param bindingResult the binding result
+     * @param principal     the principal
+     * @return the response entity
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> putSingleService(@Valid @PathVariable Long id,
                                               @RequestBody SingleServicePostRequest request,
                                               BindingResult bindingResult, Principal principal) {
         //check login
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
 
         if (role != 2) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccessException("your account has not been activated yet");
+            throw new AccountNotHaveAccessException(NO_ACTIVATE);
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -106,99 +144,29 @@ public class SingleServiceController {
         //update service
         singlePostService.update(id, request, principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 
 
-
+    /**
+     * Delete single service response entity.
+     *
+     * @param id        the id
+     * @param principal the principal
+     * @return the response entity
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteSingleService(@Valid @PathVariable Long id, Principal principal) {
+    public ResponseEntity<?> deleteSingleService(@PathVariable Long id, Principal principal) {
+
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
-            throw new AccountNotHaveAccessException("your account has not been activated yet");
+            throw new AccountNotHaveAccessException(NO_ACTIVATE);
         }
         singlePostService.delete(id);
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }
-
-
-    //price cap nhat tu dong
-    @PutMapping("price/{id}")
-    public ResponseEntity<?> putSingleServiceServicePrice(@Valid @PathVariable Long id,
-                                                          @RequestBody SingleServicePostPriceRequest priceRequest,
-                                                          BindingResult bindingResult, Principal principal) {
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
-        }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException("your account has not been activated yet");
-        }
-        //check valid attributes
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if (errorMap != null) return errorMap;
-
-        SinglePost singlePost = singlePostService.updatePrice(id, priceRequest.getPrice(), principal.getName());
-
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
-    }
-
-    @PutMapping("photos/{id}")
-    public ResponseEntity<?> putSingleServiceServicePhotos(@Valid @PathVariable Long id,
-                                                           @RequestBody SingleServicePostPhotosRequest photoRequest,
-                                                           BindingResult bindingResult, Principal principal) {
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
-        }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException("your account has not been activated yet");
-        }
-        //check valid attributes
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if (errorMap != null) return errorMap;
-
-        SinglePost singlePost = singlePostService.updatePhotos(id, photoRequest.getPhotos(), principal.getName());
-
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
-    }
-
-    @PutMapping("description/{id}")
-    public ResponseEntity<?> putSingleServiceServiceDescription(@Valid @PathVariable Long id,
-                                                                @RequestBody SingleServicePostDescriptionRequest descriptionRequest,
-                                                                BindingResult bindingResult, Principal principal) {
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
-        }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException("your account has not been activated yet");
-        }
-        //check valid attributes
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if (errorMap != null) return errorMap;
-
-        SinglePost singlePost = singlePostService.updateDescription(id, descriptionRequest.getDescription(), principal.getName());
-
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
-    }
-
+    
 
 }
 

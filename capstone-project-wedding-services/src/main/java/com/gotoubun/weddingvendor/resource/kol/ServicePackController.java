@@ -49,31 +49,16 @@ public class ServicePackController {
      * @param keyword   the keyword
      * @param packageId the package id
      * @param price     the price
-     * @param principal the principal
      * @return the all service pack
      */
     @GetMapping
     public ResponseEntity<?> getAllServicePack(String keyword,
-                                               Long packageId, Float price,
-                                               Principal principal) {
-        // TODO Auto-generated method stub
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException(LOGIN_REQUIRED);
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 4) {
-            throw new AccountNotHaveAccessException(NO_PERMISSION);
-        }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
-        }
+                                               Long packageId, Float price) {
+
         List<PackagePostResponse> packagePostResponseList = packagePostService.findAll(keyword, packageId, price);
         if (packagePostResponseList.size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }
-
 
         return new ResponseEntity<>(packagePostResponseList, HttpStatus.OK);
     }
@@ -98,7 +83,7 @@ public class ServicePackController {
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
 
-            throw new AccountNotHaveAccessException("you are not kol");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
@@ -136,7 +121,7 @@ public class ServicePackController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
-            throw new AccountNotHaveAccessException("you are not kol");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
@@ -167,7 +152,7 @@ public class ServicePackController {
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
 
-            throw new AccountNotHaveAccessException("you are not kol");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
@@ -182,28 +167,14 @@ public class ServicePackController {
     /**
      * Gets all single post by service pack.
      *
-     * @param id        the id
-     * @param principal the principal
+     * @param id the id
      * @return the all single post by service pack
      */
     @GetMapping("{id}/single-services")
-    public ResponseEntity<?> getAllSinglePostByServicePack(@PathVariable Long id,
-                                                           Principal principal) {
-        // TODO Auto-generated method stub
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException(LOGIN_REQUIRED);
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 4) {
-            throw new AccountNotHaveAccessException(NO_PERMISSION);
-        }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
-        }
+    public ResponseEntity<?> getAllSinglePostByServicePack(@PathVariable Long id) {
+
         List<SingleServicePostResponse> singleServicePostResponses =
-                (List<SingleServicePostResponse>) packagePostService.findByPackagePost(id, principal.getName());
+                (List<SingleServicePostResponse>) packagePostService.findByPackagePost(id);
         if (singleServicePostResponses.size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }
@@ -259,15 +230,12 @@ public class ServicePackController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
-            throw new AccountNotHaveAccessException("you are not kol");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {
             throw new AccountNotHaveAccessException(NO_ACTIVATE);
         }
-//        //check valid attributes
-//        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-//        if (errorMap != null) return errorMap;
 
         packagePostService.updateSinglePost(id, singlePostId, principal.getName());
 
@@ -293,7 +261,7 @@ public class ServicePackController {
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 4) {
-            throw new AccountNotHaveAccessException("you are not kol");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         int status = accountService.getStatus(principal.getName());
         if (status == 0) {

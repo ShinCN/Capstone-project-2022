@@ -85,8 +85,8 @@ public class AccountServiceImpl implements AccountService {
             List<VendorProviderResponse> vendorResponses =new ArrayList<>();
         vendors.forEach(c -> {
             VendorProviderResponse vendorResponse= VendorProviderResponse.builder()
+                    .id(c.getId())
                     .username(c.getAccount().getUsername())
-                    .password(c.getAccount().getPassword())
                     .status(c.getAccount().getStatus())
                     .createdDate(c.getAccount().getCreatedDate())
                     .modifiedDate(c.getAccount().getModifiedDate())
@@ -95,6 +95,7 @@ public class AccountServiceImpl implements AccountService {
                     .address(c.getAddress())
                     .company(c.getCompany())
                     .nanoPassword(c.getNanoPassword())
+
                     .build();
             vendorResponses.add(vendorResponse);
                 }
@@ -112,8 +113,8 @@ public class AccountServiceImpl implements AccountService {
         List<KOLResponse> kolResponses =new ArrayList<>();
         keyOpinionLeaders.forEach(c -> {
                     KOLResponse kolResponse= KOLResponse.builder()
+                            .id(c.getId())
                             .username(c.getAccount().getUsername())
-                            .password(c.getAccount().getPassword())
                             .status(c.getAccount().getStatus())
                             .createdDate(c.getAccount().getCreatedDate())
                             .modifiedDate(c.getAccount().getModifiedDate())

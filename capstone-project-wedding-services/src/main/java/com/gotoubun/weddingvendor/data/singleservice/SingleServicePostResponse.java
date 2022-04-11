@@ -15,7 +15,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SingleServicePostResponse {
-
+    Long id;
     String serviceName;
     Float price;
     String description;

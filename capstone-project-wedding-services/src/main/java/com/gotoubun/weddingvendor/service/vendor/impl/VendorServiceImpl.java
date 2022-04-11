@@ -13,9 +13,8 @@ import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.exception.VendorNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.SinglePostRepository;
-import com.gotoubun.weddingvendor.service.singlecategory.SingleCategoryService;
+import com.gotoubun.weddingvendor.service.category.SingleCategoryService;
 import com.gotoubun.weddingvendor.service.vendor.VendorService;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,8 +22,6 @@ import org.springframework.stereotype.Service;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.security.auth.login.AccountNotFoundException;
 
 import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomPassword;
 
@@ -94,7 +91,6 @@ public class VendorServiceImpl implements VendorService {
         VendorProvider vendorProvider = vendorRepository.findByAccount(account);
         VendorProviderResponse vendorResponse = VendorProviderResponse.builder()
                 .username(vendorProvider.getAccount().getUsername())
-                .password(vendorProvider.getAccount().getPassword())
                 .status(vendorProvider.getAccount().getStatus())
                 .createdDate(vendorProvider.getAccount().getCreatedDate())
                 .modifiedDate(vendorProvider.getAccount().getModifiedDate())

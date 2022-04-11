@@ -119,14 +119,12 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
     }
 
     @Override
-    public Collection<SingleServicePostResponse> findByPackagePost(Long id,String username) {
+    public Collection<SingleServicePostResponse> findByPackagePost(Long id) {
 
-        Account account = accountRepository.findByUsername(username);
-        KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(account);
         PackagePost existingServicePack = getPackageServicePostById(id).get();
 
-        if (getPackageServicePostById(id).isPresent() && (!getPackageServicePostById(id).get().getKeyOpinionLeader().getAccount().getUsername().equals(username))) {
-            throw new ServicePackNotFound("This service pack is not found in your account");
+        if (!getPackageServicePostById(id).isPresent()) {
+            throw new ServicePackNotFound("This service pack is not found ");
         }
 
         List<SinglePost> singlePosts =singlePostRepository.findAllByPackagePosts(packagePostRepository.getById(id));
@@ -134,6 +132,7 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
         singlePosts.forEach(c->{
             Collection<PhotoResponse> photoResponses = new ArrayList<>();
             SingleServicePostResponse singleServicePostResponse= SingleServicePostResponse.builder()
+                    .id(c.getId())
                     .serviceName(c.getServiceName())
                     .price(c.getPrice())
                     .description(c.getAbout())

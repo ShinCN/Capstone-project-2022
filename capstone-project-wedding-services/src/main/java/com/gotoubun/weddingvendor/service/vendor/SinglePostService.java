@@ -10,11 +10,8 @@ import java.util.Collection;
 public interface SinglePostService {
     void save(SingleServicePostRequest singleServicePostRequest, String username);
     void update(Long id, SingleServicePostRequest singleServicePostRequest, String username);
-    SinglePost updateName(Long id, String serviceName, String username);
-    SinglePost updatePrice(Long id, Float price, String username);
-    SinglePost updateDescription(Long id, String description, String username);
-    SinglePost updatePhotos(Long id, Collection<Photo> photos, String username);
     void delete(Long id);
-    Collection<SingleServicePostResponse> findAllByVendors(String username);
+    Collection<SingleServicePostResponse> findAllByVendors(Long id);
+    Collection<SingleServicePostResponse> findAllByCategories(Long categoryId);
     Collection<SingleServicePostResponse> findAll();
 }

@@ -10,6 +10,7 @@ import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
+import com.gotoubun.weddingvendor.repository.SingleCategoryRepository;
 import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
@@ -33,75 +34,11 @@ public class SinglePostServiceImpl implements SinglePostService {
     @Autowired
     SinglePostRepository singlePostRepository;
     @Autowired
+    SingleCategoryRepository singleCategoryRepository;
+    @Autowired
     public BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    @Override
-    public SinglePost updateName(Long id, String serviceName, String username) {
-
-        Account account = accountRepository.findByUsername(username);
-        VendorProvider vendorProvider = vendorRepository.findByAccount(account);
-        SinglePost existingSinglePost = getServicePostById(id).get();
-
-        //check service in current account
-        if (getServicePostById(id).isPresent() && (!getServicePostById(id).get().getVendorProvider().getAccount().getUsername().equals(username))) {
-            throw new SingleServicePostNotFoundException("Service not found in your account");
-        }
-
-        //check service name exist
-//        if (checkServiceNameExisted(serviceName, vendorProvider.getId())) {
-//            throw new SingleServicePostNotFoundException("Service Name " + serviceName + " has already existed in your account");
-//        }
-
-        existingSinglePost.setServiceName(serviceName);
-
-        return singlePostRepository.save(existingSinglePost);
-    }
-
-    @Override
-    public SinglePost updatePrice(Long id, Float price, String username) {
-        Account account = accountRepository.findByUsername(username);
-        SinglePost existingSinglePost = getServicePostById(id).get();
-
-        //check service in current account
-        if (getServicePostById(id).isPresent() && (!getServicePostById(id).get().getVendorProvider().getAccount().getUsername().equals(username))) {
-            throw new SingleServicePostNotFoundException("Service not found in your account");
-        }
-
-        existingSinglePost.setPrice(price);
-
-        return singlePostRepository.save(existingSinglePost);
-    }
-
-    @Override
-    public SinglePost updateDescription(Long id, String description, String username) {
-        Account account = accountRepository.findByUsername(username);
-        SinglePost existingSinglePost = getServicePostById(id).get();
-
-        //check service in current account
-        if (getServicePostById(id).isPresent() && (!getServicePostById(id).get().getVendorProvider().getAccount().getUsername().equals(username))) {
-            throw new SingleServicePostNotFoundException("Service not found in your account");
-        }
-
-        existingSinglePost.setAbout(description);
-
-        return singlePostRepository.save(existingSinglePost);
-    }
-
-    @Override
-    public SinglePost updatePhotos(Long id, Collection<Photo> photos, String username) {
-        Account account = accountRepository.findByUsername(username);
-        SinglePost existingSinglePost = getServicePostById(id).get();
-
-        //check service in current account
-        if (getServicePostById(id).isPresent() && (!getServicePostById(id).get().getVendorProvider().getAccount().getUsername().equals(username))) {
-            throw new SingleServicePostNotFoundException("Service not found in your account");
-        }
-        photos.forEach(c->c.setSinglePost(existingSinglePost));
-        existingSinglePost.setPhotos(photos);
-
-        return singlePostRepository.save(existingSinglePost);
-    }
 
     @Override
     public void save(SingleServicePostRequest request, String username) {
@@ -191,10 +128,9 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
 
     @Override
-    public Collection<SingleServicePostResponse> findAllByVendors(String username) {
+    public Collection<SingleServicePostResponse> findAllByVendors(Long id) {
 
-        Account account = accountRepository.findByUsername(username);
-        VendorProvider vendorProvider = vendorRepository.findByAccount(account);
+        VendorProvider vendorProvider = vendorRepository.getById(id);
 
         List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
         List<SinglePost> singlePosts= singlePostRepository.findAllByVendorProvider(vendorProvider);
@@ -214,6 +150,30 @@ public class SinglePostServiceImpl implements SinglePostService {
            singleServicePostResponse.setPhotos(photoResponses);
            singleServicePostResponses.add(singleServicePostResponse);
        });
+        return singleServicePostResponses;
+    }
+
+    @Override
+    public Collection<SingleServicePostResponse> findAllByCategories(Long categoryId) {
+
+        List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
+        List<SinglePost> singlePosts= singlePostRepository.findAllBySingleCategory(singleCategoryRepository.getById(categoryId));
+
+        if(singlePosts.size() == 0)
+        {
+            throw new SingleServicePostNotFoundException("category does not have any one registered");
+        }
+        singlePosts.forEach(c->{
+            Collection<PhotoResponse> photoResponses = new ArrayList<>();
+            SingleServicePostResponse singleServicePostResponse= SingleServicePostResponse.builder()
+                    .serviceName(c.getServiceName())
+                    .price(c.getPrice())
+                    .description(c.getAbout())
+                    .build();
+            c.getPhotos().forEach(b->photoResponses.add(new PhotoResponse(b.getCaption(),b.getUrl())));
+            singleServicePostResponse.setPhotos(photoResponses);
+            singleServicePostResponses.add(singleServicePostResponse);
+        });
         return singleServicePostResponses;
     }
 

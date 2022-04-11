@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -77,42 +78,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Collection<VendorProviderResponse> findAllVendor() {
-            List<Account> vendorAccounts = (List<Account>)  accountRepository.findByRole(2);
-            List<VendorProvider> vendors=new ArrayList<>();
-            vendorAccounts.forEach(c->{
-                vendors.add(vendorRepository.findByAccount(c));
-            });
-            List<VendorProviderResponse> vendorResponses =new ArrayList<>();
-        vendors.forEach(c -> {
-            VendorProviderResponse vendorResponse= VendorProviderResponse.builder()
-                    .id(c.getId())
-                    .username(c.getAccount().getUsername())
-                    .status(c.getAccount().getStatus())
-                    .createdDate(c.getAccount().getCreatedDate())
-                    .modifiedDate(c.getAccount().getModifiedDate())
-                    .fullName(c.getFullName())
-                    .phone(c.getPhone())
-                    .address(c.getAddress())
-                    .company(c.getCompany())
-                    .nanoPassword(c.getNanoPassword())
-
-                    .build();
-            vendorResponses.add(vendorResponse);
-                }
-        );
-        return  vendorResponses;
-    }
-
-    @Override
-    public Collection<KOLResponse> findAllKOL() {
-        List<Account> kolAccounts = (List<Account>) accountRepository.findByRole(4);
-        List<KeyOpinionLeader> keyOpinionLeaders= new ArrayList<>();
-        kolAccounts.forEach(c->{
-            keyOpinionLeaders.add(kolRepository.findByAccount(c));
+        List<Account> vendorAccounts = (List<Account>) accountRepository.findByRole(2);
+        List<VendorProvider> vendors = new ArrayList<>();
+        vendorAccounts.forEach(c -> {
+            vendors.add(vendorRepository.findByAccount(c));
         });
-        List<KOLResponse> kolResponses =new ArrayList<>();
-        keyOpinionLeaders.forEach(c -> {
-                    KOLResponse kolResponse= KOLResponse.builder()
+        List<VendorProviderResponse> vendorResponses = new ArrayList<>();
+        vendors.forEach(c -> {
+                    VendorProviderResponse vendorResponse = VendorProviderResponse.builder()
                             .id(c.getId())
                             .username(c.getAccount().getUsername())
                             .status(c.getAccount().getStatus())
@@ -121,25 +94,44 @@ public class AccountServiceImpl implements AccountService {
                             .fullName(c.getFullName())
                             .phone(c.getPhone())
                             .address(c.getAddress())
-                            .description(c.getDescription())
+                            .company(c.getCompany())
                             .nanoPassword(c.getNanoPassword())
                             .build();
-            kolResponses.add(kolResponse);
+                    vendorResponses.add(vendorResponse);
                 }
         );
-        return kolResponses;
+
+        return vendorResponses;
+    }
+
+    @Override
+    public Collection<KOLResponse> findAllKOL() {
+
+        List<KeyOpinionLeader> keyOpinionLeaders = kolRepository.findAll();
+
+        return keyOpinionLeaders.stream().map(c -> KOLResponse.builder()
+                        .id(c.getId())
+                        .username(c.getAccount().getUsername())
+                        .status(c.getAccount().getStatus())
+                        .createdDate(c.getAccount().getCreatedDate())
+                        .modifiedDate(c.getAccount().getModifiedDate())
+                        .fullName(c.getFullName())
+                        .phone(c.getPhone())
+                        .address(c.getAddress())
+                        .description(c.getDescription())
+                        .nanoPassword(c.getNanoPassword())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
     public void updatePassword(AccountPasswordRequest passWord, String username) {
         Account account = accountRepository.findByUsername(username);
-        if(!account.getPassword().equals(passWord.getOldPassword()))
-        {
-               throw new PasswordNotMatchException("Password does not match");
+        if (!account.getPassword().equals(passWord.getOldPassword())) {
+            throw new PasswordNotMatchException("Password does not match");
         }
         account.setPassword(passWord.getNewPassword());
     }
-
 
 
 }

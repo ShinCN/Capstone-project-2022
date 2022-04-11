@@ -88,7 +88,7 @@ public class AccountController {
      * @return the collection
      */
     @GetMapping("/kols")
-    public Collection<KOLResponse> getAllKol(Principal principal) {
+    public ResponseEntity<Collection<KOLResponse> > getAllKol(Principal principal) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
@@ -100,7 +100,7 @@ public class AccountController {
         if (kolResponses.size() == 0) {
             throw new KolNotFoundException(NO_RESULTS);
         }
-        return accountService.findAllKOL();
+        return new ResponseEntity<>(kolResponses,HttpStatus.OK);
     }
 
     /**
@@ -110,7 +110,7 @@ public class AccountController {
      * @return the collection
      */
     @GetMapping("/vendors")
-    public Collection<VendorProviderResponse> getAllVendor(Principal principal) {
+    public ResponseEntity<Collection<VendorProviderResponse>> getAllVendor(Principal principal) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
@@ -122,7 +122,7 @@ public class AccountController {
         if (vendorProviderResponses.size() == 0) {
             throw new VendorNotFoundException("Kol is not found");
         }
-        return vendorProviderResponses;
+        return new ResponseEntity<>(vendorProviderResponses,HttpStatus.OK);
     }
 
     /**

@@ -1,13 +1,9 @@
-package com.gotoubun.weddingvendor.service.service_pack;
+package com.gotoubun.weddingvendor.service.packagepost;
 
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostResponse;
-import com.gotoubun.weddingvendor.data.servicepack.SinglePostNewRequest;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
-import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;

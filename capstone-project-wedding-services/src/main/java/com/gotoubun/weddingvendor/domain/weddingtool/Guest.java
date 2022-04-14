@@ -22,7 +22,7 @@ public class Guest {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="fullname", columnDefinition = "TEXT")
+	@Column(name="full_name", columnDefinition = "TEXT")
 	private String fullName;
 	
 	@Column(name="phone")

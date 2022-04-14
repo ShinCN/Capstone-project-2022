@@ -7,9 +7,8 @@ import javax.validation.constraints.NotBlank;
 public class GuestRequest {
     @NotBlank(message = "Name is not blank")
     String fullName;
-    @NotBlank(message = "Phone is not blank")
     String phone;
-    @NotBlank(message = "Email is not blank")
     String mail;
     String address;
+
 }

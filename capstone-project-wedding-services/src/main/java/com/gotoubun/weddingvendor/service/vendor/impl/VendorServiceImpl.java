@@ -70,7 +70,6 @@ public class VendorServiceImpl implements VendorService {
         vendorProvider.setAddress(vendor.getAddress());
         vendorRepository.save(vendorProvider);
 
-
         return vendorProvider;
     }
 

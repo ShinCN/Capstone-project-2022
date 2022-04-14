@@ -2,7 +2,10 @@ package com.gotoubun.weddingvendor.resource.account;
 
 import com.gotoubun.weddingvendor.data.account.AccountPasswordRequest;
 import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
+import com.gotoubun.weddingvendor.data.kol.KOLPagingResponse;
 import com.gotoubun.weddingvendor.data.kol.KOLResponse;
+import com.gotoubun.weddingvendor.data.singleservice.SinglePostPagingResponse;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
@@ -88,7 +91,12 @@ public class AccountController {
      * @return the collection
      */
     @GetMapping("/kols")
-    public ResponseEntity<Collection<KOLResponse> > getAllKol(Principal principal) {
+    public ResponseEntity<KOLPagingResponse> getAllKol(
+            Principal principal,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
@@ -96,12 +104,21 @@ public class AccountController {
         if (role != 1) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        Collection<KOLResponse> kolResponses = accountService.findAllKOL();
-        if (kolResponses.size() == 0) {
-            throw new KolNotFoundException(NO_RESULTS);
-        }
-        return new ResponseEntity<>(kolResponses,HttpStatus.OK);
+
+        return new ResponseEntity<>(accountService.findAllKOL(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
+
+    @GetMapping("/single-service")
+    public ResponseEntity<SinglePostPagingResponse> getAllSingleService(
+            Principal principal,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+
+        return new ResponseEntity<>(accountService.findAllSinglePost(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
 
     /**
      * Get vendors collection.
@@ -122,7 +139,7 @@ public class AccountController {
         if (vendorProviderResponses.size() == 0) {
             throw new VendorNotFoundException("Kol is not found");
         }
-        return new ResponseEntity<>(vendorProviderResponses,HttpStatus.OK);
+        return new ResponseEntity<>(vendorProviderResponses, HttpStatus.OK);
     }
 
     /**
@@ -134,8 +151,8 @@ public class AccountController {
      */
     @PutMapping("/password")
     public ResponseEntity<?> putAccountPassword(AccountPasswordRequest passwordRequest,
-                                                     BindingResult result,
-                                                     Principal principal) {
+                                                BindingResult result,
+                                                Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
 
@@ -145,6 +162,7 @@ public class AccountController {
         accountService.updatePassword(passwordRequest, principal.getName());
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
+
     /**
      * Post account response entity.
      *

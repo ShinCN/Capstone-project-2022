@@ -2,18 +2,31 @@ package com.gotoubun.weddingvendor.service.account.impl;
 
 import com.gotoubun.weddingvendor.data.account.AccountPasswordRequest;
 import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
+import com.gotoubun.weddingvendor.data.guest.GuestListRequest;
+import com.gotoubun.weddingvendor.data.kol.KOLPagingResponse;
 import com.gotoubun.weddingvendor.data.kol.KOLResponse;
+import com.gotoubun.weddingvendor.data.singleservice.PhotoResponse;
+import com.gotoubun.weddingvendor.data.singleservice.SinglePostPagingResponse;
+import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
+import com.gotoubun.weddingvendor.domain.vendor.Photo;
+import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
+import com.gotoubun.weddingvendor.domain.weddingtool.GuestList;
 import com.gotoubun.weddingvendor.exception.PasswordNotMatchException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.KolRepository;
+import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +38,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
+
+    @Autowired
+    private SinglePostRepository singlePostRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -78,11 +94,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Collection<VendorProviderResponse> findAllVendor() {
-        List<Account> vendorAccounts = (List<Account>) accountRepository.findByRole(2);
-        List<VendorProvider> vendors = new ArrayList<>();
-        vendorAccounts.forEach(c -> {
-            vendors.add(vendorRepository.findByAccount(c));
-        });
+        List<VendorProvider> vendors = vendorRepository.findAll();
         List<VendorProviderResponse> vendorResponses = new ArrayList<>();
         vendors.forEach(c -> {
                     VendorProviderResponse vendorResponse = VendorProviderResponse.builder()
@@ -105,11 +117,16 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Collection<KOLResponse> findAllKOL() {
+    public KOLPagingResponse findAllKOL(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
 
-        List<KeyOpinionLeader> keyOpinionLeaders = kolRepository.findAll();
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        return keyOpinionLeaders.stream().map(c -> KOLResponse.builder()
+        Page<KeyOpinionLeader> keyOpinionLeaders = kolRepository.findAll(pageable);
+
+        Collection<KOLResponse> kolResponses = keyOpinionLeaders.stream().map(c -> KOLResponse.builder()
                         .id(c.getId())
                         .username(c.getAccount().getUsername())
                         .status(c.getAccount().getStatus())
@@ -122,6 +139,50 @@ public class AccountServiceImpl implements AccountService {
                         .nanoPassword(c.getNanoPassword())
                         .build())
                 .collect(Collectors.toList());
+
+        return KOLPagingResponse.builder()
+                .totalPages(keyOpinionLeaders.getTotalPages())
+                .pageNo(keyOpinionLeaders.getNumber())
+                .last(keyOpinionLeaders.isLast())
+                .totalElements(keyOpinionLeaders.getTotalElements())
+                .kolResponses(kolResponses)
+                .totalElements(keyOpinionLeaders.getTotalElements())
+                .build();
+
+    }
+
+    @Override
+    public SinglePostPagingResponse findAllSinglePost(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<SinglePost> singlePosts = singlePostRepository.findAll(pageable);
+
+        Collection<SingleServicePostResponse> singleServicePostResponses = singlePosts.stream().map(singlePost -> SingleServicePostResponse.builder()
+                        .id(singlePost.getId())
+                        .serviceName(singlePost.getServiceName())
+                        .price(singlePost.getPrice())
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .description(singlePost.getAbout())
+                        .build())
+                .collect(Collectors.toList());
+
+        return SinglePostPagingResponse.builder()
+                .totalPages(singlePosts.getTotalPages())
+                .pageNo(singlePosts.getNumber())
+                .last(singlePosts.isLast())
+                .totalElements(singlePosts.getTotalElements())
+                .singleServicePostResponses(singleServicePostResponses)
+                .totalElements(singlePosts.getTotalElements())
+                .build();
+    }
+
+    // convert request to entity
+    private PhotoResponse mapToResponse(Photo photo) {
+        return new PhotoResponse(photo.getCaption(), photo.getUrl());
     }
 
     @Override

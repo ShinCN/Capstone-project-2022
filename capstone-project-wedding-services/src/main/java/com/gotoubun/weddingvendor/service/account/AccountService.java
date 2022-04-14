@@ -2,7 +2,9 @@ package com.gotoubun.weddingvendor.service.account;
 
 import com.gotoubun.weddingvendor.data.account.AccountPasswordRequest;
 import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
+import com.gotoubun.weddingvendor.data.kol.KOLPagingResponse;
 import com.gotoubun.weddingvendor.data.kol.KOLResponse;
+import com.gotoubun.weddingvendor.data.singleservice.SinglePostPagingResponse;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 
@@ -16,6 +18,7 @@ public interface AccountService {
     int getRole(String username);
     int getStatus(String username);
     Collection<VendorProviderResponse> findAllVendor();
-    Collection<KOLResponse> findAllKOL();
+    KOLPagingResponse findAllKOL(int pageNo, int pageSize, String sortBy, String sortDir);
+    SinglePostPagingResponse  findAllSinglePost (int pageNo, int pageSize, String sortBy, String sortDir);
     void updatePassword(AccountPasswordRequest passWord,String username);
 }

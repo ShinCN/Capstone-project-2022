@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -22,7 +24,7 @@ import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomPassword;
+import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
 
 @RestController
 public class PaymentController {
@@ -43,7 +45,7 @@ public class PaymentController {
         Customer customer = accountService.findByUserName(principal.getName()).get().getCustomer();
 
             int amount = requestParams.getAmount() * 100;
-            String suffix_txn =generateRandomPassword(3);
+            String suffix_txn =generateRandomString(3);
             Map<String, String> vnp_Params = new HashMap<>();
             vnp_Params.put("vnp_Version", PaymentConfig.VERSION);
             vnp_Params.put("vnp_Command", PaymentConfig.COMMAND);

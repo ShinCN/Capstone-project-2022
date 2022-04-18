@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.resource.planningtools.guestlist;
+package com.gotoubun.weddingvendor.resource.planningtools;
 
 import com.gotoubun.weddingvendor.data.guest.GuestListRequest;
 import com.gotoubun.weddingvendor.data.kol.KOLRequest;
@@ -57,6 +57,9 @@ public class GuestListController {
                                      BindingResult bindingResult,
                                      Principal principal) {
         // TODO Auto-generated method stub
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
         //check validate
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
@@ -71,34 +74,6 @@ public class GuestListController {
     }
 
     /**
-     * Put kol response entity.
-     *
-     * @param guestListRequest the guest list request
-     * @param id               the id
-     * @param bindingResult    the binding result
-     * @param principal        the principal
-     * @return the response entity
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<?> putGuestList(@Valid @RequestBody GuestListRequest guestListRequest,
-                                    @PathVariable Long id,
-                                    BindingResult bindingResult,
-                                    Principal principal) {
-        // TODO Auto-generated method stub
-        //check validate
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
-        if (errorMap != null) return errorMap;
-        //save
-        int role = accountService.getRole(principal.getName());
-        if (role != 3) {
-            throw new AccountNotHaveAccessException(NO_PERMISSION);
-        }
-
-        guestListService.update(guestListRequest,principal.getName(),id);
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
-    }
-
-    /**
      * Delete guest list response entity.
      *
      * @param id        the id
@@ -106,8 +81,12 @@ public class GuestListController {
      * @return the response entity
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteGuestList(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<?> deleteGuest(@PathVariable Long id, Principal principal) {
 
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
         int role = accountService.getRole(principal.getName());
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);

@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(BLOG_URLS).permitAll()
                 .antMatchers(SINGLE_CATEGORY_URLS).permitAll()
                 .antMatchers(PACKAGE_CATEGORY_URLS).permitAll()
-                .antMatchers(GUEST_LIST_URLS).permitAll()
+                .antMatchers(GUEST_URLS).permitAll()
                 .antMatchers(H2_URL).permitAll()
                 .anyRequest().authenticated();
 

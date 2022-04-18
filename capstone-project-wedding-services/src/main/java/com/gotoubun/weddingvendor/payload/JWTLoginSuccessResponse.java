@@ -8,4 +8,5 @@ import lombok.Data;
 public class JWTLoginSuccessResponse {
     private boolean success;
     private String token;
+    private int role;
 }

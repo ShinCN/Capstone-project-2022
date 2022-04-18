@@ -80,8 +80,8 @@ public class AccountController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
-
-        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
+        int role= accountService.getRole(loginRequest.getUsername());
+        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt,role));
     }
 
     /**

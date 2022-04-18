@@ -2,7 +2,6 @@ package com.gotoubun.weddingvendor.service.kol.impl;
 
 import com.gotoubun.weddingvendor.data.kol.KOLRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
-
 import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.exception.PhoneAlreadyExistException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
@@ -13,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomPassword;
+import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
 
 
 @Service
@@ -34,7 +33,7 @@ public class KOLServiceImpl implements KOLService {
         Account account = new Account();
    
         KeyOpinionLeader keyOpinionLeader = new KeyOpinionLeader();
-        String password = generateRandomPassword(10);
+        String password = generateRandomString(10);
         //check username existed
         if(checkUserNameExisted(kolRequest.getEmail()))
         {

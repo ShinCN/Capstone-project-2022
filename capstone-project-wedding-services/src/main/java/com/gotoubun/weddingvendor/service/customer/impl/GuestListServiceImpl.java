@@ -30,7 +30,9 @@ public class GuestListServiceImpl implements GuestListService {
 
     @Override
     public void save(GuestListRequest guestListRequest, String username) {
+
         GuestList guestList = mapToEntity(guestListRequest, username);
+        guestList.setCreatedDate(getCurrentDate.now());
         guestListRepository.save(guestList);
     }
 
@@ -52,10 +54,10 @@ public class GuestListServiceImpl implements GuestListService {
     public void delete(Long id, String username) {
         GuestList guestList = getGuestListById(id);
 
-        if (guestList != null && !guestList.getCustomer().getAccount().getUsername().equals(username)) {
+        if ( !guestList.getCustomer().getAccount().getUsername().equals(username)) {
             throw new ResourceNotFoundException("Customer not found in your Account");
         }
-        guestListRepository.delete(getGuestListById(id));
+        guestListRepository.delete(guestList);
     }
 
     public GuestList getGuestListById(long id) {
@@ -66,9 +68,8 @@ public class GuestListServiceImpl implements GuestListService {
     private GuestList mapToEntity(GuestListRequest guestListRequest, String username) {
 
         GuestList guestList = new GuestList();
-        guestList.setGuestListName(guestListRequest.getName());
-        guestList.setCreatedDate(getCurrentDate.now());
         guestList.setModifiedDate(getCurrentDate.now());
+        guestList.setGuestListName(guestListRequest.getName());
         guestList.setCustomer(customerRepository.findByAccount(accountRepository.findByUsername(username)));
 
         return guestList;

@@ -23,7 +23,8 @@ import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomPassword;
+import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
+
 
 @Service
 public class VendorServiceImpl implements VendorService {
@@ -47,7 +48,7 @@ public class VendorServiceImpl implements VendorService {
         Account account = new Account();
         VendorProvider vendorProvider = new VendorProvider();
         Optional<SingleCategory> singleCategory = singleCategoryService.findById(vendor.getCategoryId());
-        String password = generateRandomPassword(10);
+        String password = generateRandomString(10);
         if (checkUserNameExisted(vendor.getUsername())) {
             throw new UsernameAlreadyExistsException("username: " + vendor.getUsername() + "already exist");
         }

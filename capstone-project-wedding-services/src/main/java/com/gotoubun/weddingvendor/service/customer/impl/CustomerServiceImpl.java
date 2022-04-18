@@ -3,6 +3,7 @@ package com.gotoubun.weddingvendor.service.customer.impl;
 import com.gotoubun.weddingvendor.data.customer.CustomerRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.Customer;
+import com.gotoubun.weddingvendor.domain.weddingtool.CheckList;
 import com.gotoubun.weddingvendor.exception.PhoneAlreadyExistException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -64,6 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
         guest.setPhone(customerRequest.getPhone());
         guest.setAddress(customerRequest.getAddress());
         guest.setPlanningDate(LocalDate.parse(customerRequest.getWeddingDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        guest.setCheckList(createCheckList(guest));
         customerRepository.save(guest);
         return guest;
     }
@@ -71,6 +75,17 @@ public class CustomerServiceImpl implements CustomerService {
     boolean checkUserNameExisted(String username) {
         return accountRepository.findByUsername(username) != null;
 
+    }
+
+    CheckList createCheckList(Customer customer){
+        String id= "cl" +generateRandomString(10);
+        CheckList checkList= new CheckList();
+        checkList.setId(id);
+        checkList.setCheckListName(customer.getFullName());
+        checkList.setCreatedDate(customer.getAccount().getCreatedDate());
+        checkList.setModifiedDate(customer.getAccount().getModifiedDate());
+        checkList.setCustomer(customer);
+        return  checkList;
     }
 
     boolean checkPhoneExisted(String phone) {

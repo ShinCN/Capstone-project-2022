@@ -11,7 +11,7 @@ public class SecurityConstants {
     public static final String SINGLE_CATEGORY_URLS = "/single-category/**";
     public static final String PACKAGE_CATEGORY_URLS = "/package-category/**";
     public static final String BLOG_URLS = "/blog/**";
-    public static final String GUEST_LIST_URLS = "guest/list/**";
+    public static final String GUEST_URLS = "/guest/**";
     public static final String H2_URL = "h2-console/**";
     public static final String SECRET = "SecretKeyToGenJWTs";
     public static final String TOKEN_PREFIX = "Bearer ";

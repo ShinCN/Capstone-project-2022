@@ -45,7 +45,7 @@ public class SingleServiceController {
      * @param sortDir   the sort dir
      * @return the all single service
      */
-    @GetMapping("/single-service")
+    @GetMapping
     public ResponseEntity<SinglePostPagingResponse> getAllSingleService(
             Principal principal,
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
@@ -116,24 +116,6 @@ public class SingleServiceController {
         return new ResponseEntity<>(singlePostService.findAllByVendors(id),HttpStatus.OK);
     }
 
-    /**
-     * Gets all single service.
-     *
-     * @param principal the principal
-     * @return the all single service
-     */
-    @GetMapping
-    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleService(Principal principal) {
-        if (principal == null)
-            throw new LoginRequiredException(LOGIN_REQUIRED);
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccessException(NO_PERMISSION);
-        }
-
-        return new ResponseEntity<>(singlePostService.findAll(),HttpStatus.OK);
-    }
 
     /**
      * Put single service response entity.

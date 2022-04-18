@@ -15,8 +15,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
-@ToString
 @Table(name = "single_service_post")
 public class SinglePost extends BasePost{
 

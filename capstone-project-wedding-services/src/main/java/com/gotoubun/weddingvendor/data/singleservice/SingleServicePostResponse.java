@@ -21,4 +21,5 @@ public class SingleServicePostResponse {
     Float price;
     String description;
     Collection<PhotoResponse> photos;
+    String vendorAddress;
 }

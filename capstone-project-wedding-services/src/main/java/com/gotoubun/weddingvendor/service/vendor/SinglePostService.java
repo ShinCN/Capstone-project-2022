@@ -15,5 +15,4 @@ public interface SinglePostService {
     SinglePostPagingResponse findAllSinglePost (int pageNo, int pageSize, String sortBy, String sortDir);
     Collection<SingleServicePostResponse> findAllByVendors(Long id);
     Collection<SingleServicePostResponse> findAllByCategories(Long categoryId);
-    Collection<SingleServicePostResponse> findAll();
 }

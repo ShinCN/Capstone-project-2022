@@ -27,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -72,117 +73,24 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    @Override
-    public Account updateStatus(Long id, AccountStatusRequest accountStatusRequest) {
-        Account account = accountRepository.getById(id);
-        account.setStatus(accountStatusRequest.getStatus());
-        return accountRepository.save(account);
-    }
-
-    @Override
     public Optional<Account> findByUserName(String username) {
         return Optional.ofNullable(accountRepository.findByUsername(username));
     }
 
     public int getRole(String username) {
+        if(!findByUserName(username).isPresent())
+        {
+            throw new UsernameNotFoundException("Username"+username+"is not found ");
+        }
         return findByUserName(username).get().getRole();
     }
 
     public int getStatus(String username) {
+        if(!findByUserName(username).isPresent())
+        {
+            throw new UsernameNotFoundException("Username"+username+"is not found ");
+        }
         return findByUserName(username).get().getStatus();
-    }
-
-    @Override
-    public Collection<VendorProviderResponse> findAllVendor() {
-        List<VendorProvider> vendors = vendorRepository.findAll();
-        List<VendorProviderResponse> vendorResponses = new ArrayList<>();
-        vendors.forEach(c -> {
-                    VendorProviderResponse vendorResponse = VendorProviderResponse.builder()
-                            .id(c.getId())
-                            .username(c.getAccount().getUsername())
-                            .status(c.getAccount().getStatus())
-                            .createdDate(c.getAccount().getCreatedDate())
-                            .modifiedDate(c.getAccount().getModifiedDate())
-                            .fullName(c.getFullName())
-                            .phone(c.getPhone())
-                            .address(c.getAddress())
-                            .company(c.getCompany())
-                            .nanoPassword(c.getNanoPassword())
-                            .build();
-                    vendorResponses.add(vendorResponse);
-                }
-        );
-
-        return vendorResponses;
-    }
-
-    @Override
-    public KOLPagingResponse findAllKOL(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        // create Pageable instance
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        Page<KeyOpinionLeader> keyOpinionLeaders = kolRepository.findAll(pageable);
-
-        Collection<KOLResponse> kolResponses = keyOpinionLeaders.stream().map(c -> KOLResponse.builder()
-                        .id(c.getId())
-                        .username(c.getAccount().getUsername())
-                        .status(c.getAccount().getStatus())
-                        .createdDate(c.getAccount().getCreatedDate())
-                        .modifiedDate(c.getAccount().getModifiedDate())
-                        .fullName(c.getFullName())
-                        .phone(c.getPhone())
-                        .address(c.getAddress())
-                        .description(c.getDescription())
-                        .nanoPassword(c.getNanoPassword())
-                        .build())
-                .collect(Collectors.toList());
-
-        return KOLPagingResponse.builder()
-                .totalPages(keyOpinionLeaders.getTotalPages())
-                .pageNo(keyOpinionLeaders.getNumber())
-                .last(keyOpinionLeaders.isLast())
-                .totalElements(keyOpinionLeaders.getTotalElements())
-                .kolResponses(kolResponses)
-                .totalElements(keyOpinionLeaders.getTotalElements())
-                .build();
-
-    }
-
-    @Override
-    public SinglePostPagingResponse findAllSinglePost(int pageNo, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        // create Pageable instance
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        Page<SinglePost> singlePosts = singlePostRepository.findAll(pageable);
-
-        Collection<SingleServicePostResponse> singleServicePostResponses = singlePosts.stream().map(singlePost -> SingleServicePostResponse.builder()
-                        .id(singlePost.getId())
-                        .serviceName(singlePost.getServiceName())
-                        .price(singlePost.getPrice())
-                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
-                        .description(singlePost.getAbout())
-                        .build())
-                .collect(Collectors.toList());
-
-        return SinglePostPagingResponse.builder()
-                .totalPages(singlePosts.getTotalPages())
-                .pageNo(singlePosts.getNumber())
-                .last(singlePosts.isLast())
-                .totalElements(singlePosts.getTotalElements())
-                .singleServicePostResponses(singleServicePostResponses)
-                .totalElements(singlePosts.getTotalElements())
-                .build();
-    }
-
-    // convert request to entity
-    private PhotoResponse mapToResponse(Photo photo) {
-        return new PhotoResponse(photo.getCaption(), photo.getUrl());
     }
 
     @Override
@@ -193,6 +101,5 @@ public class AccountServiceImpl implements AccountService {
         }
         account.setPassword(passWord.getNewPassword());
     }
-
 
 }

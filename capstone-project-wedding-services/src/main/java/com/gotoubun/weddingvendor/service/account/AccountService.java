@@ -14,11 +14,7 @@ import java.util.Optional;
 public interface AccountService {
     Account save(Account account);
     Optional<Account> findByUserName(String username);
-    Account updateStatus(Long id, AccountStatusRequest accountStatusRequest);
-    int getRole(String username);
-    int getStatus(String username);
-    Collection<VendorProviderResponse> findAllVendor();
-    KOLPagingResponse findAllKOL(int pageNo, int pageSize, String sortBy, String sortDir);
-    SinglePostPagingResponse  findAllSinglePost (int pageNo, int pageSize, String sortBy, String sortDir);
     void updatePassword(AccountPasswordRequest passWord,String username);
+    int getStatus(String username);
+    int getRole(String username);
 }

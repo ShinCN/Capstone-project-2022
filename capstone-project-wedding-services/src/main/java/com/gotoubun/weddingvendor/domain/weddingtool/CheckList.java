@@ -2,10 +2,12 @@ package com.gotoubun.weddingvendor.domain.weddingtool;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.*;
 
+import com.gotoubun.weddingvendor.domain.vendor.Feedback;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Primary;
@@ -33,6 +35,8 @@ public class CheckList {
 	@Column(name="checklist_name", columnDefinition = "TEXT")
 	private String checkListName;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="checkList", cascade = CascadeType.ALL)
+	private Collection<ChecklistTask> checklistTasks;
 
 	@Column(name="created_date")
 	@CreatedDate

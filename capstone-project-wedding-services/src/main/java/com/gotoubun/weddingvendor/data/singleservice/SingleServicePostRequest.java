@@ -19,5 +19,5 @@ public class SingleServicePostRequest {
     @NotNull
     Float price;
     String description;
-    Collection<Photo> photos;
+    Collection<PhotoRequest> photos;
 }

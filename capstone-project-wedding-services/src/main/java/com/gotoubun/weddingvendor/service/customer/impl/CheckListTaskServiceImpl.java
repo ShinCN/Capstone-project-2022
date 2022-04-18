@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
 
+@Service
 public class CheckListTaskServiceImpl implements CheckListTaskService {
 
     @Autowired
@@ -40,6 +42,9 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
 
     @Autowired
     CheckListTaskRepository checkListTaskRepository;
+
+    @Autowired
+    CheckListTaskPagingRepository checkListTaskPagingRepository;
 
 
     @Autowired
@@ -53,11 +58,11 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
 
         CheckList checkList = getCheckListByCustomer(username);
 
-        if (checkList!=null && !checkList.getCustomer().getAccount().getUsername().equals(username)) {
+        if (checkList != null && !checkList.getCustomer().getAccount().getUsername().equals(username)) {
             throw new ResourceNotFoundException("you don't have permission to get access to this check list");
         }
         String id = "clt" + generateRandomString(10);
-        ChecklistTask checklistTask= mapToEntity(request);
+        ChecklistTask checklistTask = mapToEntity(request);
         checklistTask.setId(id);
         checklistTask.setCheckList(checkList);
         checkListTaskRepository.save(checklistTask);
@@ -68,12 +73,12 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
     public void update(CheckListTaskRequest request, String id, String username) {
         CheckList checkList = getCheckListByCustomer(username);
 
-        if (checkList!=null && !checkList.getCustomer().getAccount().getUsername().equals(username)) {
+        if (checkList != null && !checkList.getCustomer().getAccount().getUsername().equals(username)) {
             throw new ResourceNotFoundException("you don't have permission to get access to this check list");
         }
 
         ChecklistTask checklistTask = getCheckListTaskById(id);
-        checklistTask=mapToEntity(request);
+        checklistTask = mapToEntity(request);
         checkListTaskRepository.save(checklistTask);
 
     }
@@ -86,15 +91,15 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
         }
         checkListTaskRepository.delete(checklistTask);
     }
-    public CheckListTaskPagingResponse findAllCheckListTask(int pageNo, int pageSize, String sortBy, String sortDir,String username)
-    {
+
+    public CheckListTaskPagingResponse findAllCheckListTask(int pageNo, int pageSize, String sortBy, String sortDir, String username) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 
         // create Pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<ChecklistTask> checklistTasks = checkListTaskRepository
-                .findByCheckList(getCheckListByCustomer(username),pageable);
+                .findByCheckList(getCheckListByCustomer(username), pageable);
 
 
         Collection<CheckListTaskResponse> checkListTaskResponses = checklistTasks.stream()

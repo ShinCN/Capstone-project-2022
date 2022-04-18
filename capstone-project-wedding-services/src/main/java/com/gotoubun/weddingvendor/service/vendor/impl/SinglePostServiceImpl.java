@@ -1,8 +1,6 @@
 package com.gotoubun.weddingvendor.service.vendor.impl;
 
-import com.gotoubun.weddingvendor.data.singleservice.PhotoResponse;
-import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
-import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
+import com.gotoubun.weddingvendor.data.singleservice.*;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.vendor.Photo;
@@ -15,6 +13,10 @@ import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,35 @@ public class SinglePostServiceImpl implements SinglePostService {
     public BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
+    @Override
+    public SinglePostPagingResponse findAllSinglePost(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<SinglePost> singlePosts = singlePostRepository.findAll(pageable);
+
+        Collection<SingleServicePostResponse> singleServicePostResponses = singlePosts.stream()
+                .map(singlePost -> SingleServicePostResponse.builder()
+                        .id(singlePost.getId())
+                        .serviceName(singlePost.getServiceName())
+                        .price(singlePost.getPrice())
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .description(singlePost.getAbout())
+                        .build())
+                .collect(Collectors.toList());
+
+        return SinglePostPagingResponse.builder()
+                .totalPages(singlePosts.getTotalPages())
+                .pageNo(singlePosts.getNumber())
+                .last(singlePosts.isLast())
+                .totalElements(singlePosts.getTotalElements())
+                .singleServicePostResponses(singleServicePostResponses)
+                .totalElements(singlePosts.getTotalElements())
+                .build();
+    }
 
     @Override
     public void save(SingleServicePostRequest request, String username) {
@@ -49,7 +80,7 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setServiceName(request.getServiceName());
         singlePost.setPrice(request.getPrice());
         singlePost.setAbout(request.getDescription());
-        singlePost.setPhotos(request.getPhotos());
+        singlePost.setPhotos(request.getPhotos().stream().map(this::convertToEntity).collect(Collectors.toList()));
         singlePost.setRate(0);
         singlePost.setStatus(1);
         singlePost.setSingleCategory(vendorProvider.getSingleCategory());
@@ -81,7 +112,7 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setServiceName(request.getServiceName());
         singlePost.setPrice(request.getPrice());
         singlePost.setAbout(request.getDescription());
-        singlePost.setPhotos(request.getPhotos());
+        singlePost.setPhotos(request.getPhotos().stream().map(this::convertToEntity).collect(Collectors.toList()));
         singlePost.setRate(0);
         singlePost.setStatus(1);
         singlePost.setSingleCategory(vendorProvider.getSingleCategory());
@@ -97,6 +128,14 @@ public class SinglePostServiceImpl implements SinglePostService {
         }
 
         singlePostRepository.save(singlePost);
+    }
+
+    private Photo convertToEntity(PhotoRequest photoRequest)
+    {
+        Photo photo =new Photo();
+        photo.setCaption(photoRequest.getCaption());
+        photo.setCaption(photoRequest.getCaption());
+        return photo;
     }
 
     List<SinglePost> findByVendorId(Long id) {

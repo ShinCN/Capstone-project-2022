@@ -29,6 +29,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Service pack controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/service-pack")
 public class ServicePackController {
     @Autowired

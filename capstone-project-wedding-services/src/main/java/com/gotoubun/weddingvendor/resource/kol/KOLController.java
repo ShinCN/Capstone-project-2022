@@ -25,6 +25,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Kol controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/kol")
 public class KOLController {
     /**

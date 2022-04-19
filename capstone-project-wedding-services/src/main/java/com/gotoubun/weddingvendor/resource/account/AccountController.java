@@ -43,6 +43,7 @@ import static com.gotoubun.weddingvendor.security.SecurityConstants.TOKEN_PREFIX
  * The type Account controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/account")
 public class AccountController {
     @Autowired

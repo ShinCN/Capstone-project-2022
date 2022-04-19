@@ -27,6 +27,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.NO_ACTIVATE;
  * The type Customer controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/customer")
 public class CustomerController {
 

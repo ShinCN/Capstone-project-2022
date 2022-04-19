@@ -81,7 +81,8 @@ public class AccountController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
         int role= accountService.getRole(loginRequest.getUsername());
-        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt,role));
+        String username = loginRequest.getUsername();
+        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt, role, username));
     }
 
 

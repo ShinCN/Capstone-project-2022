@@ -9,4 +9,5 @@ public class JWTLoginSuccessResponse {
     private boolean success;
     private String token;
     private int role;
+    private String username;
 }

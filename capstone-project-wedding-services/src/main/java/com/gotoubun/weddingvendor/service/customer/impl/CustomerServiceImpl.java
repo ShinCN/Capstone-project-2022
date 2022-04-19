@@ -1,8 +1,12 @@
 package com.gotoubun.weddingvendor.service.customer.impl;
 
 import com.gotoubun.weddingvendor.data.customer.CustomerRequest;
+import com.gotoubun.weddingvendor.data.customer.CustomerResponse;
+import com.gotoubun.weddingvendor.data.kol.KOLRequest;
+import com.gotoubun.weddingvendor.data.kol.KOLResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.Customer;
+import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.domain.weddingtool.CheckList;
 import com.gotoubun.weddingvendor.exception.PhoneAlreadyExistException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
@@ -36,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
-    public Customer save(CustomerRequest customerRequest) {
+    public void save(CustomerRequest customerRequest) {
         // TODO Auto-generated method stub
         Account account = new Account();
         Customer guest = new Customer();
@@ -69,7 +73,23 @@ public class CustomerServiceImpl implements CustomerService {
         guest.setPlanningDate(LocalDate.parse(customerRequest.getWeddingDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         guest.setCheckList(createCheckList(guest));
         customerRepository.save(guest);
-        return guest;
+
+    }
+
+    @Override
+    public void update(CustomerRequest customerRequest, String username) {
+        if (checkPhoneExisted(customerRequest.getPhone())) {
+            throw new PhoneAlreadyExistException("phone: " + customerRequest.getPhone() + " already exist");
+        }
+        Customer customer = customerRepository.findByAccount(accountRepository.findByUsername(username));
+
+        customerRepository.save(mapToEntity(customerRequest,customer));
+    }
+
+    @Override
+    public CustomerResponse load(String username) {
+        Customer customer = customerRepository.findByAccount(accountRepository.findByUsername(username));
+        return convertToResponse(customer);
     }
 
     boolean checkUserNameExisted(String username) {
@@ -86,6 +106,28 @@ public class CustomerServiceImpl implements CustomerService {
         checkList.setModifiedDate(customer.getAccount().getModifiedDate());
         checkList.setCustomer(customer);
         return  checkList;
+    }
+
+    private Customer mapToEntity (CustomerRequest customerRequest, Customer customer)
+    {
+        customer.setFullName(customerRequest.getFullName());
+        customer.setAddress(customerRequest.getAddress());
+        customer.setPlanningDate(LocalDate.parse(customerRequest.getWeddingDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        customer.getAccount().setModifiedDate(getCurrentDate.now());
+        return customer;
+    }
+
+    private CustomerResponse convertToResponse(Customer customer) {
+        return CustomerResponse.builder()
+                .id(customer.getId())
+                .username(customer.getEmail())
+                .fullName(customer.getFullName())
+                .weddingDate(customer.getPlanningDate())
+                .address(customer.getAddress())
+                .password(customer.getAccount().getPassword())
+                .createdDate(customer.getAccount().getCreatedDate())
+                .modifiedDate(customer.getAccount().getModifiedDate())
+                .build();
     }
 
     boolean checkPhoneExisted(String phone) {

@@ -1,6 +1,12 @@
 package com.gotoubun.weddingvendor.resource.customer;
 
 import com.gotoubun.weddingvendor.data.customer.CustomerRequest;
+import com.gotoubun.weddingvendor.data.customer.CustomerResponse;
+import com.gotoubun.weddingvendor.data.kol.KOLRequest;
+import com.gotoubun.weddingvendor.data.kol.KOLResponse;
+import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
+import com.gotoubun.weddingvendor.exception.DeactivatedException;
+import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
@@ -9,15 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
 
-import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
+import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
+import static com.gotoubun.weddingvendor.resource.MessageConstant.NO_ACTIVATE;
 
 /**
  * The type Customer controller.
@@ -44,6 +48,30 @@ public class CustomerController {
     /**
      * Post customer response entity.
      *
+     * @param principal the principal
+     * @return the response entity
+     */
+    @GetMapping
+    public ResponseEntity<CustomerResponse> getCustomer(Principal principal) {
+        // TODO Auto-generated method stub
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 3) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new DeactivatedException(NO_ACTIVATE);
+        }
+
+        return new ResponseEntity<>(customerService.load(principal.getName()), HttpStatus.OK);
+    }
+
+    /**
+     * Post customer response entity.
+     *
      * @param customerRequest the customer request
      * @param bindingResult   the binding result
      * @param principal       the principal
@@ -60,5 +88,37 @@ public class CustomerController {
         customerService.save(customerRequest);
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+    }
+    /**
+     * Put kol response entity.
+     *
+     * @param request       the request
+     * @param bindingResult the binding result
+     * @param principal     the principal
+     * @return the response entity
+     */
+    @PutMapping
+    public ResponseEntity<?> putCustomer(@Valid @RequestBody CustomerRequest request,
+                                    BindingResult bindingResult,
+                                    Principal principal) {
+        // TODO Auto-generated method stub
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 3) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        int status = accountService.getStatus(principal.getName());
+        if (status == 0) {
+            throw new DeactivatedException(NO_ACTIVATE);
+        }
+        //check valid attributes
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if (errorMap != null) return errorMap;
+
+        //update
+        customerService.update(request, principal.getName());
+        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.OK);
     }
 }

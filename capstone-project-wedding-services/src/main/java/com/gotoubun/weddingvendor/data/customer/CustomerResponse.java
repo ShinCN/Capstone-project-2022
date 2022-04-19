@@ -1,19 +1,18 @@
-package com.gotoubun.weddingvendor.data.kol;
+package com.gotoubun.weddingvendor.data.customer;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
-import org.hibernate.annotations.Nationalized;
-
-import javax.persistence.Column;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class KOLResponse {
+public class CustomerResponse {
     Long id;
     String username;
     int status;
@@ -23,7 +22,5 @@ public class KOLResponse {
     String phone;
     String address;
     String password;
-    String description;
-
-
+    LocalDate weddingDate;
 }

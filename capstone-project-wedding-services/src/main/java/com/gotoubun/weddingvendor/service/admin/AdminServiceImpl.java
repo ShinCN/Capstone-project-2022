@@ -49,7 +49,7 @@ public class AdminServiceImpl implements AdminService {
                         .phone(c.getPhone())
                         .address(c.getAddress())
                         .description(c.getDescription())
-                        .nanoPassword(c.getNanoPassword())
+                        .password(c.getAccount().getPassword())
                         .build())
                 .collect(Collectors.toList());
 

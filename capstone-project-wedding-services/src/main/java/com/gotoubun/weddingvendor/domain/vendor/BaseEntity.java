@@ -38,13 +38,10 @@ public class BaseEntity {
 		this.modifiedDate = new Date();
 	}
 	
-	@Column(name="createdby")
-	@CreatedBy
-	@JsonIgnore
+	@Column(name="created_by")
 	private String createdBy;
-	
-	@Column(name="modifiedby")
-	@LastModifiedBy
-	@JsonIgnore
+
+
+	@Column(name="modified_by")
 	private String modifiedBy;
 }

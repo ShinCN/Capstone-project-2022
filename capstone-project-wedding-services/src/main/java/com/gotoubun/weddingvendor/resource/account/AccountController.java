@@ -50,8 +50,6 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-//    @Autowired
-//    private AccountValidator accountValidator;
 
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -81,8 +79,8 @@ public class AccountController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
         int role= accountService.getRole(loginRequest.getUsername());
-        String username = accountService.findByUserName(loginRequest.getUsername()).get().getCustomer().getFullName();
-        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt, role, username));
+
+        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt, role, loginRequest.getUsername()));
     }
 
 

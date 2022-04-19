@@ -13,7 +13,7 @@ public class VendorProviderResponse {
 
     Long id;
     String username;
-    int status;
+    boolean status;
     LocalDateTime createdDate;
     LocalDateTime modifiedDate;
     String fullName;

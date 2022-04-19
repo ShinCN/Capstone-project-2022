@@ -73,14 +73,10 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
     public void update(CheckListTaskRequest request, String id, String username) {
         CheckList checkList = getCheckListByCustomer(username);
 
-        if (checkList != null && !checkList.getCustomer().getAccount().getUsername().equals(username)) {
+        if (!checkList.getCustomer().getAccount().getUsername().equals(username)) {
             throw new ResourceNotFoundException("you don't have permission to get access to this check list");
         }
-
-        ChecklistTask checklistTask = getCheckListTaskById(id);
-        checklistTask = mapToEntity(request);
-        checkListTaskRepository.save(checklistTask);
-
+        checkListTaskRepository.save(mapToEntity(request));
     }
 
     @Override

@@ -42,7 +42,7 @@ public class PaymentController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
 
-        Customer customer = accountService.findByUserName(principal.getName()).get().getCustomer();
+        Customer customer = accountService.findByUserName(principal.getName()).getCustomer();
 
             int amount = requestParams.getAmount() * 100;
             String suffix_txn =generateRandomString(3);

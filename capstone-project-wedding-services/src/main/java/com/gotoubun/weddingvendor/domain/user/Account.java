@@ -34,7 +34,7 @@ public class Account implements UserDetails {
 
     //1: active, 0: de-active
     @Column(name="status")
-    private int status;
+    private boolean status;
 
     @Column(name="created_date")
     @JsonIgnore

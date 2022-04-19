@@ -16,7 +16,7 @@ import java.util.Date;
 public class KOLResponse {
     Long id;
     String username;
-    int status;
+    boolean status;
     LocalDateTime createdDate;
     LocalDateTime modifiedDate;
     String fullName;

@@ -32,16 +32,8 @@ public class Blog extends BaseEntity{
     @Column(name="content")
     private String content;
 
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Account account;
 
-    @Column(name="createdby")
-    @CreatedBy
-    private String createdBy;
-
-    @Column(name="modifiedby")
-    @LastModifiedBy
-    private String modifiedBy;
 }

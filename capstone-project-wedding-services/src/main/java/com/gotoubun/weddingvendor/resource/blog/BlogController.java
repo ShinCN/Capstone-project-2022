@@ -3,9 +3,11 @@ package com.gotoubun.weddingvendor.resource.blog;
 import com.gotoubun.weddingvendor.data.blog.BlogRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.vendor.Blog;
+import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
+import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.blog.BlogService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class BlogController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
+
+    @Autowired
+    private AccountService accountService;
 
     /**
      * Get all blogs collection.
@@ -81,6 +86,11 @@ public class BlogController {
                                       Principal principal) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2 || role != 4) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
@@ -106,6 +116,11 @@ public class BlogController {
                                      Principal principal) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2 || role != 4) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
@@ -125,6 +140,12 @@ public class BlogController {
     public Collection<Blog> getAllBlogsByUser(Principal principal) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2 || role != 4) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+
         Account account = accountRepository.findByUsername(principal.getName());
         return blogService.findAllByAccount(account);
     }
@@ -136,14 +157,21 @@ public class BlogController {
      * @param principal the principal
      * @return the response entity
      */
-    @DeleteMapping
+    @DeleteMapping("{id}")
     public ResponseEntity<?> deleteBlog(@PathVariable Long id, Principal principal) {
         //check login
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
 
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2 || role != 4) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+
         blogService.delete(id);
         return new ResponseEntity<MessageToUser>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
 
     }
+
 }

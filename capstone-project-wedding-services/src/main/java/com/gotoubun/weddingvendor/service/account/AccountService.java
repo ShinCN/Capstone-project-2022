@@ -18,4 +18,5 @@ public interface AccountService {
     Collection<VendorProviderResponse> findAllVendor();
     Collection<KOLResponse> findAllKOL();
     void updatePassword(AccountPasswordRequest passWord,String username);
+
 }

@@ -89,8 +89,8 @@ public class AccountServiceImpl implements AccountService {
                             .id(c.getId())
                             .username(c.getAccount().getUsername())
                             .status(c.getAccount().getStatus())
-                            .createdDate(c.getAccount().getCreatedDate())
-                            .modifiedDate(c.getAccount().getModifiedDate())
+                          //  .createdDate(c.getAccount().getCreatedDate())
+                         //   .modifiedDate(c.getAccount().getModifiedDate())
                             .fullName(c.getFullName())
                             .phone(c.getPhone())
                             .address(c.getAddress())
@@ -113,8 +113,8 @@ public class AccountServiceImpl implements AccountService {
                         .id(c.getId())
                         .username(c.getAccount().getUsername())
                         .status(c.getAccount().getStatus())
-                        .createdDate(c.getAccount().getCreatedDate())
-                        .modifiedDate(c.getAccount().getModifiedDate())
+                      //  .createdDate(c.getAccount().getCreatedDate())
+                      //  .modifiedDate(c.getAccount().getModifiedDate())
                         .fullName(c.getFullName())
                         .phone(c.getPhone())
                         .address(c.getAddress())
@@ -132,6 +132,4 @@ public class AccountServiceImpl implements AccountService {
         }
         account.setPassword(passWord.getNewPassword());
     }
-
-
 }

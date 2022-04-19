@@ -1,10 +1,12 @@
 package com.gotoubun.weddingvendor.domain.weddingtool;
 
 import com.gotoubun.weddingvendor.domain.user.Customer;
+import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,17 +23,23 @@ public class PaymentHistory {
     @JoinColumn(name="customer_id")
     private Customer customer;
 
-    @Column(name="service_id")
-    private String serviceId;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JoinTable(name = "single_service_in_receipt",
+            joinColumns = @JoinColumn(name = "receiptId"),
+            inverseJoinColumns = @JoinColumn(name = "single_service_id")
+    )
+    private Collection<SinglePost> singlePosts;
 
     @Column(name="vnp_tmncode")
-    private float tmnCode;
+    private String tmnCode;
 
     @Column(name="vnp_txnRef")
-    private float txnRef;
+    private String txnRef;
 
     @Column(name="vnp_amount")
-    private float amount;
+    private Float amount;
 
     @Column(name="response_code")
     private String responseCode;
@@ -45,11 +53,11 @@ public class PaymentHistory {
     @Column(name="card_type")
     private String cardType;
 
-    @Column(name="order_info")
+    @Column(name="order_info", columnDefinition="TEXT")
     private String orderInfo;
 
     @Column(name="pay_date")
-    private Date payDate;
+    private LocalDateTime payDate;
 
     @Column(name="transaction_no")
     private String transNo;

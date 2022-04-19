@@ -4,7 +4,6 @@ import com.gotoubun.weddingvendor.data.category.CategoryResponse;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.category.PackageCategoryService;
-import com.gotoubun.weddingvendor.service.category.SingleCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +36,6 @@ public class PackageCategoryController {
     @GetMapping
     public ResponseEntity<?> getAllServicePack() {
         // TODO Auto-generated method stub
-        //check login
         List<CategoryResponse> packageCategoryResponses = (List<CategoryResponse>) packageCategoryService.findAll();
         if (packageCategoryResponses.size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);

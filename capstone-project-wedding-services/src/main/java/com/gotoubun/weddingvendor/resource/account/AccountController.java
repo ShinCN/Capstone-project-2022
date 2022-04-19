@@ -12,12 +12,9 @@ import com.gotoubun.weddingvendor.exception.VendorNotFoundException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.payload.JWTLoginSuccessResponse;
 import com.gotoubun.weddingvendor.payload.LoginRequest;
-import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.security.JwtTokenProvider;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
-import com.gotoubun.weddingvendor.service.account.impl.AccountServiceImpl;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +26,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.security.Principal;
 import java.util.Collection;
 
@@ -81,6 +77,7 @@ public class AccountController {
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 
+
     /**
      * Get all kol collection.
      *
@@ -98,8 +95,8 @@ public class AccountController {
         }
         Collection<KOLResponse> kolResponses = accountService.findAllKOL();
         if (kolResponses.size() == 0) {
-            throw new KolNotFoundException(NO_RESULTS);
-        }
+        throw new KolNotFoundException(NO_RESULTS);
+    }
         return new ResponseEntity<>(kolResponses,HttpStatus.OK);
     }
 

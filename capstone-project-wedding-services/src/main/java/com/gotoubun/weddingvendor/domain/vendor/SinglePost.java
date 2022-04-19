@@ -1,15 +1,13 @@
 package com.gotoubun.weddingvendor.domain.vendor;
 
-import java.util.Collection;
-
-import javax.persistence.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
-
+import com.gotoubun.weddingvendor.domain.weddingtool.PaymentHistory;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
+
+import javax.persistence.*;
+import java.util.Collection;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -65,4 +63,11 @@ public class SinglePost extends BasePost{
 	//0 = not available, 1 = available
 	@Column(name="status")
 	private Integer status;
+
+	@Column(name="count_rate")
+	private Integer countRate;
+
+	@JsonIgnore
+	@ManyToMany(mappedBy = "singlePosts", fetch = FetchType.LAZY)
+	private Collection<PaymentHistory> paymentHistories;
 }

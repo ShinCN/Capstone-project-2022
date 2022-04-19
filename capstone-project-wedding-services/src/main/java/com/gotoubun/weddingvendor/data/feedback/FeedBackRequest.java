@@ -1,4 +1,4 @@
-package com.gotoubun.weddingvendor.data.budget;
+package com.gotoubun.weddingvendor.data.feedback;
 
 
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class BudgetRequest {
-    String categoryName;
-    Long cost;
+public class FeedBackRequest {
+    String content;
+    Integer rate;
 }

@@ -5,7 +5,6 @@ import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
-import com.gotoubun.weddingvendor.domain.vendor.Photo;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
@@ -170,8 +169,35 @@ public class SinglePostServiceImpl implements SinglePostService {
                     .serviceName(c.getServiceName())
                     .price(c.getPrice())
                     .description(c.getAbout())
+                    .vendorAddress(c.getVendorProvider().getAddress())
                     .build();
             c.getPhotos().forEach(b->photoResponses.add(new PhotoResponse(b.getCaption(),b.getUrl())));
+            singleServicePostResponse.setPhotos(photoResponses);
+            singleServicePostResponses.add(singleServicePostResponse);
+        });
+        return singleServicePostResponses;
+    }
+
+
+    @Override
+    public Collection<SingleServicePostResponse> findAllByCategoriesMyService(Long categoryId, String username) {
+        Account account = accountRepository.findByUsername(username);
+        List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
+        List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategoryAndCustomers(singleCategoryRepository.getById(categoryId), account.getCustomer());
+
+        if (singlePosts.size() == 0) {
+            throw new SingleServicePostNotFoundException("You have not added anything yet");
+        }
+        singlePosts.forEach(c -> {
+            Collection<PhotoResponse> photoResponses = new ArrayList<>();
+            SingleServicePostResponse singleServicePostResponse = SingleServicePostResponse.builder()
+                    .id(c.getId())
+                    .serviceName(c.getServiceName())
+                    .price(c.getPrice())
+                    .description(c.getAbout())
+                    .vendorAddress(c.getVendorProvider().getAddress())
+                    .build();
+            c.getPhotos().forEach(b -> photoResponses.add(new PhotoResponse(b.getCaption(), b.getUrl())));
             singleServicePostResponse.setPhotos(photoResponses);
             singleServicePostResponses.add(singleServicePostResponse);
         });

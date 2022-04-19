@@ -7,6 +7,7 @@ import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
+import com.gotoubun.weddingvendor.service.customer.CustomerService;
 import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,23 @@ public class SingleServiceController {
     private MapValidationErrorService mapValidationErrorService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private CustomerService customerService;
+
+    @PostMapping("{id}")
+    public ResponseEntity<?> customerAddSingleService(@PathVariable Long id, Principal principal){
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 3) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+
+        customerService.addService(id, principal.getName());
+
+        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+    }
 
     /**
      * Post single service response entity.
@@ -79,6 +97,7 @@ public class SingleServiceController {
                                                                                               @PathVariable Long id) {
         return new ResponseEntity<>(singlePostService.findAllByCategories(id),HttpStatus.OK);
     }
+
 
     /**
      * Gets all single service.

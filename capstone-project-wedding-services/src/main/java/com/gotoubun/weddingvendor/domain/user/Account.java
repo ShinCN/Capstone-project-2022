@@ -2,12 +2,16 @@ package com.gotoubun.weddingvendor.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.domain.vendor.Comment;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,11 +41,11 @@ public class Account implements UserDetails {
 
     @Column(name="created_date")
     @JsonIgnore
-    private Date createdDate;
+    private LocalDateTime createdDate;
 
     @Column(name="modified_date")
     @JsonIgnore
-    private Date modifiedDate;
+    private LocalDateTime modifiedDate;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "account")
     @JsonIgnore
@@ -59,15 +63,6 @@ public class Account implements UserDetails {
     @JsonIgnore
     private Customer customer;
 
-    @PrePersist
-    protected void onCreate(){
-        this.createdDate = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate(){
-        this.modifiedDate = new Date();
-    }
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="account", cascade = CascadeType.ALL)

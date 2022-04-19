@@ -2,8 +2,6 @@ package com.gotoubun.weddingvendor.service.vendor;
 
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
-import com.gotoubun.weddingvendor.domain.vendor.Photo;
-import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 
 import java.util.Collection;
 
@@ -14,4 +12,5 @@ public interface SinglePostService {
     Collection<SingleServicePostResponse> findAllByVendors(Long id);
     Collection<SingleServicePostResponse> findAllByCategories(Long categoryId);
     Collection<SingleServicePostResponse> findAll();
+    Collection<SingleServicePostResponse> findAllByCategoriesMyService(Long categoryId, String username);
 }

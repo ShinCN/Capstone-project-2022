@@ -78,12 +78,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void update(CustomerRequest customerRequest, String username) {
-        if (checkPhoneExisted(customerRequest.getPhone())) {
-            throw new PhoneAlreadyExistException("phone: " + customerRequest.getPhone() + " already exist");
-        }
+
         Customer customer = customerRepository.findByAccount(accountRepository.findByUsername(username));
 
-        customerRepository.save(mapToEntity(customerRequest,customer));
+        //check phone existed
+        if(customer.getPhone().equals(customerRequest.getPhone()))
+        {
+            customerRepository.save(mapToEntity(customerRequest,customer));
+        }
+        else if (checkPhoneExisted(customerRequest.getPhone())) {
+            throw new PhoneAlreadyExistException("phone: " + customerRequest.getPhone() + " already exist");
+        }
     }
 
     @Override
@@ -122,6 +127,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .id(customer.getId())
                 .username(customer.getEmail())
                 .fullName(customer.getFullName())
+                .phone(customer.getPhone())
                 .weddingDate(customer.getPlanningDate())
                 .address(customer.getAddress())
                 .password(customer.getAccount().getPassword())

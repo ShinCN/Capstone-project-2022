@@ -98,26 +98,26 @@ public class KOLServiceImpl implements KOLService {
     @Override
     public void update(KOLRequest kolRequest, String username) {
 
-        //check phone existed
-        if (checkPhoneExisted(kolRequest.getPhone())) {
-            throw new PhoneAlreadyExistException("phone: " + kolRequest.getPhone() + " already existed");
-        }
-
         KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(accountRepository.findByUsername(username));
 
-        kolRepository.save(mapToEntity(kolRequest,keyOpinionLeader));
+        //check phone existed
+        if (keyOpinionLeader.getPhone().equals(kolRequest.getPhone())) {
+            kolRepository.save(mapToEntity(kolRequest, keyOpinionLeader));
+        } else if (checkPhoneExisted(kolRequest.getPhone())) {
+            throw new PhoneAlreadyExistException("phone: " + kolRequest.getPhone() + " already existed");
+        }
     }
+
     public KeyOpinionLeader getKeyOpinionLeaderById(Long id) {
         return kolRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("KOl is not found"));
     }
 
-    private KeyOpinionLeader mapToEntity (KOLRequest kolRequest, KeyOpinionLeader keyOpinionLeader)
-    {
+    private KeyOpinionLeader mapToEntity(KOLRequest kolRequest, KeyOpinionLeader keyOpinionLeader) {
         keyOpinionLeader.setFullName(kolRequest.getFullName());
         keyOpinionLeader.setAddress(kolRequest.getAddress());
         keyOpinionLeader.setDescription(kolRequest.getDescription());
         keyOpinionLeader.getAccount().setModifiedDate(getCurrentDate.now());
-        return  keyOpinionLeader;
+        return keyOpinionLeader;
     }
 
     boolean checkUserNameExisted(String username) {

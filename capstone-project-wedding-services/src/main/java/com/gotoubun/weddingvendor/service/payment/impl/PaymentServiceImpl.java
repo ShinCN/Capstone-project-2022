@@ -8,7 +8,6 @@ import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.domain.weddingtool.PaymentHistory;
 import com.gotoubun.weddingvendor.exception.EmptyPaymentHistoryException;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
-import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.PaymentHistoryRepository;
 import com.gotoubun.weddingvendor.repository.SinglePostRepository;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,54 +33,55 @@ public class PaymentServiceImpl implements PaymentService {
     private GetCurrentDate currentDate;
 
     @Autowired
-    private static SinglePostRepository singlePostRepository;
+    private SinglePostRepository singlePostRepository;
 
     @Autowired
-    private static AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
 
     @Override
     public void save(String amount, String txnRef, String bankCode, String bankTransNo,
                      String cardType, String orderInfo, String responseCode,
                      String tmnCode, String transNo, String transStatus,
-                     String secureHash, String username) {
+                     String secureHash, String username, List serviceId) {
 
-        Account account = accountRepository.findByUsername(username);
+        try {
+            Account account = accountRepository.findByUsername(username);
 
-        if(account.getUsername().equals("")){
-            throw new UsernameNotFoundException("This user does not exist");
-        }
-        String serviceId[] = txnRef.substring(3).split("&");
-        Collection<SinglePost> singlePosts = new ArrayList<>();
-
-        PaymentHistory paymentHistory = new PaymentHistory();
-
-        for(int i = 1; i < serviceId.length; i++){
-            Optional<SinglePost> singlePost = singlePostRepository.findById(Long.parseLong(serviceId[i]));
-            if(singlePost == null){
-                throw new SingleServicePostNotFoundException("This service does not exist");
+            if (account.getUsername().equals("")) {
+                throw new UsernameNotFoundException("This user does not exist");
             }
-            singlePost.get().getPaymentHistories().add(paymentHistory);
-            singlePosts.add(singlePost.get());
+
+            Collection<SinglePost> singlePosts = new ArrayList<>();
+            PaymentHistory paymentHistory = new PaymentHistory();
+            serviceId.forEach(c -> {
+                Long id = Long.valueOf(c.toString().trim());
+                Optional<SinglePost> singlePost  = singlePostRepository.findById(id);
+                singlePost.get().getPaymentHistories().add(paymentHistory);
+                singlePosts.add(singlePost.get());
+            });
+
+            paymentHistory.setAmount(Float.parseFloat(amount));
+            paymentHistory.setTmnCode(tmnCode);
+            paymentHistory.setTxnRef(txnRef);
+            paymentHistory.setResponseCode(responseCode);
+            paymentHistory.setBankCode(bankCode);
+            paymentHistory.setBankTransNo(bankTransNo);
+            paymentHistory.setCardType(cardType);
+            paymentHistory.setOrderInfo(orderInfo);
+            paymentHistory.setPayDate(currentDate.now());
+            paymentHistory.setTransNo(transNo);
+            paymentHistory.setSecureHashType("hmacSHA512");
+            paymentHistory.setSecureHash(secureHash);
+            paymentHistory.setCustomer(account.getCustomer());
+            paymentHistory.setSinglePosts(singlePosts);
+            paymentHistory.setTransStatus("success");
+
+            paymentHistoryRepository.save(paymentHistory);
+
+        }catch (Exception e){
+            e.getCause().printStackTrace();
         }
-
-        paymentHistory.setAmount(Float.parseFloat(amount));
-        paymentHistory.setTmnCode(tmnCode);
-        paymentHistory.setTxnRef(txnRef);
-        paymentHistory.setResponseCode(responseCode);
-        paymentHistory.setBankCode(bankCode);
-        paymentHistory.setBankTransNo(bankTransNo);
-        paymentHistory.setCardType(cardType);
-        paymentHistory.setOrderInfo(orderInfo);
-        paymentHistory.setPayDate(currentDate.now());
-        paymentHistory.setTransNo(transNo);
-        paymentHistory.setSecureHashType("hmacSHA512");
-        paymentHistory.setSecureHash(secureHash);
-        paymentHistory.setCustomer(account.getCustomer());
-        paymentHistory.setSinglePosts(singlePosts);
-        paymentHistory.setTransStatus("success");
-
-        paymentHistoryRepository.save(paymentHistory);
     }
 
     @Override

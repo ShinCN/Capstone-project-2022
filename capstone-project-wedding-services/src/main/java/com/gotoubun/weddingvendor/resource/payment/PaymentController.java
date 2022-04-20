@@ -44,6 +44,8 @@ public class PaymentController {
 
     private String username = "";
 
+    private List serviceId = new ArrayList();
+
     @PostMapping("create-payment")
     public ResponseEntity<?> createPayment(@Valid @RequestBody PaymentRequest requestParams, BindingResult bindingResult, Principal principal) throws UnsupportedEncodingException, IOException {
         if (principal == null)
@@ -62,7 +64,8 @@ public class PaymentController {
             username = principal.getName();
             String suffix_txn ="";
             for (SinglePost sp : requestParams.getSinglePosts()){
-                suffix_txn += sp.getId()+"&";
+                suffix_txn += "&"+sp.getId();
+                serviceId.add(sp.getId());
             }
 
             //check ammount ben fe
@@ -159,7 +162,7 @@ public class PaymentController {
         }
 
         paymentService.save(amount, txnRef, bankCode, bankTransNo, cardType, orderInfo,
-                responseCode, tmnCode, transNo, transStatus, secureHash, username);
+                responseCode, tmnCode, transNo, transStatus, secureHash, username, serviceId);
 
         paymentResponse.setStatus("00");
         paymentResponse.setMessage("success");

@@ -1,8 +1,10 @@
 package com.gotoubun.weddingvendor.data.servicepack;
 
 import com.gotoubun.weddingvendor.data.kol.KOLMiniResponse;
-import com.gotoubun.weddingvendor.data.kol.KOLResponse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,7 +13,7 @@ import lombok.*;
 public class PackagePostResponse {
      Long id;
      String name;
-     int rate;
+     float rate;
      String imgUrl;
      KOLMiniResponse kolMiniResponse;
 

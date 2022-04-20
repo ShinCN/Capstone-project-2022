@@ -1,12 +1,16 @@
 package com.gotoubun.weddingvendor.domain.vendor;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Nationalized;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
-import lombok.*;
-import org.hibernate.annotations.Nationalized;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +32,6 @@ public class BasePost extends BaseEntity{
 	private Float price;
 
 	@Column(name="rate")
-	private Integer rate;
+	private float rate;
 
 }

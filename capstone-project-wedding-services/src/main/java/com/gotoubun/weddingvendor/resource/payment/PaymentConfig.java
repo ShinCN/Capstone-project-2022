@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PaymentConfig {
 
-    public static final String IPADDR = "127.0.0.1";
+    public static final String IPADDR = "0.0.0.0.0.0.0.1";
     public static final String VERSION = "2.1.0";
     public static final String COMMAND = "pay";
     public static final String TMNCODE = "1A0CS8G9";

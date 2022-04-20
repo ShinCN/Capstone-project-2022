@@ -38,12 +38,11 @@ public class FeedBackServiceImpl implements FeedBackService {
     public void save(Long receiptId, Long serviceId, FeedBackRequest request, String username) {
         Account account = accountRepository.findByUsername(username);
 
-        if(account.getUsername() == ""){
+        if(account.getUsername().equals("")){
             throw new UsernameNotFoundException("This user does not exist");
         }
 
         Optional<PaymentHistory> paymentHistory = paymentHistoryRepository.findById(receiptId);
-//        SinglePost
 
         Feedback feedback = new Feedback();
         paymentHistory.get().getSinglePosts().forEach(c -> {

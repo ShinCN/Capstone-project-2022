@@ -5,6 +5,7 @@ import com.gotoubun.weddingvendor.data.servicepack.PackagePostResponse;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
+import com.gotoubun.weddingvendor.exception.DeactivatedException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.IPageService;
@@ -28,6 +29,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Service pack controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/service-pack")
 public class ServicePackController {
     @Autowired
@@ -84,10 +86,9 @@ public class ServicePackController {
 
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
-
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -122,9 +123,9 @@ public class ServicePackController {
         if (role != 4) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -153,10 +154,9 @@ public class ServicePackController {
 
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
-
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
         packagePostService.delete(id);
 
@@ -202,9 +202,9 @@ public class ServicePackController {
         if (role != 4) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
 
         return new ResponseEntity<>(packagePostIPageService.findAll(pageable, searchText), HttpStatus.OK);
@@ -231,9 +231,9 @@ public class ServicePackController {
         if (role != 4) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
 
         packagePostService.updateSinglePost(id, singlePostId, principal.getName());
@@ -262,9 +262,9 @@ public class ServicePackController {
         if (role != 4) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
 
         packagePostService.deleteSinglePost(id, singlePostId, principal.getName());

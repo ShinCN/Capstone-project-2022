@@ -69,7 +69,7 @@ public class KOLServiceImpl implements KOLService {
         account.setUsername(kolRequest.getEmail());
         account.setPassword(bCryptPasswordEncoder.encode(password));
         account.setRole(4);
-        account.setStatus(1);
+        account.setStatus(false);
         account.setCreatedDate(getCurrentDate.now());
         account.setModifiedDate(getCurrentDate.now());
         accountRepository.save(account);

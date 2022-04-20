@@ -3,6 +3,7 @@ package com.gotoubun.weddingvendor.service.account.impl;
 import com.gotoubun.weddingvendor.data.account.AccountPasswordRequest;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.exception.PasswordNotMatchException;
+import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.KolRepository;
@@ -41,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
             //Username has to be unique (exception)
             account.setUsername(account.getUsername());
             account.setRole(1);
-            account.setStatus(1);
+            account.setStatus(true);
             // Make sure that password and confirmPassword match
             // We don't persist or show the confirmPassword
 
@@ -52,24 +53,16 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    public Optional<Account> findByUserName(String username) {
-        return Optional.ofNullable(accountRepository.findByUsername(username));
+    public Account findByUserName(String username) {
+        return Optional.ofNullable(accountRepository.findByUsername(username)).orElseThrow(()-> new ResourceNotFoundException("username is not found"));
     }
 
     public int getRole(String username) {
-        if(!findByUserName(username).isPresent())
-        {
-            throw new UsernameNotFoundException("Username"+username+"is not found ");
-        }
-        return findByUserName(username).get().getRole();
+        return findByUserName(username).getRole();
     }
 
-    public int getStatus(String username) {
-        if(!findByUserName(username).isPresent())
-        {
-            throw new UsernameNotFoundException("Username"+username+"is not found ");
-        }
-        return findByUserName(username).get().getStatus();
+    public boolean getStatus(String username) {
+        return findByUserName(username).isStatus();
     }
 
     @Override

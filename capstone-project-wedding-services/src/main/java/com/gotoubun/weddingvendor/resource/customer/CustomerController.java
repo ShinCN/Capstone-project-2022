@@ -27,6 +27,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.NO_ACTIVATE;
  * The type Customer controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/customer")
 public class CustomerController {
 
@@ -61,8 +62,8 @@ public class CustomerController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
             throw new DeactivatedException(NO_ACTIVATE);
         }
 
@@ -109,8 +110,8 @@ public class CustomerController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
+      boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
             throw new DeactivatedException(NO_ACTIVATE);
         }
         //check valid attributes

@@ -37,11 +37,11 @@ public class Comment extends BaseEntity{
 	@JoinColumn(name = "user_id")
 	private Account account;
 
-	@Column(name="createdby")
+	@Column(name="created_by")
 	@CreatedBy
 	private String createdBy;
 
-	@Column(name="modifiedby")
+	@Column(name="modified_by")
 	@LastModifiedBy
 	private String modifiedBy;
 }

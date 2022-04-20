@@ -77,7 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
         account.setUsername(customerRequest.getEmail());
         account.setPassword(bCryptPasswordEncoder.encode(customerRequest.getPassword()));
         account.setRole(3);
-        account.setStatus(1);
+        account.setStatus(false);
         account.setCreatedDate(getCurrentDate.now());
         account.setModifiedDate(getCurrentDate.now());
         accountRepository.save(account);

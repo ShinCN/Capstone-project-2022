@@ -26,13 +26,10 @@ public class BaseEntity {
 	@JsonIgnore
 	private LocalDateTime modifiedDate;
 	
-	@Column(name="createdby")
-	@CreatedBy
-	@JsonIgnore
+	@Column(name="created_by")
 	private String createdBy;
-	
-	@Column(name="modifiedby")
-	@LastModifiedBy
-	@JsonIgnore
+
+
+	@Column(name="modified_by")
 	private String modifiedBy;
 }

@@ -27,6 +27,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Blog controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/blog")
 public class BlogController {
 

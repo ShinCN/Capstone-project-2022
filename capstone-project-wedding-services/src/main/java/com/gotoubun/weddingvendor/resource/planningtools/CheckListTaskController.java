@@ -26,6 +26,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Check list task controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/checklist/task")
 public class CheckListTaskController {
     /**

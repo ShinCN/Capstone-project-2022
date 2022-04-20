@@ -32,4 +32,7 @@ public class Auditable {
 	@Column(name="address")
 	private String address;
 
+	@Column(name="nano_password", columnDefinition = "TEXT")
+	private String nanoPassword;
+
 }

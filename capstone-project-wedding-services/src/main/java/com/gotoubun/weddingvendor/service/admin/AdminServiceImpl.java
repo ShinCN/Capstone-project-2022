@@ -1,13 +1,16 @@
 package com.gotoubun.weddingvendor.service.admin;
 
-import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
 import com.gotoubun.weddingvendor.data.kol.KOLPagingResponse;
 import com.gotoubun.weddingvendor.data.kol.KOLResponse;
+import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderPagingResponse;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
-import com.gotoubun.weddingvendor.domain.user.Account;
-import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
+import com.gotoubun.weddingvendor.domain.user.*;
+import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.KolRepository;
+import com.gotoubun.weddingvendor.repository.VendorRepository;
+import com.gotoubun.weddingvendor.service.common.EmailService;
+import com.gotoubun.weddingvendor.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,13 +21,20 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @Service
 public class AdminServiceImpl implements AdminService {
     @Autowired
     KolRepository kolRepository;
 
     @Autowired
+    VendorRepository vendorRepository;
+
+    @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @Override
     public KOLPagingResponse findAllKOL(int pageNo, int pageSize, String sortBy, String sortDir) {
@@ -39,7 +49,7 @@ public class AdminServiceImpl implements AdminService {
         Collection<KOLResponse> kolResponses = keyOpinionLeaders.stream().map(c -> KOLResponse.builder()
                         .id(c.getId())
                         .username(c.getAccount().getUsername())
-                        .status(c.getAccount().getStatus())
+                        .status(c.getAccount().isStatus())
                         .createdDate(c.getAccount().getCreatedDate())
                         .modifiedDate(c.getAccount().getModifiedDate())
                         .fullName(c.getFullName())
@@ -61,26 +71,89 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
-    public int getStatus(String username) {
-        return findByUserName(username).get().getStatus();
+    @Override
+    public VendorProviderPagingResponse findAllVendor(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<VendorProvider> vendorProviders = vendorRepository.findAll(pageable);
+
+        Collection<VendorProviderResponse> vendorProviderResponses = vendorProviders.stream().map(c -> VendorProviderResponse.builder()
+                        .id(c.getId())
+                        .username(c.getAccount().getUsername())
+                        .status(c.getAccount().isStatus())
+                        .createdDate(c.getAccount().getCreatedDate())
+                        .modifiedDate(c.getAccount().getModifiedDate())
+                        .fullName(c.getFullName())
+                        .phone(c.getPhone())
+                        .address(c.getAddress())
+                        .company(c.getCompany())
+                        .build())
+                .collect(Collectors.toList());
+
+        return VendorProviderPagingResponse.builder()
+                .totalPages(vendorProviders.getTotalPages())
+                .pageNo(vendorProviders.getNumber())
+                .last(vendorProviders.isLast())
+                .totalElements(vendorProviders.getTotalElements())
+                .vendorProviderResponses(vendorProviderResponses)
+                .totalElements(vendorProviders.getTotalElements())
+                .build();
     }
 
     @Override
-    public void updateStatus(Long id, AccountStatusRequest accountStatusRequest) {
-        Account account = accountRepository.getById(id);
-        account.setStatus(accountStatusRequest.getStatus());
+    public void updateStatus(Long id) {
+        Account account = findById(id);
+        if (account.isStatus() == Boolean.FALSE) {
+            account.setStatus(!account.isStatus());
+            Auditable auditable = getDetailAccount(account);
+
+            String email = auditable.getEmail();
+            String fullName = auditable.getFullName();
+            String password = auditable.getNanoPassword();
+            emailService.send(email, EmailUtils.buildEmailForVendorAndKeyOpinionLeader(fullName, password));
+        }
+        else if (account.isStatus() == Boolean.TRUE) {
+            account.setStatus(!account.isStatus());
+        }
+
         accountRepository.save(account);
     }
 
-    @Override
-    public Collection<VendorProviderResponse> findAllVendor() {
-        return null;
+    public Auditable getDetailAccount(Account account) {
+        int role = account.getRole();
+        Auditable auditable = new Admin();
+
+        switch (role) {
+            case 1:
+                auditable = account.getAdmin();
+                break;
+            case 2:
+                auditable = account.getVendorProvider();
+                break;
+            case 3:
+                auditable = account.getKeyOpinionLeader();
+                break;
+            case 4:
+                auditable = account.getCustomer();
+                break;
+            default:
+                break;
+        }
+        return auditable;
     }
 
-    public Optional<Account> findByUserName(String username) {
-        return Optional.ofNullable(accountRepository.findByUsername(username));
+    public Account findById(Long id) {
+        return accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account is not found"));
     }
 
+
+    public Account findByUserName(String username) {
+        return Optional.ofNullable(accountRepository.findByUsername(username)).orElseThrow(() -> new ResourceNotFoundException("username is not found"));
+    }
 
 
 }

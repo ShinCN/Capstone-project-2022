@@ -4,6 +4,7 @@ import com.gotoubun.weddingvendor.data.singleservice.SinglePostPagingResponse;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
+import com.gotoubun.weddingvendor.exception.DeactivatedException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
@@ -27,6 +28,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Single service controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/single-service")
 public class SingleServiceController {
     @Autowired
@@ -93,9 +95,9 @@ public class SingleServiceController {
         if (role != 2) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
 
         //check valid attributes
@@ -158,9 +160,9 @@ public class SingleServiceController {
         if (role != 2) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
@@ -183,9 +185,9 @@ public class SingleServiceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSingleService(@PathVariable Long id, Principal principal) {
 
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
-            throw new AccountNotHaveAccessException(NO_ACTIVATE);
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
         }
         singlePostService.delete(id);
 

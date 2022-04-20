@@ -88,7 +88,7 @@ public class VendorServiceImpl implements VendorService {
         VendorProvider vendorProvider = vendorRepository.findByAccount(account);
         VendorProviderResponse vendorResponse = VendorProviderResponse.builder()
                 .username(vendorProvider.getAccount().getUsername())
-                .status(vendorProvider.getAccount().getStatus())
+                .status(vendorProvider.getAccount().isStatus())
                 .createdDate(vendorProvider.getAccount().getCreatedDate())
                 .modifiedDate(vendorProvider.getAccount().getModifiedDate())
                 .fullName(vendorProvider.getFullName())

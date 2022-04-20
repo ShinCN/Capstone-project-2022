@@ -25,6 +25,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Kol controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/kol")
 public class KOLController {
     /**
@@ -59,8 +60,8 @@ public class KOLController {
         if (role != 4) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
             throw new DeactivatedException(NO_ACTIVATE);
         }
 
@@ -109,8 +110,8 @@ public class KOLController {
         if (role != 4) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        int status = accountService.getStatus(principal.getName());
-        if (status == 0) {
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
             throw new DeactivatedException(NO_ACTIVATE);
         }
         //check valid attributes

@@ -19,9 +19,6 @@ public class VendorProvider extends Auditable{
 	@Column(name="company")
 	private String company;
 
-//	@Column(name="single_category_id", columnDefinition = "TEXT")
-//	private long singleCategoryId;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="vendorProvider", cascade = CascadeType.ALL)
 	private Collection<SinglePost> singlePosts;
 
@@ -33,7 +30,5 @@ public class VendorProvider extends Auditable{
 	@JoinColumn(name="account_id")
 	private Account account;
 
-	@Column(name="nano_password", columnDefinition = "TEXT")
-	private String nanoPassword;
 
 }

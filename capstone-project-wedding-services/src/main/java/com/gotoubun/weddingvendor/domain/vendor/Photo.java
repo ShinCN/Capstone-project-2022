@@ -27,11 +27,11 @@ public class Photo extends BaseEntity {
     @JoinColumn(name = "single_post_id")
     private SinglePost singlePost;
 
-    @Column(name = "createdby")
+    @Column(name = "created_by")
     @CreatedBy
     private String createdBy;
 
-    @Column(name = "modifiedby")
+    @Column(name = "modified_by")
     @LastModifiedBy
     private String modifiedBy;
 }

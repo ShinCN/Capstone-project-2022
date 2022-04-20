@@ -52,11 +52,11 @@ public class PackagePost extends BasePost{
 	@ManyToMany(mappedBy = "packagePosts")
     private Collection<SinglePost> singlePosts;
 
-	@Column(name="createdby")
+	@Column(name="created_by")
 	@CreatedBy
 	private String createdBy;
 
-	@Column(name="modifiedby")
+	@Column(name="modified_by")
 	@LastModifiedBy
 	private String modifiedBy;
 }

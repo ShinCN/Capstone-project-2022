@@ -26,6 +26,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Guest controller.
  */
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/guest")
 public class GuestController {
     /**

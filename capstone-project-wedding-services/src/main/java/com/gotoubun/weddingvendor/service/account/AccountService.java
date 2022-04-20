@@ -9,4 +9,5 @@ public interface AccountService {
     void updatePassword(AccountPasswordRequest passWord,String username);
     boolean getStatus(String username);
     int getRole(String username);
+    String getFullName(Account account);
 }

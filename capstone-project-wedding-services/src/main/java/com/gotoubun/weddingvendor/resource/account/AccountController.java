@@ -67,8 +67,8 @@ public class AccountController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
         int role= accountService.getRole(loginRequest.getUsername());
-
-        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt, role, loginRequest.getUsername()));
+        String fullName=accountService.getFullName(accountService.findByUserName(loginRequest.getUsername()));
+        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt, role, fullName));
     }
 
 
@@ -80,7 +80,7 @@ public class AccountController {
      * @return the response entity
      */
     @PutMapping("/password")
-    public ResponseEntity<?> putAccountPassword(AccountPasswordRequest passwordRequest,
+    public ResponseEntity<?> putAccountPassword(@Valid @RequestBody AccountPasswordRequest passwordRequest,
                                                 BindingResult result,
                                                 Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -90,7 +90,7 @@ public class AccountController {
             throw new LoginRequiredException(LOGIN_REQUIRED);
 
         accountService.updatePassword(passwordRequest, principal.getName());
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.OK);
     }
 
     /**

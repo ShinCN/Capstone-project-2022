@@ -54,11 +54,29 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public Account findByUserName(String username) {
-        return Optional.ofNullable(accountRepository.findByUsername(username)).orElseThrow(()-> new ResourceNotFoundException("username is not found"));
+        return Optional.ofNullable(accountRepository.findByUsername(username)).orElseThrow(() -> new ResourceNotFoundException("username is not found"));
     }
 
     public int getRole(String username) {
         return findByUserName(username).getRole();
+    }
+
+    @Override
+    public String getFullName(Account account) {
+        int role = account.getRole();
+        String fullName;
+        if (role == 1) {
+            fullName = account.getAdmin().getFullName();
+        } else if (role == 2) {
+            fullName = account.getVendorProvider().getFullName();
+        } else if (role == 3) {
+            fullName = account.getKeyOpinionLeader().getFullName();
+        } else if (role == 4) {
+            fullName = account.getCustomer().getFullName();
+        } else
+            fullName = "????";
+
+        return fullName;
     }
 
     public boolean getStatus(String username) {
@@ -66,12 +84,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updatePassword(AccountPasswordRequest passWord, String username) {
+    public void updatePassword(AccountPasswordRequest password, String username) {
         Account account = accountRepository.findByUsername(username);
-        if (!account.getPassword().equals(passWord.getOldPassword())) {
+        boolean isPasswordMatch = bCryptPasswordEncoder.matches(password.getOldPassword(), account.getPassword());
+        if (!isPasswordMatch) {
             throw new PasswordNotMatchException("Password does not match");
         }
-        account.setPassword(passWord.getNewPassword());
+        account.setPassword(bCryptPasswordEncoder.encode(password.getNewPassword()));
+        accountRepository.save(account);
     }
 
 }

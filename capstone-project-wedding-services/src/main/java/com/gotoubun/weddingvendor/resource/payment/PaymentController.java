@@ -60,7 +60,7 @@ public class PaymentController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
 
-            Customer customer = accountService.findByUserName(principal.getName()).get().getCustomer();
+            Customer customer = accountService.findByUserName(principal.getName()).getCustomer();
             username = principal.getName();
             String suffix_txn ="";
             for (SinglePost sp : requestParams.getSinglePosts()){

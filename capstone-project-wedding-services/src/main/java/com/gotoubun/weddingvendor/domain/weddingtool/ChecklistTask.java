@@ -1,15 +1,10 @@
 package com.gotoubun.weddingvendor.domain.weddingtool;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,24 +19,28 @@ import lombok.Data;
 @Table(name = "checklist_task")
 public class ChecklistTask {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(unique=true,columnDefinition="NVARCHAR(255)")
+	private String id;
 	
 	@Column(name="task_name", columnDefinition = "TEXT")
 	private String taskName;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "check_list_id", nullable = false)
 	private CheckList checkList;
-	
+
+	@Column(name="due_date")
+	private LocalDate dueDate;
+
+
 	@Column(name="status")
 	private boolean status;
 	
 	@Column(name="created_date")
 	@CreatedDate
-	private Date createdDate;
+	private LocalDateTime createdDate;
 	
 	@Column(name="modified_date")
 	@LastModifiedDate
-	private Date modifiedDate;
+	private LocalDateTime modifiedDate;
 }

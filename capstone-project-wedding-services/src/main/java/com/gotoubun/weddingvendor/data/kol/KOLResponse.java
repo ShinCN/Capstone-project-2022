@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.Column;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -16,12 +17,12 @@ public class KOLResponse {
     Long id;
     String username;
     int status;
-    Date createdDate;
-    Date modifiedDate;
+    LocalDateTime createdDate;
+    LocalDateTime modifiedDate;
     String fullName;
     String phone;
     String address;
-    String nanoPassword;
+    String password;
     String description;
 
 

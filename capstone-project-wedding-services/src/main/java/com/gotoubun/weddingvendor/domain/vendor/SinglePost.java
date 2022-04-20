@@ -13,8 +13,8 @@ import java.util.Collection;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
-@ToString
 @Table(name = "single_service_post")
 public class SinglePost extends BasePost{
 

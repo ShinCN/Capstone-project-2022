@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface KolRepository extends JpaRepository<KeyOpinionLeader, Long> {
+
     KeyOpinionLeader findByAccount(Account account);
     KeyOpinionLeader findByPhone(String phoneNumber);
 

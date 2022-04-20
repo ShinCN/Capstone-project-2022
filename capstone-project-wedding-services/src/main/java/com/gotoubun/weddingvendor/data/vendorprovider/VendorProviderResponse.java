@@ -2,6 +2,7 @@ package com.gotoubun.weddingvendor.data.vendorprovider;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -13,8 +14,8 @@ public class VendorProviderResponse {
     Long id;
     String username;
     int status;
-    Date createdDate;
-    Date modifiedDate;
+    LocalDateTime createdDate;
+    LocalDateTime modifiedDate;
     String fullName;
     String phone;
     String address;

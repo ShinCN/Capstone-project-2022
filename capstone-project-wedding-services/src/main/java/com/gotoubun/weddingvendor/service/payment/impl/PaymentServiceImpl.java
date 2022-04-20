@@ -17,7 +17,6 @@ import com.gotoubun.weddingvendor.service.payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,24 +33,24 @@ public class PaymentServiceImpl implements PaymentService {
     private GetCurrentDate currentDate;
 
     @Autowired
-    private SinglePostRepository singlePostRepository;
+    private static SinglePostRepository singlePostRepository;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private static AccountRepository accountRepository;
 
-    @Transactional
+
     @Override
     public void save(String amount, String txnRef, String bankCode, String bankTransNo,
                      String cardType, String orderInfo, String responseCode,
                      String tmnCode, String transNo, String transStatus,
-                     String secureHash) {
+                     String secureHash, String username) {
 
-        Account account = accountRepository.getById(Long.parseLong(txnRef.substring(3,4)));
+        Account account = accountRepository.findByUsername(username);
 
-        if(account.getUsername() == ""){
+        if(account.getUsername().equals("")){
             throw new UsernameNotFoundException("This user does not exist");
         }
-        String serviceId[] = txnRef.substring(3).split("");
+        String serviceId[] = txnRef.substring(3).split("&");
         Collection<SinglePost> singlePosts = new ArrayList<>();
 
         PaymentHistory paymentHistory = new PaymentHistory();
@@ -81,14 +80,13 @@ public class PaymentServiceImpl implements PaymentService {
         paymentHistory.setSinglePosts(singlePosts);
         paymentHistory.setTransStatus("success");
 
-
         paymentHistoryRepository.save(paymentHistory);
     }
 
     @Override
     public Collection<PaymentHistoryResponse> findAllReceipt(String username) {
         Account account = accountRepository.findByUsername(username);
-        if(account.getUsername() == ""){
+        if(account.getUsername().equalsIgnoreCase("")){
             throw new UsernameNotFoundException("This user does not exist");
         }
         Collection<PaymentHistory> paymentHistories = paymentHistoryRepository.findAllByCustomer_Account(account);
@@ -115,7 +113,7 @@ public class PaymentServiceImpl implements PaymentService {
     public ReceiptDetailResponse getReceiptDetail(Long id, String username) {
         Account account = accountRepository.findByUsername(username);
 
-        if(account.getUsername() == ""){
+        if(account.getUsername().equalsIgnoreCase("")){
             throw new UsernameNotFoundException("This user does not exist");
         }
 

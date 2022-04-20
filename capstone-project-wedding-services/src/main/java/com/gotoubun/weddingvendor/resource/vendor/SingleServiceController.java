@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.resource.vendor;
 
+import com.gotoubun.weddingvendor.data.singleservice.SinglePostPagingResponse;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
@@ -53,6 +54,27 @@ public class SingleServiceController {
     }
 
     /**
+     * Gets all single service.
+     *
+     * @param principal the principal
+     * @param pageNo    the page no
+     * @param pageSize  the page size
+     * @param sortBy    the sort by
+     * @param sortDir   the sort dir
+     * @return the all single service
+     */
+    @GetMapping
+    public ResponseEntity<SinglePostPagingResponse> getAllSingleService(
+            Principal principal,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+
+        return new ResponseEntity<>(singlePostService.findAllSinglePost(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
+    /**
      * Post single service response entity.
      *
      * @param singleServicePost the single service post
@@ -90,6 +112,7 @@ public class SingleServiceController {
      * Gets all single service.
      *
      * @param principal the principal
+     * @param id        the id
      * @return the all single service
      */
     @GetMapping("/category/{id}")
@@ -102,6 +125,7 @@ public class SingleServiceController {
     /**
      * Gets all single service.
      *
+     * @param id        the id
      * @param principal the principal
      * @return the all single service
      */
@@ -111,24 +135,6 @@ public class SingleServiceController {
         return new ResponseEntity<>(singlePostService.findAllByVendors(id),HttpStatus.OK);
     }
 
-    /**
-     * Gets all single service.
-     *
-     * @param principal the principal
-     * @return the all single service
-     */
-    @GetMapping
-    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleService(Principal principal) {
-        if (principal == null)
-            throw new LoginRequiredException(LOGIN_REQUIRED);
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 2) {
-            throw new AccountNotHaveAccessException(NO_PERMISSION);
-        }
-
-        return new ResponseEntity<>(singlePostService.findAll(),HttpStatus.OK);
-    }
 
     /**
      * Put single service response entity.

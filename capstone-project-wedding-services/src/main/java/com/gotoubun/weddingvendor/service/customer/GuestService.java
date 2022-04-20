@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 
 
 public interface GuestService {
-    void save(GuestRequest guestRequest);
-    void update(GuestRequest guestRequest);
-    void delete(Long id);
+    void save(GuestRequest guestRequest,Long guestListId,String username);
+    void delete(String id,String username);
 }

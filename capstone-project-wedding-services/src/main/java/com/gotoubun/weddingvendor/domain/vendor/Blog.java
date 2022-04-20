@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
 
@@ -37,11 +35,4 @@ public class Blog extends BaseEntity{
     @JoinColumn(name = "user_id")
     private Account account;
 
-    @Column(name="createdby")
-    @CreatedBy
-    private String createdBy;
-
-    @Column(name="modifiedby")
-    @LastModifiedBy
-    private String modifiedBy;
 }

@@ -2,7 +2,6 @@ package com.gotoubun.weddingvendor.resource.kol;
 
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostResponse;
-import com.gotoubun.weddingvendor.data.servicepack.SinglePostNewRequest;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
@@ -11,7 +10,7 @@ import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.IPageService;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
-import com.gotoubun.weddingvendor.service.service_pack.PackagePostService;
+import com.gotoubun.weddingvendor.service.packagepost.PackagePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

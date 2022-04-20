@@ -19,10 +19,10 @@ import lombok.Setter;
 @Table(name = "guest")
 public class Guest {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(columnDefinition = "nvarchar(255)")
+	private String id;
 	
-	@Column(name="fullname", columnDefinition = "TEXT")
+	@Column(name="full_name", columnDefinition = "TEXT")
 	private String fullName;
 	
 	@Column(name="phone")

@@ -64,7 +64,6 @@ public class Account implements UserDetails {
     private Customer customer;
 
 
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="account", cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<Comment> comments;

@@ -20,7 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomPassword;
+import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
+
 
 @Service
 public class VendorServiceImpl implements VendorService {
@@ -44,7 +45,7 @@ public class VendorServiceImpl implements VendorService {
         Account account = new Account();
         VendorProvider vendorProvider = new VendorProvider();
         Optional<SingleCategory> singleCategory = singleCategoryService.findById(vendor.getCategoryId());
-        String password = generateRandomPassword(10);
+        String password = generateRandomString(10);
         if (checkUserNameExisted(vendor.getUsername())) {
             throw new UsernameAlreadyExistsException("username: " + vendor.getUsername() + "already exist");
         }
@@ -67,7 +68,6 @@ public class VendorServiceImpl implements VendorService {
         vendorProvider.setAddress(vendor.getAddress());
         vendorRepository.save(vendorProvider);
 
-
         return vendorProvider;
     }
 
@@ -89,8 +89,8 @@ public class VendorServiceImpl implements VendorService {
         VendorProviderResponse vendorResponse = VendorProviderResponse.builder()
                 .username(vendorProvider.getAccount().getUsername())
                 .status(vendorProvider.getAccount().getStatus())
-                //  .createdDate(vendorProvider.getAccount().getCreatedDate())
-             //   .modifiedDate(vendorProvider.getAccount().getModifiedDate())
+                .createdDate(vendorProvider.getAccount().getCreatedDate())
+                .modifiedDate(vendorProvider.getAccount().getModifiedDate())
                 .fullName(vendorProvider.getFullName())
                 .phone(vendorProvider.getPhone())
                 .address(vendorProvider.getAddress())

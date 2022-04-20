@@ -11,6 +11,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "kol")
 public class KeyOpinionLeader extends Auditable{

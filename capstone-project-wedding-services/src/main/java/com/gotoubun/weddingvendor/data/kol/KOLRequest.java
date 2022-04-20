@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.data.kol;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,6 @@ public class KOLRequest {
     String fullName;
     @NotBlank(message = "email should not be blank")
     String email;
-    @NotBlank(message = "password should not be blank")
-    String password;
     @NotBlank(message = "phone should not be blank")
     String phone;
     @NotBlank(message = "address should not be blank")

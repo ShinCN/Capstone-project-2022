@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.domain.weddingtool;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -39,9 +40,9 @@ public class GuestList {
 	
 	@Column(name="created_date")
 	@CreatedDate
-	private Date createdDate;
+	private LocalDateTime createdDate;
 	
 	@Column(name="modified_date")
 	@LastModifiedDate
-	private Date modifiedDate;
+	private LocalDateTime modifiedDate;
 }

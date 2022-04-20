@@ -30,8 +30,8 @@ public class Customer extends Auditable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
 	private Collection<SeatChart> seatCharts;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
-	private Collection<CheckList> checkLists;
+	@OneToOne(mappedBy = "customer",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private CheckList checkList;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="customer", cascade = CascadeType.ALL)
 	private Collection<Feedback> feedbacks;

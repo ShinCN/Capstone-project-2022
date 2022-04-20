@@ -42,6 +42,8 @@ public class PaymentController {
     @Autowired
     private GetCurrentDate currentDate;
 
+    private String username = "";
+
     @PostMapping("create-payment")
     public ResponseEntity<?> createPayment(@Valid @RequestBody PaymentRequest requestParams, BindingResult bindingResult, Principal principal) throws UnsupportedEncodingException, IOException {
         if (principal == null)
@@ -57,9 +59,10 @@ public class PaymentController {
         if (errorMap != null) return errorMap;
 
             Customer customer = accountService.findByUserName(principal.getName()).get().getCustomer();
+            username = principal.getName();
             String suffix_txn ="";
             for (SinglePost sp : requestParams.getSinglePosts()){
-                suffix_txn +=  sp.getId();
+                suffix_txn += sp.getId()+"&";
             }
 
             //check ammount ben fe
@@ -148,7 +151,6 @@ public class PaymentController {
             @RequestParam(value = "vnp_SecureHash", required = false) String secureHash
             )throws MessagingException {
 
-
         PaymentResponse paymentResponse = new PaymentResponse();
         if(!responseCode.equalsIgnoreCase("00")){
             paymentResponse.setStatus("99");
@@ -157,7 +159,7 @@ public class PaymentController {
         }
 
         paymentService.save(amount, txnRef, bankCode, bankTransNo, cardType, orderInfo,
-                responseCode, tmnCode, transNo, transStatus, secureHash);
+                responseCode, tmnCode, transNo, transStatus, secureHash, username);
 
         paymentResponse.setStatus("00");
         paymentResponse.setMessage("success");

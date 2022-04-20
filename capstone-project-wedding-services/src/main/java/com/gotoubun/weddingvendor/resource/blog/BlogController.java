@@ -88,7 +88,7 @@ public class BlogController {
             throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
-        if (role != 2 || role != 4) {
+        if (role == 1 || role == 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         //check valid attributes
@@ -118,7 +118,7 @@ public class BlogController {
             throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
-        if (role != 2 || role != 4) {
+        if (role == 1 || role == 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         //check valid attributes
@@ -142,7 +142,7 @@ public class BlogController {
             throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
-        if (role != 2 || role != 4) {
+        if (role == 1 || role == 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
 
@@ -165,7 +165,7 @@ public class BlogController {
 
         //check role
         int role = accountService.getRole(principal.getName());
-        if (role != 2 || role != 4) {
+        if (role == 1 || role == 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
 

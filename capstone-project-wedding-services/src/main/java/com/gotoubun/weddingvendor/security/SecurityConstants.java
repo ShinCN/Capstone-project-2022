@@ -14,9 +14,10 @@ public class SecurityConstants {
     public static final String PAYMENT_URLS = "/create-payment";
     public static final String PAYMENT_RESULTS_URLS = "/payment-result";
     public static final String BUDGET_URL = "/budget/**";
+    public static final String GUEST_URLS = "/guest/**";
     public static final String H2_URL = "h2-console/**";
-    public static final String SECRET ="SecretKeyToGenJWTs";
-    public static final String TOKEN_PREFIX= "Bearer ";
+    public static final String SECRET = "SecretKeyToGenJWTs";
+    public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
     public static final long EXPIRATION_TIME = 30000_000; //3000 seconds
 }

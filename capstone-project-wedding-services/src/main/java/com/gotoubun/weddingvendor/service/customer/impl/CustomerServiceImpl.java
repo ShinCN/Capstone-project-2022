@@ -1,14 +1,15 @@
 package com.gotoubun.weddingvendor.service.customer.impl;
 
 import com.gotoubun.weddingvendor.data.customer.CustomerRequest;
+import com.gotoubun.weddingvendor.data.customer.CustomerResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.domain.weddingtool.Budget;
 import com.gotoubun.weddingvendor.domain.weddingtool.BudgetCategory;
+import com.gotoubun.weddingvendor.domain.weddingtool.CheckList;
 import com.gotoubun.weddingvendor.exception.PhoneAlreadyExistException;
-import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
 import com.gotoubun.weddingvendor.repository.*;
@@ -24,6 +25,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+
+import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -54,13 +57,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private SinglePostRepository singlePostRepository;
 
-    @Override
     @Transactional
-    public Customer save(CustomerRequest customerRequest) {
+    @Override
+    public void save(CustomerRequest customerRequest) {
         // TODO Auto-generated method stub
         Account account = new Account();
         Customer guest = new Customer();
-
 
         //check username existed
         if (checkUserNameExisted(customerRequest.getEmail())) {
@@ -69,8 +71,6 @@ public class CustomerServiceImpl implements CustomerService {
 
         Budget budget = new Budget();
         List<SingleCategory> singleCategoryList = singleCategoryRepository.findAll();
-
-
 
 
         //save account
@@ -86,6 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new PhoneAlreadyExistException("phone: " + customerRequest.getPhone() + " already exist");
         }
 
+
         budget.setCustomer(guest);
         budget.setBudgetCategories(budgetCategoryRepository.findAll());
         budgetRepository.save(budget);
@@ -97,6 +98,7 @@ public class CustomerServiceImpl implements CustomerService {
             budgetCategoryRepository.save(budgetCategory);
         }
 
+
         //save customer
         guest.setAccount(account);
         guest.setEmail(customerRequest.getEmail());
@@ -105,48 +107,106 @@ public class CustomerServiceImpl implements CustomerService {
         guest.setPhone(customerRequest.getPhone());
         guest.setAddress(customerRequest.getAddress());
         guest.setPlanningDate(LocalDate.parse(customerRequest.getWeddingDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        guest.setCheckList(createCheckList(guest));
         guest.setPlanningBudget(0L);
         guest.setBudget(budget);
         customerRepository.save(guest);
 
-        return guest;
+
     }
 
     @Override
-    public Optional<Customer> findByAccount(Optional<Account> account) {
-        return Optional.of(customerRepository.findByAccount(account).orElseThrow(() -> new ResourceNotFoundException("Category does not exist")));
+    public Customer findByAccount(Account account) {
+        return customerRepository.findByAccount(account);
     }
 
     @Override
     public void addService(Long id, String username) {
         Account account = accountRepository.findByUsername(username);
-        Optional<Customer> customer = findByAccount(Optional.ofNullable(account));
+        Customer customer = findByAccount(account);
         Optional<SinglePost> singlePost = singlePostRepository.findById(id);
 
         if(!singlePost.isPresent()){
             throw new SingleServicePostNotFoundException("This service does not exist");
         }
-        customer.get().getSinglePosts().add(singlePost.get());
-        singlePost.get().getCustomers().add(customer.get());
-        customerRepository.save(customer.get());
+        customer.getSinglePosts().add(singlePost.get());
+        singlePost.get().getCustomers().add(customer);
+        customerRepository.save(customer);
         singlePostRepository.save(singlePost.get());
     }
 
     @Override
     public void deleteService(Long id, String username) {
         Account account = accountRepository.findByUsername(username);
-        Optional<Customer> customer = findByAccount(Optional.ofNullable(account));
+        Customer customer = findByAccount(account);
         Optional<SinglePost> singlePost = singlePostRepository.findById(id);
 
-        customer.get().getSinglePosts().remove(singlePost);
+        customer.getSinglePosts().remove(singlePost);
         singlePost.get().getCustomers().remove(customer);
-        customerRepository.save(customer.get());
+        customerRepository.save(customer);
         singlePostRepository.save(singlePost.get());
     }
 
 
-    boolean checkUserNameExisted(String username){
+    @Override
+    public void update(CustomerRequest customerRequest, String username) {
+
+        Customer customer = customerRepository.findByAccount(accountRepository.findByUsername(username));
+
+        //check phone existed
+        if(customer.getPhone().equals(customerRequest.getPhone()))
+        {
+            customerRepository.save(mapToEntity(customerRequest,customer));
+        }
+        else if (checkPhoneExisted(customerRequest.getPhone())) {
+            throw new PhoneAlreadyExistException("phone: " + customerRequest.getPhone() + " already exist");
+        }
+    }
+
+    @Override
+    public CustomerResponse load(String username) {
+        Customer customer = customerRepository.findByAccount(accountRepository.findByUsername(username));
+        return convertToResponse(customer);
+    }
+
+    boolean checkUserNameExisted(String username) {
+
         return accountRepository.findByUsername(username) != null;
+
+    }
+
+    CheckList createCheckList(Customer customer){
+        String id= "cl" +generateRandomString(10);
+        CheckList checkList= new CheckList();
+        checkList.setId(id);
+        checkList.setCheckListName(customer.getFullName());
+        checkList.setCreatedDate(customer.getAccount().getCreatedDate());
+        checkList.setModifiedDate(customer.getAccount().getModifiedDate());
+        checkList.setCustomer(customer);
+        return  checkList;
+    }
+
+    private Customer mapToEntity (CustomerRequest customerRequest, Customer customer)
+    {
+        customer.setFullName(customerRequest.getFullName());
+        customer.setAddress(customerRequest.getAddress());
+        customer.setPlanningDate(LocalDate.parse(customerRequest.getWeddingDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        customer.getAccount().setModifiedDate(getCurrentDate.now());
+        return customer;
+    }
+
+    private CustomerResponse convertToResponse(Customer customer) {
+        return CustomerResponse.builder()
+                .id(customer.getId())
+                .username(customer.getEmail())
+                .fullName(customer.getFullName())
+                .phone(customer.getPhone())
+                .weddingDate(customer.getPlanningDate())
+                .address(customer.getAddress())
+                .password(customer.getAccount().getPassword())
+                .createdDate(customer.getAccount().getCreatedDate())
+                .modifiedDate(customer.getAccount().getModifiedDate())
+                .build();
     }
 
 

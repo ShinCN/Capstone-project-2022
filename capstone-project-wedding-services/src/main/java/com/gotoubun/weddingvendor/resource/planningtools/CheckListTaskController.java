@@ -24,7 +24,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Check list task controller.
  */
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/checklist/task")
 public class CheckListTaskController {
     /**
@@ -88,10 +88,10 @@ public class CheckListTaskController {
      * @return the response entity
      */
     @GetMapping
-    public ResponseEntity<?> postCheckListTask(
+    public ResponseEntity<?> getAllCheckListTask(
             Principal principal,
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         // TODO Auto-generated method stub
@@ -104,7 +104,7 @@ public class CheckListTaskController {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         CheckListTaskPagingResponse checkListTaskPagingResponse = checkListTaskService
-                .findAllCheckListTask(pageNo, pageSize, sortBy, sortDir,principal.getName());
+                .findAllCheckListTask(pageNo, pageSize, sortBy, sortDir, principal.getName());
         if (checkListTaskPagingResponse.getCheckListTaskResponseList().size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }
@@ -116,14 +116,14 @@ public class CheckListTaskController {
      * Put check list task response entity.
      *
      * @param checkListTaskRequest the check list task request
-     * @param checkListTaskId      the check list task id
+     * @param id                   the id
      * @param bindingResult        the binding result
      * @param principal            the principal
      * @return the response entity
      */
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> putCheckListTask(@Valid @RequestBody CheckListTaskRequest checkListTaskRequest,
-                                              @PathVariable String checkListTaskId,
+                                              @PathVariable String id,
                                               BindingResult bindingResult,
                                               Principal principal) {
         // TODO Auto-generated method stub
@@ -138,9 +138,33 @@ public class CheckListTaskController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        checkListTaskService.update(checkListTaskRequest, principal.getName(), checkListTaskId);
+        checkListTaskService.update(checkListTaskRequest, id, principal.getName());
 
-        return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.OK);
+    }
+
+    /**
+     * Put check list task response entity.
+     *
+     * @param id        the id
+     * @param principal the principal
+     * @return the response entity
+     */
+    @PutMapping("/status/{id}")
+    public ResponseEntity<?> putCheckListTaskStatus(@PathVariable String id,
+                                                    Principal principal) {
+        // TODO Auto-generated method stub
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+
+        int role = accountService.getRole(principal.getName());
+        if (role != 3) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        checkListTaskService.updateStatus(id, principal.getName());
+
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.OK);
     }
 
     /**

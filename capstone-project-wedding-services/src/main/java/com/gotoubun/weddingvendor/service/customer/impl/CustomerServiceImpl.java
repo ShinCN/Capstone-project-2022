@@ -170,9 +170,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     boolean checkUserNameExisted(String username) {
-
         return accountRepository.findByUsername(username) != null;
-
     }
 
     CheckList createCheckList(Customer customer){
@@ -208,7 +206,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .modifiedDate(customer.getAccount().getModifiedDate())
                 .build();
     }
-
 
     boolean checkPhoneExisted(String phone) {
         return customerRepository.findByPhone(phone) != null;

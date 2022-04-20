@@ -8,12 +8,14 @@ import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import com.gotoubun.weddingvendor.service.customer.GuestListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.security.Principal;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
@@ -22,7 +24,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Guest list controller.
  */
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/guest/list")
 public class GuestListController {
 
@@ -51,8 +53,8 @@ public class GuestListController {
      */
     @PostMapping
     public ResponseEntity<?> postGuestList(@Valid @RequestBody GuestListRequest guestListRequest,
-                                     BindingResult bindingResult,
-                                     Principal principal) {
+                                           BindingResult bindingResult,
+                                           Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)
@@ -65,9 +67,39 @@ public class GuestListController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        guestListService.save(guestListRequest,principal.getName());
+        guestListService.save(guestListRequest, principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+    }
+
+    /**
+     * Put guest list response entity.
+     *
+     * @param guestListRequest the guest list request
+     * @param bindingResult    the binding result
+     * @param principal        the principal
+     * @param id               the id
+     * @return the response entity
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> putGuestList(@Valid @RequestBody GuestListRequest guestListRequest,
+                                          BindingResult bindingResult,
+                                          Principal principal,
+                                          @PathVariable Long id) {
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check validate
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+        if (errorMap != null) return errorMap;
+        //save
+        int role = accountService.getRole(principal.getName());
+        if (role != 3) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        guestListService.update(guestListRequest.getName(), principal.getName(), id);
+
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.OK);
     }
 
     /**
@@ -89,7 +121,7 @@ public class GuestListController {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
 
-        guestListService.delete(id,principal.getName());
+        guestListService.delete(id, principal.getName());
 
         return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.OK);
     }

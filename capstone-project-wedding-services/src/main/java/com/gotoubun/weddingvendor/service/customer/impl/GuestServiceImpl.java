@@ -1,6 +1,9 @@
 package com.gotoubun.weddingvendor.service.customer.impl;
 
 import com.gotoubun.weddingvendor.data.guest.GuestRequest;
+import com.gotoubun.weddingvendor.data.guest.GuestResponse;
+import com.gotoubun.weddingvendor.domain.user.Account;
+import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.domain.weddingtool.Guest;
 import com.gotoubun.weddingvendor.domain.weddingtool.GuestList;
 import com.gotoubun.weddingvendor.exception.GuestIdAlreadyExistException;
@@ -15,7 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
 
@@ -32,37 +38,39 @@ public class GuestServiceImpl implements GuestService {
     @Autowired
     GuestRepository guestRepository;
 
-    @Override
-    public void save(GuestRequest guestRequest, Long guestListId, String username) {
+
+    public void save(GuestRequest guestRequest, String username, Long guestListId) {
+        GuestList guestList = getGuestListById(guestListId);
+
+        if (!guestList.getCustomer().getAccount().getUsername().equals(username)) {
+            throw new ResourceNotFoundException("you don't have permission to get access to this guest list");
+        }
+        String id = "g" + generateRandomString(10);
+        Guest guest = mapToEntity(guestRequest, new Guest());
+        guest.setId(id);
+        guest.setGuestList(guestList);
+
+        guestRepository.save(guest);
+    }
+
+    public void update(GuestRequest guestRequest, String username, Long guestListId, String id) {
+
         GuestList guestList = getGuestListById(guestListId);
         //check permission
         if (!guestList.getCustomer().getAccount().getUsername().equals(username)) {
             throw new ResourceNotFoundException("you don't have permission to get access to this guest list");
         }
-        Guest guest = mapToEntity(guestRequest);
-        //check guest id = null
-        if (guestRequest.getId() == null) {
-            String id = "g" + generateRandomString(10);
-            guest.setId(id);
-        }
-        //check guest id != null
-        if (guestRequest.getId() != null) {
-            guest = mapToEntity(guestRequest);
-            guest.setId(guestRequest.getId());
-        }
-        guest.setGuestList(guestList);
+        Guest guest = mapToEntity(guestRequest, getGuestById(id));
+
         guestRepository.save(guest);
-        //check guest exist
     }
 
-    public boolean checkGuestIdExisted(String guestId, Long guestListId) {
-        List<String> guestIds = new ArrayList<>();
-        List<Guest> guests = guestRepository.findByGuestList(getGuestListById(guestListId));
-        if (guests.size() == 0) {
-            return false;
-        }
-        guests.forEach(guest -> guestIds.add(guest.getId()));
-        return guestIds.contains(guestId);
+    public List<GuestList> getGuestListByCustomer(String username) {
+        Account account = accountRepository.findByUsername(username);
+        Customer customer = customerRepository.findByAccount(account);
+        return Optional.ofNullable(guestListRepository
+                        .findByCustomer(customer))
+                .orElseThrow(() -> new ResourceNotFoundException("customer is not found"));
     }
 
     public GuestList getGuestListById(Long id) {
@@ -73,7 +81,6 @@ public class GuestServiceImpl implements GuestService {
         return guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest is not found"));
     }
 
-
     @Override
     public void delete(String id, String username) {
         Guest guest = getGuestById(id);
@@ -83,14 +90,33 @@ public class GuestServiceImpl implements GuestService {
         guestRepository.delete(guest);
     }
 
+    @Override
+    public Collection<GuestResponse> findAllGuest(Long guestListId) {
+
+        List<Guest> guestResponses = guestRepository.findByGuestList(getGuestListById(guestListId));
+        return guestResponses.stream().map(this::convertToResponse).collect(Collectors.toList());
+    }
+
     // convert request to entity
-    private Guest mapToEntity(GuestRequest guestRequest) {
-        Guest guest = new Guest();
+    private Guest mapToEntity(GuestRequest guestRequest, Guest guest) {
+
         guest.setAddress(guestRequest.getAddress());
         guest.setFullName(guestRequest.getFullName());
         guest.setPhone(guestRequest.getPhone());
         guest.setMail(guestRequest.getMail());
 
         return guest;
+    }
+
+    // convert request to entity
+    private GuestResponse convertToResponse(Guest guest) {
+
+        GuestResponse guestResponse = new GuestResponse();
+        guestResponse.setAddress(guest.getAddress());
+        guestResponse.setFullName(guest.getFullName());
+        guestResponse.setPhone(guest.getPhone());
+        guestResponse.setMail(guest.getMail());
+
+        return guestResponse;
     }
 }

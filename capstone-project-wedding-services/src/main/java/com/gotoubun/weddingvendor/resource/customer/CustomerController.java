@@ -76,7 +76,9 @@ public class CustomerController {
      * @return the response entity
      */
     @PostMapping
-    public ResponseEntity<?> postCustomer(@Valid @RequestBody CustomerRequest customerRequest, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> postCustomer(@Valid @RequestBody CustomerRequest customerRequest,
+                                          BindingResult bindingResult,
+                                          Principal principal) {
         // TODO Auto-generated method stub
         //check validate
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);

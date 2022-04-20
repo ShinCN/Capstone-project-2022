@@ -1,6 +1,7 @@
 package com.gotoubun.weddingvendor.resource.planningtools;
 
 import com.gotoubun.weddingvendor.data.guest.GuestRequest;
+import com.gotoubun.weddingvendor.data.guest.GuestResponse;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
@@ -73,13 +75,32 @@ public class GuestController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        guestService.save(guestRequest,guestListId,principal.getName());
+        guestService.save(guestRequest,principal.getName(),guestListId);
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
-    @PutMapping
+    @GetMapping
+    public ResponseEntity<?> getAllGuest(Principal principal,
+                                         @RequestParam Long guestListId) {
+        // TODO Auto-generated method stub
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        int role = accountService.getRole(principal.getName());
+        if (role != 3) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        List<GuestResponse> guestResponses = (List<GuestResponse>) guestService.findAllGuest(guestListId);
+        if( guestResponses.size()==0){
+            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(guestResponses, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
     public ResponseEntity<?> putGuest(@Valid @RequestBody GuestRequest guestRequest,
-                                       @RequestParam Long guestListId,
+                                      @RequestParam Long guestListId,
+                                       @PathVariable String id,
                                        BindingResult bindingResult,
                                        Principal principal) {
         // TODO Auto-generated method stub
@@ -94,10 +115,11 @@ public class GuestController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        guestService.save(guestRequest,guestListId,principal.getName());
+        guestService.update(guestRequest,principal.getName(),guestListId,id);
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.OK);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGuest(@PathVariable String id, Principal principal) {
         //check login

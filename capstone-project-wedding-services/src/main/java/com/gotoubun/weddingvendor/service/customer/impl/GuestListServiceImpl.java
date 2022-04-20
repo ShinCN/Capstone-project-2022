@@ -35,16 +35,14 @@ public class GuestListServiceImpl implements GuestListService {
     }
 
     @Override
-    public void update(GuestListRequest guestListRequest, String username, Long id) {
+    public void update(String guestListName, String username, Long id) {
 
         GuestList guestList = getGuestListById(id);
-
-        if (guestList != null && !guestList.getCustomer().getAccount().getUsername().equals(username)) {
+        if (!guestList.getCustomer().getAccount().getUsername().equals(username)) {
             throw new ResourceNotFoundException("Customer not found in your Account");
         }
 
-        guestList = mapToEntity(guestListRequest, username);
-        guestList.setId(id);
+        guestList.setGuestListName(guestListName);
         guestListRepository.save(guestList);
     }
 
@@ -72,6 +70,5 @@ public class GuestListServiceImpl implements GuestListService {
 
         return guestList;
     }
-
 
 }

@@ -16,7 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
@@ -52,21 +55,35 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
             throw new ResourceNotFoundException("you don't have permission to get access to this check list");
         }
         String id = "clt" + generateRandomString(10);
-        ChecklistTask checklistTask = mapToEntity(request);
+        ChecklistTask checklistTask = mapToEntity(request, new ChecklistTask());
         checklistTask.setId(id);
         checklistTask.setCheckList(checkList);
         checkListTaskRepository.save(checklistTask);
-
     }
 
     @Override
     public void update(CheckListTaskRequest request, String id, String username) {
+
         CheckList checkList = getCheckListByCustomer(username);
 
         if (!checkList.getCustomer().getAccount().getUsername().equals(username)) {
             throw new ResourceNotFoundException("you don't have permission to get access to this check list");
         }
-        checkListTaskRepository.save(mapToEntity(request));
+
+        ChecklistTask checklistTask = mapToEntity(request, getCheckListTaskById(id));
+        checklistTask.setModifiedDate(getCurrentDate.now());
+        checkListTaskRepository.save(checklistTask);
+    }
+
+    @Override
+    public void updateStatus(String id, String username) {
+
+        ChecklistTask checklistTask = getCheckListTaskById(id);
+        if (!checklistTask.getCheckList().getCustomer().getAccount().getUsername().equals(username)) {
+            throw new ResourceNotFoundException("you don't have permission to get access to this check list");
+        }
+        checklistTask.setStatus(Boolean.TRUE);
+        checkListTaskRepository.save(checklistTask);
     }
 
     @Override
@@ -109,10 +126,10 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
 
 
     public CheckList getCheckListByCustomer(String username) {
-        return checkListRepository
+        return Optional.ofNullable(checkListRepository
                 .findByCustomer(customerRepository
                         .findByAccount(accountRepository
-                                .findByUsername(username)));
+                                .findByUsername(username)))).orElseThrow(() -> new ResourceNotFoundException("Check List Task is not found in your account"));
     }
 
     public ChecklistTask getCheckListTaskById(String id) {
@@ -121,14 +138,14 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
 
 
     // convert request to entity
-    private ChecklistTask mapToEntity(CheckListTaskRequest checkListTaskRequest) {
+    private ChecklistTask mapToEntity(CheckListTaskRequest checkListTaskRequest, ChecklistTask checkListTask) {
 
-        ChecklistTask checklistTask = new ChecklistTask();
+        checkListTask.setTaskName(checkListTaskRequest.getName());
+        checkListTask.setModifiedDate(getCurrentDate.now());
+        checkListTask.setCreatedDate(getCurrentDate.now());
+        checkListTask.setDueDate(LocalDate.parse(checkListTaskRequest.getDeadline(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
+        checkListTask.setStatus(false);
 
-        checklistTask.setTaskName(checkListTaskRequest.getName());
-        checklistTask.setCreatedDate(getCurrentDate.now());
-        checklistTask.setStatus(false);
-
-        return checklistTask;
+        return checkListTask;
     }
 }

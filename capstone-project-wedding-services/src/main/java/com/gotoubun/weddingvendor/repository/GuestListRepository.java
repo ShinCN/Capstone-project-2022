@@ -5,7 +5,10 @@ import com.gotoubun.weddingvendor.domain.weddingtool.GuestList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface GuestListRepository extends JpaRepository<GuestList, Long > {
-    GuestList findByCustomer(Customer customer);
+    List<GuestList> findByCustomer(Customer customer);
+
 }

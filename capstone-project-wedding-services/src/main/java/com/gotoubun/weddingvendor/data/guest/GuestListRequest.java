@@ -7,6 +7,6 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class GuestListRequest {
-    @NotBlank(message = "name is required")
+    @NotBlank(message = "guest list name is not blank")
     String name;
 }

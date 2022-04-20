@@ -11,8 +11,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GuestRequest {
-    @Nullable
-    String id;
+
     @NotBlank(message = "Name is not blank")
     String fullName;
     String phone;

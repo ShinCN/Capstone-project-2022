@@ -22,10 +22,6 @@ public class KeyOpinionLeader extends Auditable{
     @Column(name="avatar_url", columnDefinition = "varchar(255)")
     private String avatarUrl;
 
-
-    @Column(name="nano_password", columnDefinition = "TEXT")
-    private String nanoPassword;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="keyOpinionLeader", cascade = CascadeType.ALL)
     private Collection<PackagePost> packagePosts;
 

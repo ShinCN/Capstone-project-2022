@@ -4,13 +4,13 @@ import com.gotoubun.weddingvendor.data.kol.KOLPagingResponse;
 import com.gotoubun.weddingvendor.data.kol.KOLResponse;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderPagingResponse;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
-import com.gotoubun.weddingvendor.domain.user.Account;
-import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
-import com.gotoubun.weddingvendor.domain.user.VendorProvider;
+import com.gotoubun.weddingvendor.domain.user.*;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.KolRepository;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
+import com.gotoubun.weddingvendor.service.common.EmailService;
+import com.gotoubun.weddingvendor.utils.EmailUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +32,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @Override
     public KOLPagingResponse findAllKOL(int pageNo, int pageSize, String sortBy, String sortDir) {
@@ -103,11 +106,49 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void updateStatus(Long id) {
-        Account account = accountRepository.getById(id);
-        account.setStatus(!account.isStatus());
+        Account account = findById(id);
+        if (account.isStatus() == Boolean.FALSE) {
+            account.setStatus(!account.isStatus());
+            Auditable auditable = getDetailAccount(account);
+
+            String email = auditable.getEmail();
+            String fullName = auditable.getFullName();
+            String password = auditable.getNanoPassword();
+            emailService.send(email, EmailUtils.buildEmailForVendorAndKeyOpinionLeader(fullName, password));
+        }
+        else if (account.isStatus() == Boolean.TRUE) {
+            account.setStatus(!account.isStatus());
+        }
+
         accountRepository.save(account);
     }
 
+    public Auditable getDetailAccount(Account account) {
+        int role = account.getRole();
+        Auditable auditable = new Admin();
+
+        switch (role) {
+            case 1:
+                auditable = account.getAdmin();
+                break;
+            case 2:
+                auditable = account.getVendorProvider();
+                break;
+            case 3:
+                auditable = account.getKeyOpinionLeader();
+                break;
+            case 4:
+                auditable = account.getCustomer();
+                break;
+            default:
+                break;
+        }
+        return auditable;
+    }
+
+    public Account findById(Long id) {
+        return accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account is not found"));
+    }
 
 
     public Account findByUserName(String username) {

@@ -47,7 +47,7 @@ public class AdminServiceImpl implements AdminService {
         Page<KeyOpinionLeader> keyOpinionLeaders = kolRepository.findAll(pageable);
 
         Collection<KOLResponse> kolResponses = keyOpinionLeaders.stream().map(c -> KOLResponse.builder()
-                        .id(c.getId())
+                        .id(c.getAccount().getId())
                         .username(c.getAccount().getUsername())
                         .status(c.getAccount().isStatus())
                         .createdDate(c.getAccount().getCreatedDate())
@@ -82,7 +82,7 @@ public class AdminServiceImpl implements AdminService {
         Page<VendorProvider> vendorProviders = vendorRepository.findAll(pageable);
 
         Collection<VendorProviderResponse> vendorProviderResponses = vendorProviders.stream().map(c -> VendorProviderResponse.builder()
-                        .id(c.getId())
+                        .id(c.getAccount().getId())
                         .username(c.getAccount().getUsername())
                         .status(c.getAccount().isStatus())
                         .createdDate(c.getAccount().getCreatedDate())
@@ -106,10 +106,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void updateStatus(Long id) {
+
         Account account = findById(id);
+        Auditable auditable = getDetailAccount(account);
         if (account.isStatus() == Boolean.FALSE) {
             account.setStatus(!account.isStatus());
-            Auditable auditable = getDetailAccount(account);
 
             String email = auditable.getEmail();
             String fullName = auditable.getFullName();
@@ -145,6 +146,7 @@ public class AdminServiceImpl implements AdminService {
         }
         return auditable;
     }
+
 
     public Account findById(Long id) {
         return accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Account is not found"));

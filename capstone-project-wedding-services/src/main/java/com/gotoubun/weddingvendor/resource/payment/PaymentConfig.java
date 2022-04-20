@@ -12,7 +12,6 @@ public class PaymentConfig {
     public static final String ORDERTYPE = "250006"; //Hoa don dich vu
     public static final String LOCALEDEFAULT = "VN";
     public static final String CURRCODE = "VND";
-//    public static final String RETURNURL = "https://gotoubun.azurewebsites.net/payment-result";
     public static final String RETURNURL = "http://localhost:8080/payment-result";
     public static final String VNPURL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static final String CHECKSUM = "BNGAFKFVBFZAYDGNDPGVLEYHOJAGZIVX";

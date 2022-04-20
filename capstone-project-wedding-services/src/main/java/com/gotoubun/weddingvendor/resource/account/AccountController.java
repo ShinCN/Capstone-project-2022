@@ -1,26 +1,14 @@
 package com.gotoubun.weddingvendor.resource.account;
 
 import com.gotoubun.weddingvendor.data.account.AccountPasswordRequest;
-import com.gotoubun.weddingvendor.data.admin.AccountStatusRequest;
-import com.gotoubun.weddingvendor.data.kol.KOLPagingResponse;
-import com.gotoubun.weddingvendor.data.kol.KOLResponse;
-import com.gotoubun.weddingvendor.data.singleservice.SinglePostPagingResponse;
-import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
-import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
-import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
-import com.gotoubun.weddingvendor.exception.KolNotFoundException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
-import com.gotoubun.weddingvendor.exception.VendorNotFoundException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.payload.JWTLoginSuccessResponse;
 import com.gotoubun.weddingvendor.payload.LoginRequest;
-import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.security.JwtTokenProvider;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
-import com.gotoubun.weddingvendor.service.account.impl.AccountServiceImpl;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +20,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.security.Principal;
-import java.util.Collection;
 
-import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
+import static com.gotoubun.weddingvendor.resource.MessageConstant.LOGIN_REQUIRED;
+import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
 import static com.gotoubun.weddingvendor.security.SecurityConstants.TOKEN_PREFIX;
 
 /**

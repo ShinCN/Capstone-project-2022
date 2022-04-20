@@ -10,13 +10,13 @@ import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import com.gotoubun.weddingvendor.service.payment.PaymentService;
 import com.gotoubun.weddingvendor.utils.DataUtils;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -26,6 +26,7 @@ import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.gotoubun.weddingvendor.resource.MessageConstant.LOGIN_REQUIRED;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.NO_PERMISSION;
 
 @RestController
@@ -183,7 +184,7 @@ public class PaymentController {
     public ResponseEntity<Collection<PaymentHistoryResponse>> getAllReceipt(Principal principal){
         //check login
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
 
         //check role
         int role = accountService.getRole(principal.getName());
@@ -197,7 +198,7 @@ public class PaymentController {
     public ResponseEntity<ReceiptDetailResponse> getReceiptDetail(@PathVariable Long id, Principal principal){
         //check login
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
 
         //check role
         int role = accountService.getRole(principal.getName());

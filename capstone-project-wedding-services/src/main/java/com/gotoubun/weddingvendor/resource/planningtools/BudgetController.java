@@ -88,7 +88,7 @@ public class BudgetController {
         //update service
         budgetCategoryService.update(id, request, principal.getName());
 
-        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
@@ -103,6 +103,6 @@ public class BudgetController {
         }
         budgetCategoryService.delete(id);
 
-        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.OK);
     }
 }

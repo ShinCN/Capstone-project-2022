@@ -1,9 +1,6 @@
 package com.gotoubun.weddingvendor.resource.planningtools;
 
-import com.gotoubun.weddingvendor.data.customer.CustomerRequest;
-import com.gotoubun.weddingvendor.data.guest.GuestListRequest;
 import com.gotoubun.weddingvendor.data.guest.GuestRequest;
-import com.gotoubun.weddingvendor.domain.weddingtool.Guest;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
@@ -99,7 +96,7 @@ public class GuestController {
         }
         guestService.save(guestRequest,guestListId,principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGuest(@PathVariable String id, Principal principal) {
@@ -113,7 +110,7 @@ public class GuestController {
 
         guestService.delete(id,principal.getName());
 
-        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.OK);
     }
 
 }

@@ -2,7 +2,6 @@ package com.gotoubun.weddingvendor.resource.kol;
 
 import com.gotoubun.weddingvendor.data.kol.KOLRequest;
 import com.gotoubun.weddingvendor.data.kol.KOLResponse;
-import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.DeactivatedException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;

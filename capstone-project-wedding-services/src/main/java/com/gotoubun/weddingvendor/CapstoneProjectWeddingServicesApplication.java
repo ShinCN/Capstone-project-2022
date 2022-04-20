@@ -10,8 +10,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @EnableTransactionManagement
 @SpringBootApplication
-//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-//@EnableJpaRepositories(basePackageClasses = VendorRepository.class)
 public class CapstoneProjectWeddingServicesApplication {
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder(){

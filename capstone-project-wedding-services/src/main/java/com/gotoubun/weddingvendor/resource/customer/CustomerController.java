@@ -2,8 +2,6 @@ package com.gotoubun.weddingvendor.resource.customer;
 
 import com.gotoubun.weddingvendor.data.customer.CustomerRequest;
 import com.gotoubun.weddingvendor.data.customer.CustomerResponse;
-import com.gotoubun.weddingvendor.data.kol.KOLRequest;
-import com.gotoubun.weddingvendor.data.kol.KOLResponse;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.DeactivatedException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
@@ -21,7 +19,6 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
-import static com.gotoubun.weddingvendor.resource.MessageConstant.NO_ACTIVATE;
 
 /**
  * The type Customer controller.

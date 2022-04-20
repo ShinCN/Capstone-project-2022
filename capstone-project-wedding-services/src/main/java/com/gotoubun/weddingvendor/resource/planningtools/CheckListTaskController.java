@@ -2,14 +2,12 @@ package com.gotoubun.weddingvendor.resource.planningtools;
 
 import com.gotoubun.weddingvendor.data.checklist.CheckListTaskPagingResponse;
 import com.gotoubun.weddingvendor.data.checklist.CheckListTaskRequest;
-import com.gotoubun.weddingvendor.data.guest.GuestRequest;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import com.gotoubun.weddingvendor.service.customer.CheckListTaskService;
-import com.gotoubun.weddingvendor.service.customer.CustomerService;
 import com.gotoubun.weddingvendor.service.customer.GuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -76,7 +74,7 @@ public class CheckListTaskController {
         }
         checkListTaskService.save(checkListTaskRequest, principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
     /**
@@ -142,7 +140,7 @@ public class CheckListTaskController {
         }
         checkListTaskService.update(checkListTaskRequest, principal.getName(), checkListTaskId);
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
     /**

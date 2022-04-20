@@ -1,16 +1,12 @@
 package com.gotoubun.weddingvendor.resource.planningtools;
 
 import com.gotoubun.weddingvendor.data.guest.GuestListRequest;
-import com.gotoubun.weddingvendor.data.kol.KOLRequest;
-import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
-import com.gotoubun.weddingvendor.exception.DeactivatedException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
 import com.gotoubun.weddingvendor.service.customer.GuestListService;
-import com.gotoubun.weddingvendor.service.kol.KOLService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,7 +78,7 @@ public class GuestListController {
      * @return the response entity
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteGuest(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<?> deleteGuestList(@PathVariable Long id, Principal principal) {
 
         //check login
         if (principal == null)
@@ -95,6 +91,6 @@ public class GuestListController {
 
         guestListService.delete(id,principal.getName());
 
-        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.OK);
     }
 }

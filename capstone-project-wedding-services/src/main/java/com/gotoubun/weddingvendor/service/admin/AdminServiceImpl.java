@@ -130,16 +130,16 @@ public class AdminServiceImpl implements AdminService {
 
         switch (role) {
             case 1:
-                auditable = account.getAdmin();
+                auditable = Optional.ofNullable(account.getAdmin()).orElseThrow(()->new ResourceNotFoundException("admin does not found"));;
                 break;
             case 2:
-                auditable = account.getVendorProvider();
+                auditable = Optional.ofNullable(account.getVendorProvider()).orElseThrow(()->new ResourceNotFoundException("vendor does not found"));
                 break;
             case 3:
-                auditable = account.getKeyOpinionLeader();
+                auditable =Optional.ofNullable(account.getCustomer()).orElseThrow(()->new ResourceNotFoundException("customer does not found"));
                 break;
             case 4:
-                auditable = account.getCustomer();
+                auditable = Optional.ofNullable(account.getKeyOpinionLeader()).orElseThrow(()->new ResourceNotFoundException("kol does not found"));
                 break;
             default:
                 break;

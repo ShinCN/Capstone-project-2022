@@ -66,13 +66,13 @@ public class AccountServiceImpl implements AccountService {
         int role = account.getRole();
         String fullName;
         if (role == 1) {
-            fullName = account.getAdmin().getFullName();
+            fullName = Optional.ofNullable(account.getAdmin().getFullName()).orElseThrow(()->new ResourceNotFoundException(""));
         } else if (role == 2) {
-            fullName = account.getVendorProvider().getFullName();
+            fullName = Optional.ofNullable(account.getVendorProvider().getFullName()).orElseThrow(()->new ResourceNotFoundException(""));
         } else if (role == 3) {
-            fullName = account.getKeyOpinionLeader().getFullName();
+            fullName = Optional.ofNullable(account.getCustomer().getFullName()).orElseThrow(()->new ResourceNotFoundException(""));
         } else if (role == 4) {
-            fullName = account.getCustomer().getFullName();
+            fullName = Optional.ofNullable(account.getKeyOpinionLeader().getFullName()).orElseThrow(()->new ResourceNotFoundException(""));
         } else
             fullName = "????";
 

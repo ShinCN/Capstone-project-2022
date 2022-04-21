@@ -38,6 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private AccountRepository accountRepository;
 
+    private boolean check = false;
 
     @Override
     public void save(String amount, String txnRef, String bankCode, String bankTransNo,
@@ -119,6 +120,18 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         Optional<PaymentHistory> paymentHistory = Optional.ofNullable(paymentHistoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Receipt does not exist")));
+
+        Collection<PaymentHistory> paymentHistories = paymentHistoryRepository.findAllByCustomer_Account(account);
+
+        paymentHistories.forEach(c->{
+            if(c.getCustomer() == paymentHistory.get().getCustomer()){
+                check = true;
+            }
+        });
+
+        if(!check){
+            throw new ResourceNotFoundException("This receipt does not exist in your account");
+        }
 
         float amount = 0;
         for(SinglePost sp : paymentHistory.get().getSinglePosts()){

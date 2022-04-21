@@ -75,43 +75,36 @@ public class SinglePostServiceImpl implements SinglePostService {
         Account account = accountRepository.findByUsername(username);
         VendorProvider vendorProvider = vendorRepository.findByAccount(account);
 
-        SinglePost singlePost = new SinglePost();
-        singlePost.setServiceName(request.getServiceName());
-        singlePost.setPrice(request.getPrice());
-        singlePost.setAbout(request.getDescription());
-        singlePost.setPhotos(request.getPhotos().stream().map(this::convertToEntity).collect(Collectors.toList()));
-        singlePost.setRate(0);
-        singlePost.setStatus(1);
-        singlePost.setSingleCategory(vendorProvider.getSingleCategory());
-        singlePost.setVendorProvider(vendorProvider);
-        singlePost.setCreatedBy(username);
-
-
         //check service name exist
         if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
             throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
         }
+
+        SinglePost singlePost= mapToEntity(request, new SinglePost());
+        singlePost.setSingleCategory(vendorProvider.getSingleCategory());
+        singlePost.setVendorProvider(vendorProvider);
+        singlePost.setCreatedBy(username);
 
         singlePostRepository.save(singlePost);
         singlePost.getPhotos().forEach(c -> c.setSinglePost(singlePost));
         singlePostRepository.save(singlePost);
     }
 
+
     @Override
     public void update(Long id, SingleServicePostRequest request, String username) {
         Account account = accountRepository.findByUsername(username);
         VendorProvider vendorProvider = vendorRepository.findByAccount(account);
 
-        SinglePost singlePost = getSinglePostById(id);
+        SinglePost singlePost = mapToEntity(request,getSinglePostById(id));
 
         //check service in current account
         if ((!singlePost.getVendorProvider().getAccount().getUsername().equals(username))) {
             throw new SingleServicePostNotFoundException("Service not found in your account");
         }
 
-        if (singlePost.getServiceName().equals(request.getServiceName())) {
+        if (singlePost.getServiceName().equals(request.getServiceName()) ) {
 
-            singlePost = convertToEntity(request);
             singlePost.setSingleCategory(vendorProvider.getSingleCategory());
             singlePost.setVendorProvider(vendorProvider);
             singlePost.setCreatedBy(username);
@@ -128,19 +121,19 @@ public class SinglePostServiceImpl implements SinglePostService {
         return singlePostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Single Service is not found"));
     }
 
-    private SinglePost convertToEntity(SingleServicePostRequest singleServicePostRequest) {
-        SinglePost singlePost = new SinglePost();
+    private SinglePost mapToEntity(SingleServicePostRequest singleServicePostRequest, SinglePost singlePost) {
+
         singlePost.setServiceName(singleServicePostRequest.getServiceName());
         singlePost.setPrice(singleServicePostRequest.getPrice());
         singlePost.setAbout(singleServicePostRequest.getDescription());
-        singlePost.setPhotos(singleServicePostRequest.getPhotos().stream().map(this::convertToEntity).collect(Collectors.toList()));
+        singlePost.setPhotos(singleServicePostRequest.getPhotos().stream().map(this::mapToEntity).collect(Collectors.toList()));
         singlePost.setRate(0);
         singlePost.setStatus(1);
         singlePost.getPhotos().forEach(c -> c.setSinglePost(singlePost));
         return singlePost;
     }
 
-    private Photo convertToEntity(PhotoRequest photoRequest) {
+    private Photo mapToEntity(PhotoRequest photoRequest) {
         Photo photo = new Photo();
         photo.setCaption(photoRequest.getCaption());
         photo.setCaption(photoRequest.getCaption());

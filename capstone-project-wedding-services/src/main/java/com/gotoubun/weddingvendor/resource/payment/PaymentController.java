@@ -45,7 +45,7 @@ public class PaymentController {
 
     private String username = "";
 
-    private List serviceId = new ArrayList();
+    private List<Long> serviceId = new ArrayList();
 
     @PostMapping("create-payment")
     public ResponseEntity<?> createPayment(@Valid @RequestBody PaymentRequest requestParams, BindingResult bindingResult, Principal principal) throws UnsupportedEncodingException, IOException {

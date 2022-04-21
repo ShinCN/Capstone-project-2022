@@ -43,7 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
     public void save(String amount, String txnRef, String bankCode, String bankTransNo,
                      String cardType, String orderInfo, String responseCode,
                      String tmnCode, String transNo, String transStatus,
-                     String secureHash, String username, List serviceId) {
+                     String secureHash, String username, List<Long> serviceId) {
 
         try {
             Account account = accountRepository.findByUsername(username);
@@ -56,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
             PaymentHistory paymentHistory = new PaymentHistory();
             serviceId.forEach(c -> {
                 Long id = Long.valueOf(c.toString().trim());
-                Optional<SinglePost> singlePost  = singlePostRepository.findById(id);
+                Optional<SinglePost> singlePost  = Optional.ofNullable(singlePostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("This service does not exist in your payment")));
                 singlePost.get().getPaymentHistories().add(paymentHistory);
                 singlePosts.add(singlePost.get());
             });

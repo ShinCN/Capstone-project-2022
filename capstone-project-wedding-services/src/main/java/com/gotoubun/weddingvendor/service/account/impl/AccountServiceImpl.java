@@ -11,7 +11,6 @@ import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -70,10 +69,10 @@ public class AccountServiceImpl implements AccountService {
         } else if (role == 2) {
             fullName = account.getVendorProvider().getFullName();
         } else if (role == 3) {
-            fullName = account.getKeyOpinionLeader().getFullName();
-        } else if (role == 4) {
             fullName = account.getCustomer().getFullName();
-        } else
+        }else if (role == 4) {
+            fullName = account.getKeyOpinionLeader().getFullName();
+        }  else
             fullName = "????";
 
         return fullName;

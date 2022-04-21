@@ -107,7 +107,7 @@ public class SingleServiceController {
         //save service
         singlePostService.save(singleServicePost, principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
     /**

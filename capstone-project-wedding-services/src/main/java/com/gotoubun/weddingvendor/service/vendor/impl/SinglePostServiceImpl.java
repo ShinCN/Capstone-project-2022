@@ -7,10 +7,8 @@ import com.gotoubun.weddingvendor.domain.vendor.Photo;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
-import com.gotoubun.weddingvendor.repository.AccountRepository;
-import com.gotoubun.weddingvendor.repository.SingleCategoryRepository;
-import com.gotoubun.weddingvendor.repository.SinglePostRepository;
-import com.gotoubun.weddingvendor.repository.VendorRepository;
+import com.gotoubun.weddingvendor.repository.*;
+import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
 import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,6 +36,10 @@ public class SinglePostServiceImpl implements SinglePostService {
     SingleCategoryRepository singleCategoryRepository;
     @Autowired
     public BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    GetCurrentDate getCurrentDate;
+    @Autowired
+    PhotoRepository photoRepository;
 
 
     @Override
@@ -57,6 +59,7 @@ public class SinglePostServiceImpl implements SinglePostService {
                         .price(singlePost.getPrice())
                         .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
                         .description(singlePost.getAbout())
+                        .vendorAddress(singlePost.getVendorProvider().getAddress())
                         .build())
                 .collect(Collectors.toList());
 
@@ -80,10 +83,14 @@ public class SinglePostServiceImpl implements SinglePostService {
             throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
         }
 
-        SinglePost singlePost= mapToEntity(request, new SinglePost());
+        SinglePost singlePost = mapToEntity(request, new SinglePost());
+        singlePost.setRate(0);
+        singlePost.setStatus(1);
+        singlePost.setCreatedDate(getCurrentDate.now());
         singlePost.setSingleCategory(vendorProvider.getSingleCategory());
         singlePost.setVendorProvider(vendorProvider);
         singlePost.setCreatedBy(username);
+        singlePost.setModifiedBy(username);
 
         singlePostRepository.save(singlePost);
         singlePost.getPhotos().forEach(c -> c.setSinglePost(singlePost));
@@ -96,25 +103,23 @@ public class SinglePostServiceImpl implements SinglePostService {
         Account account = accountRepository.findByUsername(username);
         VendorProvider vendorProvider = vendorRepository.findByAccount(account);
 
-        SinglePost singlePost = mapToEntity(request,getSinglePostById(id));
+        SinglePost singlePost = getSinglePostById(id);
 
         //check service in current account
         if ((!singlePost.getVendorProvider().getAccount().getUsername().equals(username))) {
             throw new SingleServicePostNotFoundException("Service not found in your account");
         }
 
-        if (singlePost.getServiceName().equals(request.getServiceName()) ) {
-
-            singlePost.setSingleCategory(vendorProvider.getSingleCategory());
-            singlePost.setVendorProvider(vendorProvider);
-            singlePost.setCreatedBy(username);
-
-        }
-        else if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
+        if (singlePost.getServiceName().equals(request.getServiceName())
+                || !singlePost.getServiceName().equals(request.getServiceName())
+                && !checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
+            singlePost = mapToEntity(request, getSinglePostById(id));
+            singlePost.setModifiedDate(getCurrentDate.now());
+            singlePostRepository.save(singlePost);
+        } else if (checkServiceNameExisted(request.getServiceName(), vendorProvider.getId())) {
             throw new SingleServicePostNotFoundException("Service Name " + request.getServiceName() + " has already existed in your account");
         }
 
-        singlePostRepository.save(singlePost);
     }
 
     public SinglePost getSinglePostById(Long id) {
@@ -126,17 +131,29 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setServiceName(singleServicePostRequest.getServiceName());
         singlePost.setPrice(singleServicePostRequest.getPrice());
         singlePost.setAbout(singleServicePostRequest.getDescription());
-        singlePost.setPhotos(singleServicePostRequest.getPhotos().stream().map(this::mapToEntity).collect(Collectors.toList()));
-        singlePost.setRate(0);
-        singlePost.setStatus(1);
-        singlePost.getPhotos().forEach(c -> c.setSinglePost(singlePost));
+        singlePost.setModifiedDate(getCurrentDate.now());
+        List<Photo> photos1 = singleServicePostRequest.getPhotos().stream().map(this::mapToEntity).collect(Collectors.toList());
+        List<Photo> photos = (List<Photo>) singlePost.getPhotos();
+        if (photos == null) {
+            photos = new ArrayList<>(photos1);
+        } else {
+            photos.addAll(photos1);
+        }
+        singlePost.setPhotos(photos);
+        singlePost.getPhotos().forEach(c -> {
+            c.setSinglePost(singlePost);
+        });
         return singlePost;
     }
 
     private Photo mapToEntity(PhotoRequest photoRequest) {
+
         Photo photo = new Photo();
+        photo.setUrl(photoRequest.getUrl());
         photo.setCaption(photoRequest.getCaption());
-        photo.setCaption(photoRequest.getCaption());
+        photo.setModifiedDate(getCurrentDate.now());
+        photo.setCreatedDate(getCurrentDate.now());
+
         return photo;
     }
 

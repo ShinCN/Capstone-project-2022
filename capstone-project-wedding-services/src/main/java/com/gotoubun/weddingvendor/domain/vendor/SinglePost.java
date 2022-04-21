@@ -65,7 +65,7 @@ public class SinglePost extends BasePost{
 	private Integer status;
 
 	@Column(name="count_rate")
-	private int countRate;
+	private Integer countRate;
 
 	@JsonIgnore
 	@ManyToMany(mappedBy = "singlePosts", fetch = FetchType.LAZY)

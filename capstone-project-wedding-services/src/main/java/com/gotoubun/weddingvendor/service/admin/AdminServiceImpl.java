@@ -116,8 +116,7 @@ public class AdminServiceImpl implements AdminService {
             String fullName = auditable.getFullName();
             String password = auditable.getNanoPassword();
             emailService.send(email, EmailUtils.buildEmailForVendorAndKeyOpinionLeader(fullName, password));
-        }
-        else if (account.isStatus() == Boolean.TRUE) {
+        } else if (account.isStatus() == Boolean.TRUE) {
             account.setStatus(!account.isStatus());
         }
 
@@ -130,16 +129,17 @@ public class AdminServiceImpl implements AdminService {
 
         switch (role) {
             case 1:
-                auditable = Optional.ofNullable(account.getAdmin()).orElseThrow(()->new ResourceNotFoundException("admin does not found"));;
+                auditable = Optional.ofNullable(account.getAdmin()).orElseThrow(() -> new ResourceNotFoundException("admin does not found"));
+                ;
                 break;
             case 2:
-                auditable = Optional.ofNullable(account.getVendorProvider()).orElseThrow(()->new ResourceNotFoundException("vendor does not found"));
+                auditable = Optional.ofNullable(account.getVendorProvider()).orElseThrow(() -> new ResourceNotFoundException("vendor does not found"));
                 break;
             case 3:
-                auditable =Optional.ofNullable(account.getCustomer()).orElseThrow(()->new ResourceNotFoundException("customer does not found"));
+                auditable = Optional.ofNullable(account.getCustomer()).orElseThrow(() -> new ResourceNotFoundException("customer does not found"));
                 break;
             case 4:
-                auditable = Optional.ofNullable(account.getKeyOpinionLeader()).orElseThrow(()->new ResourceNotFoundException("kol does not found"));
+                auditable = Optional.ofNullable(account.getKeyOpinionLeader()).orElseThrow(() -> new ResourceNotFoundException("kol does not found"));
                 break;
             default:
                 break;

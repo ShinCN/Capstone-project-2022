@@ -126,10 +126,10 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
 
 
     public CheckList getCheckListByCustomer(String username) {
-        return Optional.ofNullable(checkListRepository
+        return checkListRepository
                 .findByCustomer(customerRepository
                         .findByAccount(accountRepository
-                                .findByUsername(username)))).orElseThrow(() -> new ResourceNotFoundException("Check List Task is not found in your account"));
+                                .findByUsername(username)));
     }
 
     public ChecklistTask getCheckListTaskById(String id) {

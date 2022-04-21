@@ -137,7 +137,6 @@ public class SingleServiceController {
         return new ResponseEntity<>(singlePostService.findAllByVendors(id),HttpStatus.OK);
     }
 
-
     /**
      * Put single service response entity.
      *

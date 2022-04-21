@@ -38,12 +38,13 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private AccountRepository accountRepository;
 
+    private boolean check = false;
 
     @Override
     public void save(String amount, String txnRef, String bankCode, String bankTransNo,
                      String cardType, String orderInfo, String responseCode,
                      String tmnCode, String transNo, String transStatus,
-                     String secureHash, String username, List serviceId) {
+                     String secureHash, String username, List<Long> serviceId) {
 
         try {
             Account account = accountRepository.findByUsername(username);
@@ -56,7 +57,7 @@ public class PaymentServiceImpl implements PaymentService {
             PaymentHistory paymentHistory = new PaymentHistory();
             serviceId.forEach(c -> {
                 Long id = Long.valueOf(c.toString().trim());
-                Optional<SinglePost> singlePost  = singlePostRepository.findById(id);
+                Optional<SinglePost> singlePost  = Optional.ofNullable(singlePostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("This service does not exist in your payment")));
                 singlePost.get().getPaymentHistories().add(paymentHistory);
                 singlePosts.add(singlePost.get());
             });
@@ -119,6 +120,18 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         Optional<PaymentHistory> paymentHistory = Optional.ofNullable(paymentHistoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Receipt does not exist")));
+
+        Collection<PaymentHistory> paymentHistories = paymentHistoryRepository.findAllByCustomer_Account(account);
+
+        paymentHistories.forEach(c->{
+            if(c.getCustomer() == paymentHistory.get().getCustomer()){
+                check = true;
+            }
+        });
+
+        if(!check){
+            throw new ResourceNotFoundException("This receipt does not exist in your account");
+        }
 
         float amount = 0;
         for(SinglePost sp : paymentHistory.get().getSinglePosts()){

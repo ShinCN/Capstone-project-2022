@@ -11,7 +11,6 @@ import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,9 +72,9 @@ public class AccountServiceImpl implements AccountService {
             fullName = Optional.ofNullable(account.getCustomer().getFullName()).orElseThrow(()->new ResourceNotFoundException(""));
         } else if (role == 4) {
             fullName = Optional.ofNullable(account.getKeyOpinionLeader().getFullName()).orElseThrow(()->new ResourceNotFoundException(""));
-        } else
+        }  else {
             fullName = "????";
-
+        }
         return fullName;
     }
 

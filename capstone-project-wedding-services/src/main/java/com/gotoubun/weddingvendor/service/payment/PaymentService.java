@@ -10,7 +10,7 @@ public interface PaymentService {
     void save(String amount, String txnRef, String bankCode, String bankTransNo,
               String cardType, String orderInfo, String responseCode,
               String tmnCode, String transNo, String transStatus,
-              String secureHash, String username, List serviceId);
+              String secureHash, String username, List<Long> serviceId);
 
     Collection<PaymentHistoryResponse> findAllReceipt(String username);
 

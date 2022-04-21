@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhotoResponse {
+    Long id;
     String caption;
     String url;
 }

@@ -11,7 +11,7 @@ public interface SinglePostService {
     void update(Long id, SingleServicePostRequest singleServicePostRequest, String username);
     void delete(Long id);
     SinglePostPagingResponse findAllSinglePost (int pageNo, int pageSize, String sortBy, String sortDir);
-    Collection<SingleServicePostResponse> findAllByVendors(Long id);
+    Collection<SingleServicePostResponse> findAllByVendors(String username);
     Collection<SingleServicePostResponse> findAllByCategories(Long categoryId);
     Collection<SingleServicePostResponse> findAllByCategoriesMyService(Long categoryId, String username);
 }

@@ -57,7 +57,7 @@ public class SinglePostServiceImpl implements SinglePostService {
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())
                         .price(singlePost.getPrice())
-                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(),photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
                         .description(singlePost.getAbout())
                         .vendorAddress(singlePost.getVendorProvider().getAddress())
                         .build())
@@ -181,30 +181,27 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
 
     @Override
-    public Collection<SingleServicePostResponse> findAllByVendors(Long id) {
+    public Collection<SingleServicePostResponse> findAllByVendors(String username) {
 
-        VendorProvider vendorProvider = vendorRepository.getById(id);
+        VendorProvider vendorProvider = vendorRepository.findByAccount(accountRepository.findByUsername(username));
 
-        List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
         List<SinglePost> singlePosts = singlePostRepository.findAllByVendorProvider(vendorProvider);
 
         if (singlePosts.size() == 0) {
             throw new SingleServicePostNotFoundException("vendor does not have single post");
         }
-        singlePosts.forEach(c -> {
-            Collection<PhotoResponse> photoResponses = new ArrayList<>();
-            SingleServicePostResponse singleServicePostResponse = SingleServicePostResponse.builder()
-                    .id(c.getId())
-                    .serviceName(c.getServiceName())
-                    .price(c.getPrice())
-                    .description(c.getAbout())
-                    .vendorAddress(c.getVendorProvider().getAddress())
-                    .build();
-            c.getPhotos().forEach(b -> photoResponses.add(new PhotoResponse(b.getCaption(), b.getUrl())));
-            singleServicePostResponse.setPhotos(photoResponses);
-            singleServicePostResponses.add(singleServicePostResponse);
-        });
-        return singleServicePostResponses;
+
+        return singlePosts.stream()
+                .map(singlePost -> SingleServicePostResponse.builder()
+                        .id(singlePost.getId())
+                        .serviceName(singlePost.getServiceName())
+                        .price(singlePost.getPrice())
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .description(singlePost.getAbout())
+                        .vendorAddress(singlePost.getVendorProvider().getAddress())
+                        .build())
+                .collect(Collectors.toList());
+
     }
 
 
@@ -217,45 +214,36 @@ public class SinglePostServiceImpl implements SinglePostService {
         if (singlePosts.size() == 0) {
             throw new SingleServicePostNotFoundException("You have not added anything yet");
         }
-        singlePosts.forEach(c -> {
-            Collection<PhotoResponse> photoResponses = new ArrayList<>();
-            SingleServicePostResponse singleServicePostResponse = SingleServicePostResponse.builder()
-                    .id(c.getId())
-                    .serviceName(c.getServiceName())
-                    .price(c.getPrice())
-                    .description(c.getAbout())
-                    .vendorAddress(c.getVendorProvider().getAddress())
-                    .build();
-            c.getPhotos().forEach(b -> photoResponses.add(new PhotoResponse(b.getCaption(), b.getUrl())));
-            singleServicePostResponse.setPhotos(photoResponses);
-            singleServicePostResponses.add(singleServicePostResponse);
-        });
-        return singleServicePostResponses;
+        return singlePosts.stream()
+                .map(singlePost -> SingleServicePostResponse.builder()
+                        .id(singlePost.getId())
+                        .serviceName(singlePost.getServiceName())
+                        .price(singlePost.getPrice())
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .description(singlePost.getAbout())
+                        .vendorAddress(singlePost.getVendorProvider().getAddress())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
     public Collection<SingleServicePostResponse> findAllByCategories(Long categoryId) {
 
-        List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
         List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategory(singleCategoryRepository.getById(categoryId));
 
         if (singlePosts.size() == 0) {
             throw new SingleServicePostNotFoundException("category does not have any one registered");
         }
-        singlePosts.forEach(c -> {
-            Collection<PhotoResponse> photoResponses = new ArrayList<>();
-            SingleServicePostResponse singleServicePostResponse = SingleServicePostResponse.builder()
-                    .id(c.getId())
-                    .serviceName(c.getServiceName())
-                    .price(c.getPrice())
-                    .description(c.getAbout())
-                    .vendorAddress(c.getVendorProvider().getAddress())
-                    .build();
-            c.getPhotos().forEach(b -> photoResponses.add(new PhotoResponse(b.getCaption(), b.getUrl())));
-            singleServicePostResponse.setPhotos(photoResponses);
-            singleServicePostResponses.add(singleServicePostResponse);
-        });
-        return singleServicePostResponses;
-    }
+        return singlePosts.stream()
+                .map(singlePost -> SingleServicePostResponse.builder()
+                        .id(singlePost.getId())
+                        .serviceName(singlePost.getServiceName())
+                        .price(singlePost.getPrice())
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .description(singlePost.getAbout())
+                        .vendorAddress(singlePost.getVendorProvider().getAddress())
+                        .build())
+                .collect(Collectors.toList());
 
+    }
 }

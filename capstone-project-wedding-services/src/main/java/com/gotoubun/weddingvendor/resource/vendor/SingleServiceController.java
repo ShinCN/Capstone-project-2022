@@ -40,6 +40,13 @@ public class SingleServiceController {
     @Autowired
     private CustomerService customerService;
 
+    /**
+     * Customer add single service response entity.
+     *
+     * @param id        the id
+     * @param principal the principal
+     * @return the response entity
+     */
     @PostMapping("{id}")
     public ResponseEntity<?> customerAddSingleService(@PathVariable Long id, Principal principal){
         if (principal == null)
@@ -127,14 +134,25 @@ public class SingleServiceController {
     /**
      * Gets all single service.
      *
-     * @param id        the id
      * @param principal the principal
      * @return the all single service
      */
-    @GetMapping("/vendor/{id}")
-    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleServiceByVendor(@PathVariable Long id,
-                                                                                             Principal principal) {
-        return new ResponseEntity<>(singlePostService.findAllByVendors(id),HttpStatus.OK);
+    @GetMapping("/vendor")
+    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleServiceByVendor(Principal principal) {
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+
+        if (role != 2) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
+        }
+        return new ResponseEntity<>(singlePostService.findAllByVendors(principal.getName()),HttpStatus.OK);
     }
 
     /**

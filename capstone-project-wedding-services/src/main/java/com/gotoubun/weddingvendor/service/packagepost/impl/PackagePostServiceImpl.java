@@ -115,28 +115,22 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
     @Override
     public Collection<SingleServicePostResponse> findByPackagePost(Long id) {
 
-        PackagePost existingServicePack = getPackageServicePostById(id).get();
-
         if (!getPackageServicePostById(id).isPresent()) {
             throw new ServicePackNotFound("This service pack is not found ");
         }
 
         List<SinglePost> singlePosts =singlePostRepository.findAllByPackagePosts(packagePostRepository.getById(id));
-        List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
-        singlePosts.forEach(c->{
-            Collection<PhotoResponse> photoResponses = new ArrayList<>();
-            SingleServicePostResponse singleServicePostResponse= SingleServicePostResponse.builder()
-                    .id(c.getId())
-                    .serviceName(c.getServiceName())
-                    .price(c.getPrice())
-                    .description(c.getAbout())
-                    .build();
-            c.getPhotos().forEach(b->photoResponses.add(new PhotoResponse(b.getCaption(),b.getUrl())));
-            singleServicePostResponse.setPhotos(photoResponses);
-            singleServicePostResponses.add(singleServicePostResponse);
-        });
 
-        return singleServicePostResponses;
+        return singlePosts.stream()
+                .map(singlePost -> SingleServicePostResponse.builder()
+                        .id(singlePost.getId())
+                        .serviceName(singlePost.getServiceName())
+                        .price(singlePost.getPrice())
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(),photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .description(singlePost.getAbout())
+                        .vendorAddress(singlePost.getVendorProvider().getAddress())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override

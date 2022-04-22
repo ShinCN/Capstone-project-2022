@@ -112,6 +112,7 @@ public class GuestServiceImpl implements GuestService {
     private GuestResponse convertToResponse(Guest guest) {
 
         GuestResponse guestResponse = new GuestResponse();
+        guestResponse.setId(guest.getId());
         guestResponse.setAddress(guest.getAddress());
         guestResponse.setFullName(guest.getFullName());
         guestResponse.setPhone(guest.getPhone());

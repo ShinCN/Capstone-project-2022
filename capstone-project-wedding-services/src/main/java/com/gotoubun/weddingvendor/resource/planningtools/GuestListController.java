@@ -1,6 +1,8 @@
 package com.gotoubun.weddingvendor.resource.planningtools;
 
 import com.gotoubun.weddingvendor.data.guest.GuestListRequest;
+import com.gotoubun.weddingvendor.data.guest.GuestListResponse;
+import com.gotoubun.weddingvendor.data.guest.GuestResponse;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.security.Principal;
+import java.util.List;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
@@ -43,6 +46,22 @@ public class GuestListController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
+    @GetMapping
+    public ResponseEntity<?> getAllGuestList(Principal principal) {
+        // TODO Auto-generated method stub
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        int role = accountService.getRole(principal.getName());
+        if (role != 3) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        List<GuestListResponse> guestListResponses = (List<GuestListResponse>) guestListService.findAllGuestList(principal.getName());
+        if( guestListResponses.size()==0){
+            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(guestListResponses, HttpStatus.OK);
+    }
     /**
      * Post customer response entity.
      *

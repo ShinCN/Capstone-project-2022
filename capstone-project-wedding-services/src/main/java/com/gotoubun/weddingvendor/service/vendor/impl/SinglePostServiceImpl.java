@@ -48,6 +48,7 @@ public class SinglePostServiceImpl implements SinglePostService {
 
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public SinglePostPagingResponse findAllSinglePost(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -56,8 +57,10 @@ public class SinglePostServiceImpl implements SinglePostService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
         Page<SinglePost> singlePosts = singlePostRepository.findAll(pageable);
+        Page<SinglePost> singlePostAfterFilter = (Page<SinglePost>) singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() != null)
+                .collect(Collectors.toList());
 
-        Collection<SingleServicePostResponse> singleServicePostResponses = singlePosts.stream()
+        Collection<SingleServicePostResponse> singleServicePostResponses = singlePostAfterFilter.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())
@@ -182,8 +185,10 @@ public class SinglePostServiceImpl implements SinglePostService {
 
     @Override
     public void delete(Long id, String username) {
-        SinglePost singlePost= getSinglePostById(id);
-        if ((!singlePost.getVendorProvider().getAccount().getUsername().equals(username))) {
+        SinglePost singlePost = getSinglePostById(id);
+
+        if ((!singlePost.getVendorProvider().getAccount().getUsername().equals(username))
+        ||singlePost.getDiscardedDate() != null) {
             throw new SingleServicePostNotFoundException("Service not found in your account");
         }
         singlePost.setDiscardedDate(getCurrentDate.now());
@@ -196,12 +201,10 @@ public class SinglePostServiceImpl implements SinglePostService {
         VendorProvider vendorProvider = vendorRepository.findByAccount(accountRepository.findByUsername(username));
 
         List<SinglePost> singlePosts = singlePostRepository.findAllByVendorProvider(vendorProvider);
+        List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+                .collect(Collectors.toList());
 
-        if (singlePosts.size() == 0) {
-            throw new SingleServicePostNotFoundException("vendor does not have single post");
-        }
-
-        return singlePosts.stream()
+        return singlePostsAfterFilter.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())
@@ -216,13 +219,14 @@ public class SinglePostServiceImpl implements SinglePostService {
     @Override
     public Collection<SingleServicePostResponse> findAllByCategoriesMyService(Long categoryId, String username) {
         Account account = accountRepository.findByUsername(username);
-        List<SingleServicePostResponse> singleServicePostResponses = new ArrayList<>();
-        List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategoryAndCustomers(singleCategoryRepository.getById(categoryId), account.getCustomer());
 
+        List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategoryAndCustomers(singleCategoryRepository.getById(categoryId), account.getCustomer());
+        List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+                .collect(Collectors.toList());
         if (singlePosts.size() == 0) {
             throw new SingleServicePostNotFoundException("You have not added anything yet");
         }
-        return singlePosts.stream()
+        return singlePostsAfterFilter.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())
@@ -238,11 +242,13 @@ public class SinglePostServiceImpl implements SinglePostService {
     public Collection<SingleServicePostResponse> findAllByCategories(Long categoryId) {
 
         List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategory(singleCategoryRepository.getById(categoryId));
+        List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+                .collect(Collectors.toList());
 
         if (singlePosts.size() == 0) {
             throw new SingleServicePostNotFoundException("category does not have any one registered");
         }
-        return singlePosts.stream()
+        return singlePostsAfterFilter.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())

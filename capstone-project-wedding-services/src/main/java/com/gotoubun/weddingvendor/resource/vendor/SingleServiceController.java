@@ -202,6 +202,9 @@ public class SingleServiceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSingleService(@PathVariable Long id, Principal principal) {
 
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
         boolean status = accountService.getStatus(principal.getName());
         if (status == Boolean.FALSE) {
             throw new DeactivatedException(NO_ACTIVATE);

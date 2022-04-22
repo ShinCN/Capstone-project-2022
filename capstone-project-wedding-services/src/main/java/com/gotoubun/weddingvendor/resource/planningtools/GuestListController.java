@@ -57,7 +57,7 @@ public class GuestListController {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         List<GuestListResponse> guestListResponses = (List<GuestListResponse>) guestListService.findAllGuestList(principal.getName());
-        if( guestListResponses.size()==0){
+        if(guestListResponses.size() == 0){
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }
         return new ResponseEntity<>(guestListResponses, HttpStatus.OK);

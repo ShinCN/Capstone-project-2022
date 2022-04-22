@@ -57,7 +57,8 @@ public class SinglePostServiceImpl implements SinglePostService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
         Page<SinglePost> singlePosts = singlePostRepository.findAll(pageable);
-        Page<SinglePost> singlePostAfterFilter = (Page<SinglePost>) singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() != null)
+        Page<SinglePost> singlePostAfterFilter = (Page<SinglePost>) singlePosts.stream()
+                .filter(singlePost -> singlePost.getDiscardedDate() != null)
                 .collect(Collectors.toList());
 
         Collection<SingleServicePostResponse> singleServicePostResponses = singlePostAfterFilter.stream()
@@ -194,13 +195,33 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setDiscardedDate(getCurrentDate.now());
         singlePostRepository.save(singlePost);
     }
-
     @Override
     public Collection<SingleServicePostResponse> findAllByVendors(String username) {
 
         VendorProvider vendorProvider = vendorRepository.findByAccount(accountRepository.findByUsername(username));
 
         List<SinglePost> singlePosts = singlePostRepository.findAllByVendorProvider(vendorProvider);
+        List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+                .collect(Collectors.toList());
+
+        return singlePostsAfterFilter.stream()
+                .map(singlePost -> SingleServicePostResponse.builder()
+                        .id(singlePost.getId())
+                        .serviceName(singlePost.getServiceName())
+                        .price(singlePost.getPrice())
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .description(singlePost.getAbout())
+                        .vendorAddress(singlePost.getVendorProvider().getAddress())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Collection<SingleServicePostResponse> findAllSinglePost() {
+
+        List<SinglePost> singlePosts = singlePostRepository.findAll();
+
         List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
                 .collect(Collectors.toList());
 

@@ -211,8 +211,7 @@ public class PackagePostServiceImpl implements PackagePostService {
         Page<PackagePost>  packagePostAfterFilter = (Page<PackagePost>) packagePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() != null)
                 .collect(Collectors.toList());
 
-
-        return null;
+        return  packagePostAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
     }
 
     PackagePostResponse convertToResponse(PackagePost packagePost) {

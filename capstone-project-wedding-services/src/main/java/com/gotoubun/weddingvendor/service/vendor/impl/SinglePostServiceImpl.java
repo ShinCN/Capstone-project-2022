@@ -12,10 +12,7 @@ import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
 import com.gotoubun.weddingvendor.service.packagepost.PackagePostService;
 import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -57,11 +54,14 @@ public class SinglePostServiceImpl implements SinglePostService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
         Page<SinglePost> singlePosts = singlePostRepository.findAll(pageable);
-        Page<SinglePost> singlePostAfterFilter = (Page<SinglePost>) singlePosts.stream()
+
+        List<SinglePost> singlePostAfterFilter = singlePosts.stream()
                 .filter(singlePost -> singlePost.getDiscardedDate() != null)
                 .collect(Collectors.toList());
 
-        Collection<SingleServicePostResponse> singleServicePostResponses = singlePostAfterFilter.stream()
+        Page<SinglePost> singlePostPagingAfterFilter = new PageImpl<>(singlePostAfterFilter);
+
+        Collection<SingleServicePostResponse> singleServicePostResponses = singlePostPagingAfterFilter.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())
@@ -73,12 +73,12 @@ public class SinglePostServiceImpl implements SinglePostService {
                 .collect(Collectors.toList());
 
         return SinglePostPagingResponse.builder()
-                .totalPages(singlePosts.getTotalPages())
-                .pageNo(singlePosts.getNumber())
-                .last(singlePosts.isLast())
-                .totalElements(singlePosts.getTotalElements())
+                .totalPages(singlePostPagingAfterFilter.getTotalPages())
+                .pageNo(singlePostPagingAfterFilter.getNumber())
+                .last(singlePostPagingAfterFilter.isLast())
+                .totalElements(singlePostPagingAfterFilter.getTotalElements())
                 .singleServicePostResponses(singleServicePostResponses)
-                .totalElements(singlePosts.getTotalElements())
+                .totalElements(singlePostPagingAfterFilter.getTotalElements())
                 .build();
     }
 
@@ -189,19 +189,20 @@ public class SinglePostServiceImpl implements SinglePostService {
         SinglePost singlePost = getSinglePostById(id);
 
         if ((!singlePost.getVendorProvider().getAccount().getUsername().equals(username))
-        ||singlePost.getDiscardedDate() != null) {
+                || singlePost.getDiscardedDate() != null) {
             throw new SingleServicePostNotFoundException("Service not found in your account");
         }
         singlePost.setDiscardedDate(getCurrentDate.now());
         singlePostRepository.save(singlePost);
     }
+
     @Override
     public Collection<SingleServicePostResponse> findAllByVendors(String username) {
 
         VendorProvider vendorProvider = vendorRepository.findByAccount(accountRepository.findByUsername(username));
 
         List<SinglePost> singlePosts = singlePostRepository.findAllByVendorProvider(vendorProvider);
-        List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+        List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
                 .collect(Collectors.toList());
 
         return singlePostsAfterFilter.stream()
@@ -222,7 +223,7 @@ public class SinglePostServiceImpl implements SinglePostService {
 
         List<SinglePost> singlePosts = singlePostRepository.findAll();
 
-        List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+        List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
                 .collect(Collectors.toList());
 
         return singlePostsAfterFilter.stream()
@@ -242,7 +243,7 @@ public class SinglePostServiceImpl implements SinglePostService {
         Account account = accountRepository.findByUsername(username);
 
         List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategoryAndCustomers(singleCategoryRepository.getById(categoryId), account.getCustomer());
-        List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+        List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
                 .collect(Collectors.toList());
         if (singlePosts.size() == 0) {
             throw new SingleServicePostNotFoundException("You have not added anything yet");
@@ -263,7 +264,7 @@ public class SinglePostServiceImpl implements SinglePostService {
     public Collection<SingleServicePostResponse> findAllByCategories(Long categoryId) {
 
         List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategory(singleCategoryRepository.getById(categoryId));
-        List<SinglePost> singlePostsAfterFilter =singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+        List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
                 .collect(Collectors.toList());
 
         if (singlePosts.size() == 0) {

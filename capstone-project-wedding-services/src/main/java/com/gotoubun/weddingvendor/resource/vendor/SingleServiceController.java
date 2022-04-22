@@ -63,38 +63,36 @@ public class SingleServiceController {
         return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
-//    /**
-//     * Gets all single service.
-//     *
-//     * @param principal the principal
-//     * @param pageNo    the page no
-//     * @param pageSize  the page size
-//     * @param sortBy    the sort by
-//     * @param sortDir   the sort dir
-//     * @return the all single service
-//     */
-//    @GetMapping
-//    public ResponseEntity<SinglePostPagingResponse> getAllSingleService(
-//            Principal principal,
-//            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-//            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-//            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-//            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
-//
-//        return new ResponseEntity<>(singlePostService.findAllSinglePost(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
-//    }
-
+    /**
+     * Gets all single service.
+     *
+     * @param pageNo   the page no
+     * @param pageSize the page size
+     * @param sortBy   the sort by
+     * @param sortDir  the sort dir
+     * @return the all single service
+     */
     @GetMapping
-    public ResponseEntity<?> getAllSingleService() {
+    public ResponseEntity<SinglePostPagingResponse> getAllSingleService(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
 
-        List<SingleServicePostResponse> singleServicePostResponses= (List<SingleServicePostResponse>) singlePostService.findAllSinglePost();
-        if(singleServicePostResponses.size() ==0)
-        {
-            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(singlePostService.findAllSinglePost(), HttpStatus.OK);
+        return new ResponseEntity<>(singlePostService.findAllSinglePost(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
+
+//    @GetMapping
+//    public ResponseEntity<?> getAllSingleService() {
+//
+//        List<SingleServicePostResponse> singleServicePostResponses= (List<SingleServicePostResponse>) singlePostService.findAllSinglePost();
+//        if(singleServicePostResponses.size() ==0)
+//        {
+//            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+//        }
+//
+//        return new ResponseEntity<>(singlePostService.findAllSinglePost(), HttpStatus.OK);
+//    }
 
     /**
      * Post single service response entity.

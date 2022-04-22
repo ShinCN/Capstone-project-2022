@@ -100,7 +100,6 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
         Page<ChecklistTask> checklistTasks = checkListTaskRepository
                 .findByCheckList(getCheckListByCustomer(username), pageable);
 
-
         Collection<CheckListTaskResponse> checkListTaskResponses = checklistTasks.stream()
                 .map(checklistTask -> CheckListTaskResponse.builder()
                         .id(checklistTask.getId())
@@ -120,7 +119,6 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
                 .totalElements(checklistTasks.getTotalElements())
                 .build();
     }
-
 
     public CheckList getCheckListByCustomer(String username) {
         return checkListRepository

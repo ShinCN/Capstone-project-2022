@@ -150,7 +150,8 @@ public class PackagePostServiceImpl implements PackagePostService {
         PackagePost existingServicePack = getPackageServicePostById(id);
 
         //check service in current account
-        if ((!existingServicePack.getKeyOpinionLeader().getAccount().getUsername().equals(username))) {
+        if ( !existingServicePack.getKeyOpinionLeader().getAccount().getUsername().equals(username) ||
+                existingServicePack.getDiscardedDate() != null) {
             throw new ServicePackNotFound("This service pack is not found in your account");
         }
 

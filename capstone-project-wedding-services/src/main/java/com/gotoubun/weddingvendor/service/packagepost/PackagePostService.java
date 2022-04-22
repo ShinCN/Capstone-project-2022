@@ -15,5 +15,6 @@ public interface PackagePostService {
     void deleteSinglePost(Long id,Long singlePostId,String username);
     Collection<SingleServicePostResponse> findByPackagePost(Long packageId);
     void delete(Long id,String username);
-    List<PackagePostResponse> findAllPackPostByFilter( String keyWord, Long packageId, Float price);
+    List<PackagePostResponse> findAllPackagePostByFilter( String keyWord, Long packageId, Float price);
+    List<PackagePostResponse> findAllPackagePost(int pageNo, int pageSize, String sortBy, String sortDir);
 }

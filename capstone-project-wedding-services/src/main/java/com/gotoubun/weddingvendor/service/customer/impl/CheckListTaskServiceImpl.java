@@ -78,7 +78,7 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
         if (!checklistTask.getCheckList().getCustomer().getAccount().getUsername().equals(username)) {
             throw new ResourceNotFoundException("you don't have permission to get access to this check list");
         }
-        checklistTask.setStatus(Boolean.TRUE);
+        checklistTask.setStatus(!checklistTask.isStatus());
         checkListTaskRepository.save(checklistTask);
     }
 

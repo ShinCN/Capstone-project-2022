@@ -170,12 +170,12 @@ public class CheckListTaskController {
     /**
      * Delete check list task response entity.
      *
-     * @param checkListTaskId the check list task id
-     * @param principal       the principal
+     * @param id        the id
+     * @param principal the principal
      * @return the response entity
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCheckListTask(@PathVariable String checkListTaskId, Principal principal) {
+    public ResponseEntity<?> deleteCheckListTask(@PathVariable String id, Principal principal) {
 
         //check login
         if (principal == null)
@@ -186,7 +186,7 @@ public class CheckListTaskController {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
 
-        checkListTaskService.delete(checkListTaskId, principal.getName());
+        checkListTaskService.delete(id, principal.getName());
 
         return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }

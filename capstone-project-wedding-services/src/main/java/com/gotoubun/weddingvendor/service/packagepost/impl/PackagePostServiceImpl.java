@@ -18,6 +18,10 @@ import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
 import com.gotoubun.weddingvendor.service.packagepost.PackagePostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -143,7 +147,6 @@ public class PackagePostServiceImpl implements PackagePostService {
         return packagePostRepository.save(existingServicePack);
     }
 
-
     @Override
     public void delete(Long id, String username) {
 
@@ -186,7 +189,7 @@ public class PackagePostServiceImpl implements PackagePostService {
     }
 
     @Override
-    public List<PackagePostResponse> findAllPackPostByFilter(String keyWord, Long packageId, Float price) {
+    public List<PackagePostResponse> findAllPackagePostByFilter(String keyWord, Long packageId, Float price) {
         Optional<List<PackagePost>> packagePosts = Optional.ofNullable(packagePostRepository.filterPackagePostByServiceName(keyWord));
         List<PackagePost> packagePostsAfterFilter = new ArrayList<>();
         if (packagePosts.isPresent()) {
@@ -194,6 +197,22 @@ public class PackagePostServiceImpl implements PackagePostService {
                     && c.getPackageCategory().getId().equals(packageId)).collect(Collectors.toList());
         }
         return packagePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    @SuppressWarnings(value = "unchecked")
+    public List<PackagePostResponse> findAllPackagePost(int pageNo, int pageSize, String sortBy, String sortDir)  {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+
+        Page<PackagePost> packagePosts = packagePostRepository.findAll(pageable);
+        Page<PackagePost>  packagePostAfterFilter = (Page<PackagePost>) packagePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() != null)
+                .collect(Collectors.toList());
+
+
+        return null;
     }
 
     PackagePostResponse convertToResponse(PackagePost packagePost) {

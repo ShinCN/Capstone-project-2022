@@ -53,7 +53,7 @@ public class ServicePackController {
     public ResponseEntity<?> getAllServicePackByFilter(String keyword,
                                                Long packageId, Float price) {
 
-        List<PackagePostResponse> packagePostResponseList = packagePostService.findAllPackPostByFilter(keyword, packageId, price);
+        List<PackagePostResponse> packagePostResponseList = packagePostService.findAllPackagePostByFilter(keyword, packageId, price);
         if (packagePostResponseList.size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }

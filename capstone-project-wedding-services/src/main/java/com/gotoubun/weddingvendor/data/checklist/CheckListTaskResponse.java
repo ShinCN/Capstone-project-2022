@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class CheckListTaskResponse {
     String id;
+    String name;
     LocalDate dueDate;
     LocalDateTime createdDate;
     boolean status;

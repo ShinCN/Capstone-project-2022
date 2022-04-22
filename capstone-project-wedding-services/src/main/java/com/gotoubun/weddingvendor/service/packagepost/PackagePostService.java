@@ -14,6 +14,6 @@ public interface PackagePostService {
     void updateSinglePost(Long id,Long singlePostId,String username);
     void deleteSinglePost(Long id,Long singlePostId,String username);
     Collection<SingleServicePostResponse> findByPackagePost(Long packageId);
-    void delete(Long id);
-    List<PackagePostResponse> findAll( String keyWord, Long packageId, Float price);
+    void delete(Long id,String username);
+    List<PackagePostResponse> findAllPackPostByFilter( String keyWord, Long packageId, Float price);
 }

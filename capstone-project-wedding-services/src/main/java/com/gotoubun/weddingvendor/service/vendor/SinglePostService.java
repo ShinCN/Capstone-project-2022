@@ -9,7 +9,7 @@ import java.util.Collection;
 public interface SinglePostService {
     void save(SingleServicePostRequest singleServicePostRequest, String username);
     void update(Long id, SingleServicePostRequest singleServicePostRequest, String username);
-    void delete(Long id);
+    void delete(Long id, String username);
     SinglePostPagingResponse findAllSinglePost (int pageNo, int pageSize, String sortBy, String sortDir);
     Collection<SingleServicePostResponse> findAllByVendors(String username);
     Collection<SingleServicePostResponse> findAllByCategories(Long categoryId);

@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,5 +34,6 @@ public class BasePost extends BaseEntity{
 
 	@Column(name="rate")
 	private float rate;
+
 
 }

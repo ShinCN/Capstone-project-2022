@@ -23,21 +23,16 @@ public class PackagePost extends BasePost{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-
 	@ManyToOne
 	@JoinColumn(name = "category_id", nullable = false)
 	private PackageCategory packageCategory;
 
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "kol_id")
 	private KeyOpinionLeader keyOpinionLeader;
-	
 
-	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packagePost", cascade = CascadeType.ALL)
 	private Collection<Feedback> feedbacks;
-
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
@@ -48,15 +43,7 @@ public class PackagePost extends BasePost{
     )
     private Collection<Customer> customers;
 
-	@JsonIgnore
 	@ManyToMany(mappedBy = "packagePosts")
     private Collection<SinglePost> singlePosts;
 
-	@Column(name="created_by")
-	@CreatedBy
-	private String createdBy;
-
-	@Column(name="modified_by")
-	@LastModifiedBy
-	private String modifiedBy;
 }

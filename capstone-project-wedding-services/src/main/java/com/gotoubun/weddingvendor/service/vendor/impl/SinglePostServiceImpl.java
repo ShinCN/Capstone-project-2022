@@ -9,6 +9,7 @@ import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
+import com.gotoubun.weddingvendor.service.packagepost.PackagePostService;
 import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,11 +28,15 @@ import java.util.stream.Collectors;
 public class SinglePostServiceImpl implements SinglePostService {
 
     @Autowired
+    PackagePostService packagePostService;
+    @Autowired
     VendorRepository vendorRepository;
     @Autowired
     AccountRepository accountRepository;
     @Autowired
     SinglePostRepository singlePostRepository;
+    @Autowired
+    PackagePostRepository packagePostRepository;
     @Autowired
     SingleCategoryRepository singleCategoryRepository;
     @Autowired
@@ -57,7 +62,7 @@ public class SinglePostServiceImpl implements SinglePostService {
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())
                         .price(singlePost.getPrice())
-                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(),photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
                         .description(singlePost.getAbout())
                         .vendorAddress(singlePost.getVendorProvider().getAddress())
                         .build())
@@ -176,8 +181,13 @@ public class SinglePostServiceImpl implements SinglePostService {
 
 
     @Override
-    public void delete(Long id) {
-        singlePostRepository.delete(getSinglePostById(id));
+    public void delete(Long id, String username) {
+        SinglePost singlePost= getSinglePostById(id);
+        if ((!singlePost.getVendorProvider().getAccount().getUsername().equals(username))) {
+            throw new SingleServicePostNotFoundException("Service not found in your account");
+        }
+        singlePost.setDiscardedDate(getCurrentDate.now());
+        singlePostRepository.save(singlePost);
     }
 
     @Override
@@ -201,9 +211,7 @@ public class SinglePostServiceImpl implements SinglePostService {
                         .vendorAddress(singlePost.getVendorProvider().getAddress())
                         .build())
                 .collect(Collectors.toList());
-
     }
-
 
     @Override
     public Collection<SingleServicePostResponse> findAllByCategoriesMyService(Long categoryId, String username) {
@@ -244,6 +252,5 @@ public class SinglePostServiceImpl implements SinglePostService {
                         .vendorAddress(singlePost.getVendorProvider().getAddress())
                         .build())
                 .collect(Collectors.toList());
-
     }
 }

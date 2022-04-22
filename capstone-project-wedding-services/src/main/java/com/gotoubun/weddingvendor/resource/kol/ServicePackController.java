@@ -36,9 +36,6 @@ public class ServicePackController {
     private PackagePostService packagePostService;
 
     @Autowired
-    private IPageService<PackagePost> packagePostIPageService;
-
-    @Autowired
     private AccountService accountService;
 
     @Autowired
@@ -53,10 +50,10 @@ public class ServicePackController {
      * @return the all service pack
      */
     @GetMapping
-    public ResponseEntity<?> getAllServicePack(String keyword,
+    public ResponseEntity<?> getAllServicePackByFilter(String keyword,
                                                Long packageId, Float price) {
 
-        List<PackagePostResponse> packagePostResponseList = packagePostService.findAll(keyword, packageId, price);
+        List<PackagePostResponse> packagePostResponseList = packagePostService.findAllPackPostByFilter(keyword, packageId, price);
         if (packagePostResponseList.size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }
@@ -97,7 +94,7 @@ public class ServicePackController {
         //save service pack
         packagePostService.save(packagePostRequest, principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
 
     /**
@@ -133,7 +130,7 @@ public class ServicePackController {
 
         packagePostService.update(id, packagePostRequest, principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 
     /**
@@ -144,7 +141,7 @@ public class ServicePackController {
      * @return the response entity
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteServicePack(@Valid @PathVariable Long id, Principal principal) {
+    public ResponseEntity<?> deleteServicePack( @PathVariable Long id, Principal principal) {
         //check login
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
@@ -158,9 +155,9 @@ public class ServicePackController {
         if (status == Boolean.FALSE) {
             throw new DeactivatedException(NO_ACTIVATE);
         }
-        packagePostService.delete(id);
+        packagePostService.delete(id,principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }
 
     /**
@@ -181,34 +178,6 @@ public class ServicePackController {
         return new ResponseEntity<>(singleServicePostResponses, HttpStatus.OK);
     }
 
-    /**
-     * Gets all service pack by title or description.
-     *
-     * @param pageable   the pageable
-     * @param searchText the search text
-     * @param principal  the principal
-     * @return the all service pack by title or description
-     */
-    @GetMapping("/search/{searchText}")
-    public ResponseEntity<?> getAllServicePackByTitleOrDescription(
-            Pageable pageable, @PathVariable String searchText,
-            Principal principal) {
-        // TODO Auto-generated method stub
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException(LOGIN_REQUIRED);
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 4) {
-            throw new AccountNotHaveAccessException(NO_PERMISSION);
-        }
-        boolean status = accountService.getStatus(principal.getName());
-        if (status == Boolean.FALSE) {
-            throw new DeactivatedException(NO_ACTIVATE);
-        }
-
-        return new ResponseEntity<>(packagePostIPageService.findAll(pageable, searchText), HttpStatus.OK);
-    }
 
     /**
      * Put service pack title response entity.
@@ -238,7 +207,7 @@ public class ServicePackController {
 
         packagePostService.updateSinglePost(id, singlePostId, principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
     }
 
     /**
@@ -269,7 +238,7 @@ public class ServicePackController {
 
         packagePostService.deleteSinglePost(id, singlePostId, principal.getName());
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }
 
 }

@@ -37,10 +37,6 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
     CheckListTaskRepository checkListTaskRepository;
 
     @Autowired
-    CheckListTaskPagingRepository checkListTaskPagingRepository;
-
-
-    @Autowired
     AccountRepository accountRepository;
 
     @Autowired
@@ -108,6 +104,7 @@ public class CheckListTaskServiceImpl implements CheckListTaskService {
         Collection<CheckListTaskResponse> checkListTaskResponses = checklistTasks.stream()
                 .map(checklistTask -> CheckListTaskResponse.builder()
                         .id(checklistTask.getId())
+                        .name(checklistTask.getTaskName())
                         .createdDate(checklistTask.getCreatedDate())
                         .dueDate(checklistTask.getDueDate())
                         .status(checklistTask.isStatus())

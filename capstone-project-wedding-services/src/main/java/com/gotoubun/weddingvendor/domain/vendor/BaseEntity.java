@@ -19,16 +19,16 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
 	@Column(name="created_date")
-	@JsonIgnore
 	private LocalDateTime createdDate;
 
 	@Column(name="modified_date")
-	@JsonIgnore
 	private LocalDateTime modifiedDate;
+
+	@Column(name="discard_date")
+	private LocalDateTime discardedDate;
 	
 	@Column(name="created_by")
 	private String createdBy;
-
 
 	@Column(name="modified_by")
 	private String modifiedBy;

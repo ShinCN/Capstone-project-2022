@@ -206,7 +206,7 @@ public class SingleServiceController {
         if (status == Boolean.FALSE) {
             throw new DeactivatedException(NO_ACTIVATE);
         }
-        singlePostService.delete(id);
+        singlePostService.delete(id,principal.getName());
 
         return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }

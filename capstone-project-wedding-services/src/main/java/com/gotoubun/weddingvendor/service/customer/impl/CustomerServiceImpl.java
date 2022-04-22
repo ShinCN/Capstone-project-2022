@@ -112,7 +112,6 @@ public class CustomerServiceImpl implements CustomerService {
         guest.setBudget(budget);
         customerRepository.save(guest);
 
-
     }
 
     @Override

@@ -9,28 +9,26 @@ import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.domain.vendor.PackageCategory;
 import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
+import com.gotoubun.weddingvendor.domain.vendor.Photo;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.ServicePackAlreadyExistedException;
 import com.gotoubun.weddingvendor.exception.ServicePackNotFound;
 import com.gotoubun.weddingvendor.repository.*;
-import com.gotoubun.weddingvendor.service.IPageService;
+import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
 import com.gotoubun.weddingvendor.service.packagepost.PackagePostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.*;
 
 import java.util.stream.Collectors;
 
 @Service
-public class PackagePostServiceImpl implements PackagePostService, IPageService<PackagePost> {
+public class PackagePostServiceImpl implements PackagePostService {
 
     @Autowired
     SinglePostRepository singlePostRepository;
@@ -43,7 +41,7 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
     @Autowired
     PackagePostRepository packagePostRepository;
     @Autowired
-    public BCryptPasswordEncoder bCryptPasswordEncoder;
+    GetCurrentDate getCurrentDate;
 
     @Override
     public void save(PackagePostRequest request, String username) {
@@ -51,21 +49,18 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
         Account account = accountRepository.findByUsername(username);
         KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(account);
 
-        if(!getPackageCategoryById(request.getPackCategoryId()).isPresent())
-        {
-            throw new ResourceNotFoundException("Package Post does not exist");
-        }
+        PackageCategory packageCategory = getPackageCategoryById(request.getPackCategoryId());
 
         if (checkServiceNameExisted(request.getPackTitle(), keyOpinionLeader.getId())) {
             throw new ServicePackAlreadyExistedException("Service Pack Name " + request.getPackTitle() + " has already existed in your account");
         }
 
         PackagePost packagePost = new PackagePost();
-        List<SinglePost> singlePosts= new ArrayList<>();
+        List<SinglePost> singlePosts = new ArrayList<>();
 
         packagePost.setServiceName(request.getPackTitle());
         packagePost.setAbout(request.getDescription());
-        packagePost.setPackageCategory(packageCategoryRepository.getById(request.getPackCategoryId()));
+        packagePost.setPackageCategory(packageCategory);
         packagePost.setSinglePosts(singlePosts);
         packagePost.setPrice(0.f);
         packagePost.setRate(0);
@@ -76,15 +71,16 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
 
 
     @Override
-    public void updateSinglePost(Long id,Long singlePostId, String username) {
+    public void updateSinglePost(Long id, Long singlePostId, String username) {
 
-        if (getPackageServicePostById(id).isPresent() && (!getPackageServicePostById(id).get().getKeyOpinionLeader().getAccount().getUsername().equals(username))) {
+        PackagePost existingServicePack = getPackageServicePostById(id);
+
+        if (!existingServicePack.getKeyOpinionLeader().getAccount().getUsername().equals(username)) {
             throw new ServicePackNotFound("This service pack is not found in your account");
         }
-        SinglePost singlePost= singlePostRepository.getById(singlePostId);
-        PackagePost existingServicePack = getPackageServicePostById(id).get();
+        SinglePost singlePost = singlePostRepository.getById(singlePostId);
 
-        existingServicePack.setPrice(existingServicePack.getPrice()+singlePost.getPrice());
+        existingServicePack.setPrice(existingServicePack.getPrice() + singlePost.getPrice());
         //add single post references package post
         singlePost.getPackagePosts().add(existingServicePack);
         //add package post references single post
@@ -94,16 +90,17 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
     }
 
     @Override
-    public void deleteSinglePost(Long id,Long singlePostId, String username) {
+    public void deleteSinglePost(Long packagePostId, Long singlePostId, String username) {
 
-        if (getPackageServicePostById(id).isPresent() && (!getPackageServicePostById(id).get().getKeyOpinionLeader().getAccount().getUsername().equals(username))) {
+        PackagePost existingServicePack = getPackageServicePostById(packagePostId);
+
+        if (existingServicePack.getKeyOpinionLeader().getAccount().getUsername().equals(username)) {
             throw new ServicePackNotFound("This service pack is not found in your account");
         }
 
-        SinglePost singlePost= singlePostRepository.getById(singlePostId);
-        PackagePost existingServicePack = getPackageServicePostById(id).get();
+        SinglePost singlePost = singlePostRepository.getById(singlePostId);
 
-        existingServicePack.setPrice(existingServicePack.getPrice()-singlePost.getPrice());
+        existingServicePack.setPrice(existingServicePack.getPrice() - singlePost.getPrice());
         //delete single post references package post
         singlePost.getPackagePosts().remove(existingServicePack);
         //delete package post references single post
@@ -115,18 +112,16 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
     @Override
     public Collection<SingleServicePostResponse> findByPackagePost(Long id) {
 
-        if (!getPackageServicePostById(id).isPresent()) {
-            throw new ServicePackNotFound("This service pack is not found ");
-        }
+        PackagePost existingServicePack = getPackageServicePostById(id);
 
-        List<SinglePost> singlePosts =singlePostRepository.findAllByPackagePosts(packagePostRepository.getById(id));
+        List<SinglePost> singlePosts = singlePostRepository.findAllByPackagePosts(existingServicePack);
 
         return singlePosts.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())
                         .price(singlePost.getPrice())
-                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(),photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
                         .description(singlePost.getAbout())
                         .vendorAddress(singlePost.getVendorProvider().getAddress())
                         .build())
@@ -136,10 +131,10 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
     @Override
     public PackagePost update(Long id, PackagePostRequest request, String username) {
 
-        PackagePost existingServicePack = getPackageServicePostById(id).get();
+        PackagePost existingServicePack = getPackageServicePostById(id);
 
         //check service in current account
-        if (getPackageServicePostById(id).isPresent() && (!getPackageServicePostById(id).get().getKeyOpinionLeader().getAccount().getUsername().equals(username))) {
+        if ((!existingServicePack.getKeyOpinionLeader().getAccount().getUsername().equals(username))) {
             throw new ServicePackNotFound("This service pack is not found in your account");
         }
         existingServicePack.setServiceName(request.getPackTitle());
@@ -150,11 +145,18 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
 
 
     @Override
-    public void delete(Long id) {
-          if(getPackageServicePostById(id).isPresent())
-          {
-              packagePostRepository.delete(getPackageServicePostById(id).get());
-          }
+    public void delete(Long id, String username) {
+
+        PackagePost existingServicePack = getPackageServicePostById(id);
+
+        //check service in current account
+        if ((!existingServicePack.getKeyOpinionLeader().getAccount().getUsername().equals(username))) {
+            throw new ServicePackNotFound("This service pack is not found in your account");
+        }
+
+        existingServicePack.setDiscardedDate(getCurrentDate.now());
+        packagePostRepository.save(existingServicePack);
+
     }
 
     List<PackagePost> findByKolId(Long id) {
@@ -174,48 +176,47 @@ public class PackagePostServiceImpl implements PackagePostService, IPageService<
         return serviceNames.contains(serviceName);
     }
 
-    public Optional<PackagePost> getPackageServicePostById(Long id) {
-        return Optional.ofNullable(packagePostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service does not exist")));
+    public PackagePost getPackageServicePostById(Long id) {
+        return packagePostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service does not exist"));
     }
 
-    public Optional<PackageCategory> getPackageCategoryById(Long id) {
-        return Optional.ofNullable(packageCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service does not exist")));
-    }
-    public Collection<PackagePost> findAllPackagePost() {
-        return (Collection<PackagePost>) packagePostRepository.findAll();
-    }
-
-
-    @Override
-    public Page<PackagePost> findAll(Pageable pageable, String searchText) {
-        return packagePostRepository.findAllPackagePost(pageable, searchText);
+    public PackageCategory getPackageCategoryById(Long id) {
+        return packageCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service does not exist"));
     }
 
     @Override
-    public Page<PackagePost> findAll(Pageable pageable) {
-        return packagePostRepository.findAll(pageable);
+    public List<PackagePostResponse> findAllPackPostByFilter(String keyWord, Long packageId, Float price) {
+        Optional<List<PackagePost>> packagePosts = Optional.ofNullable(packagePostRepository.filterPackagePostByServiceName(keyWord));
+        List<PackagePost> packagePostsAfterFilter = new ArrayList<>();
+        if (packagePosts.isPresent()) {
+            packagePostsAfterFilter = packagePosts.get().stream().filter(c -> c.getPrice().equals(price)
+                    && c.getPackageCategory().getId().equals(packageId)).collect(Collectors.toList());
+        }
+        return packagePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
     }
 
-    @Override
-    public List<PackagePostResponse> findAll(String keyWord, Long packageId, Float price) {
-        List<PackagePost> packagePosts = (List<PackagePost>) packagePostRepository.filterPackagePostByServiceName(keyWord);
-        List<PackagePost> packagePostsAfterFilter = packagePosts.stream().filter(c -> c.getPrice().equals(price)
-                && c.getPackageCategory().getId().equals(packageId)).collect(Collectors.toList());
-        List<PackagePostResponse> packagePostResponses = new ArrayList<>();
-        packagePostsAfterFilter.forEach(c ->
-                packagePostResponses.add(
-                        new PackagePostResponse(
-                                c.getId(),
-                                c.getServiceName(),
-                                c.getRate(),
-                                new ArrayList<>(new ArrayList<>(c.getSinglePosts())
-                                        .get(0).getPhotos())
-                                        .get(0).getUrl(),
-                                new KOLMiniResponse(c.getKeyOpinionLeader().getFullName(), c.getKeyOpinionLeader().getAvatarUrl())
-                        )
-                ));
+    PackagePostResponse convertToResponse(PackagePost packagePost) {
 
-        return packagePostResponses;
+        PackagePostResponse packagePostResponse = new PackagePostResponse();
+        packagePostResponse.setId(packagePost.getId());
+        packagePostResponse.setName(packagePost.getServiceName());
+        packagePostResponse.setRate(packagePost.getRate());
+        packagePostResponse.setPrice(packagePost.getPrice());
+        Collection<SinglePost> singlePosts = packagePost.getSinglePosts();
+        if (singlePosts.size() != 0) {
+            List<Photo> photos = (List<Photo>) new ArrayList<>(singlePosts).get(0).getPhotos();
+            PhotoResponse photoResponse;
+            if (photos.size() == 0) {
+                photoResponse = null;
+            } else {
+                photoResponse = new PhotoResponse(photos.get(0).getId(), photos.get(0).getCaption(), photos.get(0).getUrl());
+            }
+            packagePostResponse.setPhoto(photoResponse);
+        }
+        packagePostResponse.setKolMiniResponse(new KOLMiniResponse(packagePost.getKeyOpinionLeader().getFullName(),
+                packagePost.getKeyOpinionLeader().getAvatarUrl()));
+        return packagePostResponse;
+
     }
 
 }

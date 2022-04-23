@@ -20,7 +20,7 @@ public class Photo extends BaseEntity {
     @Column(name = "url")
     private String url;
 
-    @Column(name = "caption")
+    @Column(name = "caption",columnDefinition="NVARCHAR(255)")
     private String caption;
 
     @ManyToOne(fetch = FetchType.LAZY)

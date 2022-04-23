@@ -32,7 +32,6 @@ public class ChecklistTask {
 	@Column(name="due_date")
 	private LocalDate dueDate;
 
-
 	@Column(name="status")
 	private boolean status;
 	

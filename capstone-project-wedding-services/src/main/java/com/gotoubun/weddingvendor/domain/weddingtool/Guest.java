@@ -22,7 +22,7 @@ public class Guest {
 	@Column(columnDefinition = "nvarchar(255)")
 	private String id;
 	
-	@Column(name="full_name", columnDefinition = "TEXT")
+	@Column(name="full_name", columnDefinition = "NVARCHAR(255)")
 	private String fullName;
 	
 	@Column(name="phone")
@@ -31,7 +31,7 @@ public class Guest {
 	@Column(name="mail")
 	private String mail;
 	
-	@Column(name="address", columnDefinition = "TEXT")
+	@Column(name="address", columnDefinition = "NVARCHAR(255)")
 	private String address;
 	
 	@ManyToOne

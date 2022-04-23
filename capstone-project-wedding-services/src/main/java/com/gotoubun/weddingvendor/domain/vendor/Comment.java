@@ -20,12 +20,8 @@ public class Comment extends BaseEntity{
 
 	//noi dung comment
 	@Nationalized
-	@Column(name="content")
+	@Column(name="content",columnDefinition="NVARCHAR(255)")
 	private String content;
-
-//	//so luot like
-//	@Column(name="likes")
-//	private int likes;
 
 	//1 blog co nhieu comment
 	@ManyToOne(fetch = FetchType.EAGER)

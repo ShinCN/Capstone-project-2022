@@ -28,7 +28,7 @@ public class GuestList {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
-	@Column(name="guest_list_name", columnDefinition = "TEXT")
+	@Column(name="guest_list_name", columnDefinition = "NVARCHAR(255)")
 	private String guestListName;
 	
 	@Column(name="created_date")

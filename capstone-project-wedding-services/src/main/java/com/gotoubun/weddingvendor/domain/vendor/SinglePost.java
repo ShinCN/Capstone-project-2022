@@ -5,6 +5,7 @@ import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.weddingtool.PaymentHistory;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -16,13 +17,14 @@ import java.util.Collection;
 @Builder
 @Entity
 @Table(name = "single_service_post")
+@DynamicUpdate
 public class SinglePost extends BasePost{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "single_service_name")
+	@Column(name = "single_service_name",columnDefinition="NVARCHAR(255)")
 	private String serviceName;
 
 

@@ -32,7 +32,7 @@ public class CheckList {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
-	@Column(name="checklist_name", columnDefinition = "TEXT")
+	@Column(name="checklist_name", columnDefinition = "NVARCHAR(255)")
 	private String checkListName;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="checkList", cascade = CascadeType.ALL)

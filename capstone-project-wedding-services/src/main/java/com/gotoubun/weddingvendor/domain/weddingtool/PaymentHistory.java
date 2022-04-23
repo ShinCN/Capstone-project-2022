@@ -53,7 +53,7 @@ public class PaymentHistory {
     @Column(name="card_type")
     private String cardType;
 
-    @Column(name="order_info", columnDefinition="TEXT")
+    @Column(name="order_info", columnDefinition="NVARCHAR(255)")
     private String orderInfo;
 
     @Column(name="pay_date")

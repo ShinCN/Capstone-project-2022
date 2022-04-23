@@ -48,7 +48,7 @@ public class PackagePostServiceImpl implements PackagePostService {
     GetCurrentDate getCurrentDate;
 
     @Override
-    public void save(PackagePostRequest request, String username) {
+    public PackagePost save(PackagePostRequest request, String username) {
 
         Account account = accountRepository.findByUsername(username);
         KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(account);
@@ -63,6 +63,7 @@ public class PackagePostServiceImpl implements PackagePostService {
         packagePost.setCreatedBy(keyOpinionLeader.getFullName());
 
         packagePostRepository.save(packagePost);
+        return packagePost;
     }
 
     PackagePost mapToEntity(PackagePostRequest packagePostRequest, PackagePost packagePost) {
@@ -268,7 +269,8 @@ public class PackagePostServiceImpl implements PackagePostService {
         return packagePosts.map(posts -> posts.stream().map(this::convertToResponse).collect(Collectors.toList())).orElse(null);
     }
 
-    PackagePostResponse convertToResponse(PackagePost packagePost) {
+    @Override
+    public PackagePostResponse convertToResponse(PackagePost packagePost) {
 
         PackagePostResponse packagePostResponse = new PackagePostResponse();
         packagePostResponse.setId(packagePost.getId());

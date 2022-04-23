@@ -23,7 +23,7 @@ public class PackagePost extends BasePost{
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "category_id", nullable = false)
+	@JoinColumn(name = "category_id")
 	private PackageCategory packageCategory;
 
 	@ManyToOne(fetch = FetchType.LAZY)

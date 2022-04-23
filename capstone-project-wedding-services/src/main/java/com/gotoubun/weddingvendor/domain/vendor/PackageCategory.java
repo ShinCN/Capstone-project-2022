@@ -19,11 +19,10 @@ public class PackageCategory{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="package_name")
+	@Column(name="package_name", columnDefinition = "nvarchar(255)")
 	private String packageName;
 
-	@Length( max = 20000)
-	@Column(name="description")
+	@Column(name="description",columnDefinition = "nvarchar(255)")
 	private String description;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="packageCategory", cascade = CascadeType.ALL)

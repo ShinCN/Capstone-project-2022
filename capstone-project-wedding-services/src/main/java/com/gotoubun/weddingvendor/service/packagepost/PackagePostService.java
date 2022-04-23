@@ -13,7 +13,7 @@ import java.util.List;
  * The interface Package post service.
  */
 public interface PackagePostService {
-    void save(PackagePostRequest packagePostNewRequest, String username);
+    PackagePost save(PackagePostRequest packagePostNewRequest, String username);
 
     void update(Long id, PackagePostRequest packagePostNewRequest, String username);
 
@@ -32,4 +32,6 @@ public interface PackagePostService {
     List<PackagePostResponse> findAllPackagePostByKeyOpinionLeader(String username);
 
     PackagePostPagingResponse findAllPackagePost(int pageNo, int pageSize, String sortBy, String sortDir);
+
+    PackagePostResponse convertToResponse(PackagePost packagePost);
 }

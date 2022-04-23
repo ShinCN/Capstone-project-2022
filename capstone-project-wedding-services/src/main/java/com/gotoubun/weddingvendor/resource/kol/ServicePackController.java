@@ -180,9 +180,11 @@ public class ServicePackController {
         if (errorMap != null) return errorMap;
 
         //save service pack
-        packagePostService.save(packagePostRequest, principal.getName());
+        PackagePost packagePost= packagePostService.save(packagePostRequest, principal.getName());
 
-        return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        PackagePostResponse packagePostResponse = packagePostService.convertToResponse(packagePost);
+
+        return new ResponseEntity<>(packagePostResponse, HttpStatus.CREATED);
     }
 
     /**

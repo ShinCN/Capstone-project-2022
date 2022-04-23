@@ -56,6 +56,10 @@ public class AccountServiceImpl implements AccountService {
         return Optional.ofNullable(accountRepository.findByUsername(username)).orElseThrow(() -> new ResourceNotFoundException("username is not found"));
     }
 
+    public Optional<Account> findByUserNameForFaceBook(String username) {
+        return Optional.ofNullable(accountRepository.findByUsername(username));
+    }
+
     public int getRole(String username) {
         return findByUserName(username).getRole();
     }

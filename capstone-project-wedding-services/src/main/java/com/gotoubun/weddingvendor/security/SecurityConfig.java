@@ -2,6 +2,7 @@ package com.gotoubun.weddingvendor.security;
 
 import com.gotoubun.weddingvendor.service.common.CustomAccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import static com.gotoubun.weddingvendor.security.SecurityConstants.*;
 
 @Configuration
 @EnableWebSecurity
+@EnableOAuth2Sso
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
         jsr250Enabled = true,
@@ -91,6 +93,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PAYMENT_RESULTS_URLS).permitAll()
                 .antMatchers(SWAGGER).permitAll()
                 .antMatchers(HOME_FEEDBACK).permitAll()
+                .antMatchers(FACEBOOK_LOGIN).permitAll()
+                .antMatchers(GOOGLE_LOGIN).permitAll()
 //                .antMatchers(CONTEXT_PATH).permitAll()
                 .anyRequest().authenticated();
 

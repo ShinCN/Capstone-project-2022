@@ -21,6 +21,8 @@ public class SecurityConstants {
     public static final String HEADER_STRING = "Authorization";
     public static final String SWAGGER = "/swagger-resources/**";
     public static final String HOME_FEEDBACK = "/home/feedback";
+    public static final String FACEBOOK_LOGIN = "/facebook-login";
+    public static final String GOOGLE_LOGIN = "/google-login";
 //    public static final String CONTEXT_PATH = "/api/v1/**";
     public static final long EXPIRATION_TIME = 30000_000; //3000 seconds
 }

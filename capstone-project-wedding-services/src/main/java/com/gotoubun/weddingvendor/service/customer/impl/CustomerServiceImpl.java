@@ -63,21 +63,20 @@ public class CustomerServiceImpl implements CustomerService {
         // TODO Auto-generated method stub
         Account account = new Account();
         Customer guest = new Customer();
+        Budget budget = new Budget();
+        List<SingleCategory> singleCategoryList = singleCategoryRepository.findAll();
+
 
         //check username existed
         if (checkUserNameExisted(customerRequest.getEmail())) {
             throw new UsernameAlreadyExistsException("email: " + customerRequest.getEmail() + " already exist");
         }
 
-        Budget budget = new Budget();
-        List<SingleCategory> singleCategoryList = singleCategoryRepository.findAll();
-
-
         //save account
         account.setUsername(customerRequest.getEmail());
         account.setPassword(bCryptPasswordEncoder.encode(customerRequest.getPassword()));
         account.setRole(3);
-        account.setStatus(false);
+        account.setStatus(true);
         account.setCreatedDate(getCurrentDate.now());
         account.setModifiedDate(getCurrentDate.now());
         accountRepository.save(account);
@@ -85,7 +84,6 @@ public class CustomerServiceImpl implements CustomerService {
         if (checkPhoneExisted(customerRequest.getPhone())) {
             throw new PhoneAlreadyExistException("phone: " + customerRequest.getPhone() + " already exist");
         }
-
 
         budget.setCustomer(guest);
         budget.setBudgetCategories(budgetCategoryRepository.findAll());
@@ -97,7 +95,6 @@ public class CustomerServiceImpl implements CustomerService {
             budgetCategory.setBudget(budget);
             budgetCategoryRepository.save(budgetCategory);
         }
-
 
         //save customer
         guest.setAccount(account);

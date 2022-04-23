@@ -59,10 +59,6 @@ public class CustomerController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        boolean status = accountService.getStatus(principal.getName());
-        if (status == Boolean.FALSE) {
-            throw new DeactivatedException(NO_ACTIVATE);
-        }
 
         return new ResponseEntity<>(customerService.load(principal.getName()), HttpStatus.OK);
     }
@@ -87,7 +83,7 @@ public class CustomerController {
         //save
         customerService.save(customerRequest);
 
-        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
     /**
      * Put kol response entity.
@@ -109,10 +105,7 @@ public class CustomerController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-      boolean status = accountService.getStatus(principal.getName());
-        if (status == Boolean.FALSE) {
-            throw new DeactivatedException(NO_ACTIVATE);
-        }
+
         //check valid attributes
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;

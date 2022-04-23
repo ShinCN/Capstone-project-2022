@@ -25,8 +25,6 @@ public class KeyOpinionLeader extends Auditable{
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="keyOpinionLeader", cascade = CascadeType.ALL)
     private Collection<PackagePost> packagePosts;
 
-    @Lob
-    @Nationalized
     @Column(name="description")
     private String description;
 }

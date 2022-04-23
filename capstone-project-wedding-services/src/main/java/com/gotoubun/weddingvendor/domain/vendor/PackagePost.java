@@ -17,9 +17,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 @Entity
 @Table(name = "package_service_post")
 public class PackagePost extends BasePost{
+
 	@Id
-	@Column(name = "package_post_id")
-	@NonNull
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -42,6 +41,7 @@ public class PackagePost extends BasePost{
             inverseJoinColumns = @JoinColumn(name = "customer_id")
     )
     private Collection<Customer> customers;
+
 
 	@ManyToMany(mappedBy = "packagePosts")
     private Collection<SinglePost> singlePosts;

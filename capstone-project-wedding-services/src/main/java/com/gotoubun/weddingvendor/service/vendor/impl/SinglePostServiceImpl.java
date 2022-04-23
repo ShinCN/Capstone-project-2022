@@ -53,15 +53,9 @@ public class SinglePostServiceImpl implements SinglePostService {
         // create Pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        Page<SinglePost> singlePosts = singlePostRepository.findAll(pageable);
+        Page<SinglePost> singlePosts = singlePostRepository.findAllSinglePost(pageable);
 
-        List<SinglePost> singlePostAfterFilter = singlePosts.stream()
-                .filter(singlePost -> singlePost.getDiscardedDate() != null)
-                .collect(Collectors.toList());
-
-        Page<SinglePost> singlePostPagingAfterFilter = new PageImpl<>(singlePostAfterFilter);
-
-        Collection<SingleServicePostResponse> singleServicePostResponses = singlePostPagingAfterFilter.stream()
+        Collection<SingleServicePostResponse> singleServicePostResponses = singlePosts.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
                         .serviceName(singlePost.getServiceName())
@@ -73,12 +67,12 @@ public class SinglePostServiceImpl implements SinglePostService {
                 .collect(Collectors.toList());
 
         return SinglePostPagingResponse.builder()
-                .totalPages(singlePostPagingAfterFilter.getTotalPages())
-                .pageNo(singlePostPagingAfterFilter.getNumber())
-                .last(singlePostPagingAfterFilter.isLast())
-                .totalElements(singlePostPagingAfterFilter.getTotalElements())
+                .totalPages(singlePosts.getTotalPages())
+                .pageNo(singlePosts.getNumber())
+                .last(singlePosts.isLast())
+                .totalElements(singlePosts.getTotalElements())
                 .singleServicePostResponses(singleServicePostResponses)
-                .totalElements(singlePostPagingAfterFilter.getTotalElements())
+                .totalElements(singlePosts.getTotalElements())
                 .build();
     }
 

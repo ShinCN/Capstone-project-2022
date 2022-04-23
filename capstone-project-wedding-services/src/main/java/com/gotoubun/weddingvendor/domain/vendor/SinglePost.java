@@ -19,7 +19,6 @@ import java.util.Collection;
 public class SinglePost extends BasePost{
 
 	@Id
-	@NonNull
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -30,7 +29,6 @@ public class SinglePost extends BasePost{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vendor_id")
 	private VendorProvider vendorProvider;
-
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")

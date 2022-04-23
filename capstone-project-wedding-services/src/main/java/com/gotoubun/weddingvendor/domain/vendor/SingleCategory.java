@@ -18,7 +18,6 @@ import org.hibernate.annotations.Nationalized;
 public class SingleCategory{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	@Column(name="single_category_id")
 	private Long id;
 
 	@Column(name="category_name")

@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.resource.kol;
 
+import com.gotoubun.weddingvendor.data.servicepack.PackagePostPagingResponse;
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostResponse;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
@@ -29,7 +30,7 @@ import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
  * The type Service pack controller.
  */
 @RestController
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/service-pack")
 public class ServicePackController {
     @Autowired
@@ -44,14 +45,71 @@ public class ServicePackController {
     /**
      * Gets all service pack.
      *
+     * @param pageNo   the page no
+     * @param pageSize the page size
+     * @param sortBy   the sort by
+     * @param sortDir  the sort dir
+     * @return the all service pack
+     */
+    @GetMapping
+    public ResponseEntity<?> getAllServicePack(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "rate", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "desc", required = false) String sortDir) {
+
+        PackagePostPagingResponse packagePostPagingResponse = packagePostService.findAllPackagePost(pageNo, pageSize, sortBy, sortDir);
+        if (packagePostPagingResponse.getTotalElements() == 0) {
+            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(packagePostPagingResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/kol")
+    public ResponseEntity<?> getAllServicePackByKeyOpinionLeader(Principal principal) {
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 4) {
+
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
+        }
+        List<PackagePostResponse> packagePostResponseList = packagePostService.findAllPackagePostByKeyOpinionLeader(principal.getName());
+        if (packagePostResponseList.size() == 0) {
+            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(packagePostResponseList, HttpStatus.OK);
+    }
+//
+//    @GetMapping
+//    public ResponseEntity<?> getAllServicePack() {
+//
+//        List<PackagePostResponse> packagePostResponseList = packagePostService.findAllPackagePost();
+//        if (packagePostResponseList.size() == 0) {
+//            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+//        }
+//
+//        return new ResponseEntity<>(packagePostResponseList, HttpStatus.OK);
+//    }
+
+    /**
+     * Gets all service pack.
+     *
      * @param keyword   the keyword
      * @param packageId the package id
      * @param price     the price
      * @return the all service pack
      */
-    @GetMapping
+    @GetMapping("/filter")
     public ResponseEntity<?> getAllServicePackByFilter(String keyword,
-                                               Long packageId, Float price) {
+                                                       Long packageId, Float price) {
 
         List<PackagePostResponse> packagePostResponseList = packagePostService.findAllPackagePostByFilter(keyword, packageId, price);
         if (packagePostResponseList.size() == 0) {
@@ -59,6 +117,36 @@ public class ServicePackController {
         }
 
         return new ResponseEntity<>(packagePostResponseList, HttpStatus.OK);
+    }
+
+    /**
+     * Post service pack response entity.
+     *
+     * @param id        the id
+     * @param principal the principal
+     * @return the response entity
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<PackagePostResponse> getServicePack(@PathVariable Long id, Principal principal) {
+        // TODO Auto-generated method stub
+        //check login
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 4) {
+
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
+        }
+
+        //save service pack
+        PackagePostResponse packagePostResponse = packagePostService.load(id, principal.getName());
+
+        return ResponseEntity.ok(packagePostResponse);
     }
 
     /**
@@ -106,7 +194,7 @@ public class ServicePackController {
      * @param principal          the principal
      * @return the response entity
      */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> putServicePack(@Valid @RequestBody PackagePostRequest packagePostRequest,
                                             @PathVariable Long id,
                                             BindingResult bindingResult,
@@ -140,8 +228,8 @@ public class ServicePackController {
      * @param principal the principal
      * @return the response entity
      */
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteServicePack( @PathVariable Long id, Principal principal) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteServicePack(@PathVariable Long id, Principal principal) {
         //check login
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
@@ -155,7 +243,7 @@ public class ServicePackController {
         if (status == Boolean.FALSE) {
             throw new DeactivatedException(NO_ACTIVATE);
         }
-        packagePostService.delete(id,principal.getName());
+        packagePostService.delete(id, principal.getName());
 
         return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }
@@ -166,11 +254,11 @@ public class ServicePackController {
      * @param id the id
      * @return the all single post by service pack
      */
-    @GetMapping("{id}/single-services")
+    @GetMapping("/{id}/single-services")
     public ResponseEntity<?> getAllSinglePostByServicePack(@PathVariable Long id) {
 
         List<SingleServicePostResponse> singleServicePostResponses =
-                (List<SingleServicePostResponse>) packagePostService.findByPackagePost(id);
+                (List<SingleServicePostResponse>) packagePostService.findAllSingleServiceByPackagePost(id);
         if (singleServicePostResponses.size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }
@@ -187,7 +275,7 @@ public class ServicePackController {
      * @param principal    the principal
      * @return the response entity
      */
-    @PostMapping("{id}/single-service")
+    @PostMapping("/{id}/single-service")
     public ResponseEntity<?> putServicePackSinglePost(@PathVariable Long id,
                                                       Long singlePostId,
                                                       Principal principal) {
@@ -218,10 +306,10 @@ public class ServicePackController {
      * @param principal    the principal
      * @return the response entity
      */
-    @DeleteMapping("{id}/single-service")
+    @DeleteMapping("/{id}/single-service")
     public ResponseEntity<?> deleteServicePackSinglePost(@PathVariable Long id,
                                                          Long singlePostId,
-                                                          Principal principal) {
+                                                         Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)

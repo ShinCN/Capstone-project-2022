@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.service.packagepost;
 
+import com.gotoubun.weddingvendor.data.servicepack.PackagePostPagingResponse;
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostRequest;
 import com.gotoubun.weddingvendor.data.servicepack.PackagePostResponse;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
@@ -8,13 +9,27 @@ import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * The interface Package post service.
+ */
 public interface PackagePostService {
     void save(PackagePostRequest packagePostNewRequest, String username);
-    PackagePost update(Long id, PackagePostRequest packagePostNewRequest, String username);
-    void updateSinglePost(Long id,Long singlePostId,String username);
-    void deleteSinglePost(Long id,Long singlePostId,String username);
-    Collection<SingleServicePostResponse> findByPackagePost(Long packageId);
-    void delete(Long id,String username);
-    List<PackagePostResponse> findAllPackagePostByFilter( String keyWord, Long packageId, Float price);
-    List<PackagePostResponse> findAllPackagePost(int pageNo, int pageSize, String sortBy, String sortDir);
+
+    void update(Long id, PackagePostRequest packagePostNewRequest, String username);
+
+    void delete(Long id, String username);
+
+    void updateSinglePost(Long id, Long singlePostId, String username);
+
+    void deleteSinglePost(Long id, Long singlePostId, String username);
+
+    PackagePostResponse load(Long packageId, String username);
+
+    List<SingleServicePostResponse> findAllSingleServiceByPackagePost(Long packageId);
+
+    List<PackagePostResponse> findAllPackagePostByFilter(String keyWord, Long packageId, Float price);
+
+    List<PackagePostResponse> findAllPackagePostByKeyOpinionLeader(String username);
+
+    PackagePostPagingResponse findAllPackagePost(int pageNo, int pageSize, String sortBy, String sortDir);
 }

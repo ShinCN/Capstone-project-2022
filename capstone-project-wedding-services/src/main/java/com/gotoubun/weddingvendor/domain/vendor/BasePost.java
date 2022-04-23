@@ -24,8 +24,6 @@ public class BasePost extends BaseEntity{
 	@Column(name = "service_name")
 	private String serviceName;
 
-	@Lob
-	@Nationalized
 	@Column(name="about")
 	private String about;
 

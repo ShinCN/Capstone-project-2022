@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.repository;
 
+import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +17,19 @@ import java.util.List;
 
 @Repository
 public interface PackagePostRepository extends JpaRepository<PackagePost, Long> {
-    @Query("FROM PackagePost p WHERE p.serviceName LIKE %:keyWord%")
-    Page<PackagePost> findAllPackagePost(Pageable pageable, @Param("keyWord") String keyWord);
+    @Query("FROM PackagePost p WHERE p.discardedDate IS NULL")
+    Page<PackagePost> findAllPackagePost(Pageable pageable);
+
+    @Query("FROM PackagePost p WHERE p.discardedDate IS NULL")
+    List<PackagePost> findAllPackagePost();
+
+    @Query("FROM PackagePost p WHERE p.discardedDate IS NULL")
+    List<PackagePost> findAllPackagePostByKeyOpinionLeader(KeyOpinionLeader keyOpinionLeader);
 
     @Query("FROM PackagePost p WHERE p.serviceName LIKE %:keyWord%")
     List<PackagePost> filterPackagePostByServiceName(@Param("keyWord") String keyWord);
+
+    Page<PackagePost> findAll(Pageable pageable);
 
     List<PackagePost> findAllBySinglePosts(SinglePost singlePost);
 

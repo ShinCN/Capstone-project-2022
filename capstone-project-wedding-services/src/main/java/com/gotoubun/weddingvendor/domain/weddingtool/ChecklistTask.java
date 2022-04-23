@@ -22,7 +22,7 @@ public class ChecklistTask {
 	@Column(unique=true,columnDefinition="NVARCHAR(255)")
 	private String id;
 	
-	@Column(name="task_name", columnDefinition = "TEXT")
+	@Column(name="task_name", columnDefinition = "NVARCHAR(255)")
 	private String taskName;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

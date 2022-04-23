@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -21,8 +22,7 @@ public class PackageCategory{
 	@Column(name="package_name")
 	private String packageName;
 
-	@Lob
-	@Nationalized
+	@Length( max = 20000)
 	@Column(name="description")
 	private String description;
 	

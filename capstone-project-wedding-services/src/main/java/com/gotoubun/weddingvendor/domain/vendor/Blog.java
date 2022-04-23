@@ -21,12 +21,9 @@ public class Blog extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Nationalized
     @Column(name="title")
     private String title;
 
-    @Lob
-    @Nationalized
     @Column(name="content")
     private String content;
 

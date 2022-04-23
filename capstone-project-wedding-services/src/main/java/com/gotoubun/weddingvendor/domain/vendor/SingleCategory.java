@@ -3,6 +3,7 @@ package com.gotoubun.weddingvendor.domain.vendor;
 import java.util.Collection;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
@@ -23,16 +24,12 @@ public class SingleCategory{
 	@Column(name="category_name")
 	private String categoryName;
 
-	@Lob
-	@Nationalized
 	@Column(name="description")
 	private String description;
 
-	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
 	private Collection<SinglePost> singlePosts;
 
-	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singleCategory", cascade = CascadeType.ALL)
 	private Collection<VendorProvider> vendorProviders;
 }

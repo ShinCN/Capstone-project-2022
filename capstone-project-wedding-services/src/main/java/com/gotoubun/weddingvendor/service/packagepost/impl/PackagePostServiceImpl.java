@@ -143,15 +143,19 @@ public class PackagePostServiceImpl implements PackagePostService {
     }
 
     @Override
-    public List<SingleServicePostResponse> findAllSingleServiceByPackagePost(Long id) {
+    public List<SingleServicePostResponse> findAllSingleServiceByPackagePostAndSingleCategory(Long id,Long categoryId) {
 
         PackagePost existingServicePack = getPackageServicePostById(id);
 
         List<SinglePost> singlePosts = singlePostRepository.findAllByPackagePosts(existingServicePack);
 
-        return singlePosts.stream()
+        List<SinglePost> singlePostsAfterFilter= singlePosts.stream().filter(singlePost -> singlePost.getSingleCategory().getId().equals(categoryId))
+                .collect(Collectors.toList());
+
+        return singlePostsAfterFilter.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
+                        .singleCategoryName(singlePost.getSingleCategory().getCategoryName())
                         .serviceName(singlePost.getServiceName())
                         .price(singlePost.getPrice())
                         .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
@@ -160,6 +164,7 @@ public class PackagePostServiceImpl implements PackagePostService {
                         .build())
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public void update(Long id, PackagePostRequest request, String username) {

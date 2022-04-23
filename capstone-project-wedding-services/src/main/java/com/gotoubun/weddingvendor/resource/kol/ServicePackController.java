@@ -180,7 +180,7 @@ public class ServicePackController {
         if (errorMap != null) return errorMap;
 
         //save service pack
-        PackagePost packagePost= packagePostService.save(packagePostRequest, principal.getName());
+        PackagePost packagePost = packagePostService.save(packagePostRequest, principal.getName());
 
         PackagePostResponse packagePostResponse = packagePostService.convertToResponse(packagePost);
 
@@ -256,11 +256,12 @@ public class ServicePackController {
      * @param id the id
      * @return the all single post by service pack
      */
-    @GetMapping("/{id}/single-services")
-    public ResponseEntity<?> getAllSinglePostByServicePack(@PathVariable Long id) {
+    @GetMapping("/{packagePostId}/single-services")
+    public ResponseEntity<?> getAllSinglePostByServicePack(@PathVariable(name = "packagePostId") Long id,
+                                                           @RequestParam Long categoryId) {
 
         List<SingleServicePostResponse> singleServicePostResponses =
-                (List<SingleServicePostResponse>) packagePostService.findAllSingleServiceByPackagePost(id);
+                packagePostService.findAllSingleServiceByPackagePostAndSingleCategory(id, categoryId);
         if (singleServicePostResponses.size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }

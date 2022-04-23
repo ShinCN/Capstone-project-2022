@@ -1,10 +1,13 @@
 package com.gotoubun.weddingvendor.service.vendor;
 
+import com.gotoubun.weddingvendor.data.Price;
 import com.gotoubun.weddingvendor.data.singleservice.SinglePostPagingResponse;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
+import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface SinglePostService {
     void save(SingleServicePostRequest singleServicePostRequest, String username);
@@ -13,7 +16,11 @@ public interface SinglePostService {
 
     void delete(Long id, String username);
 
+    SingleServicePostResponse load(Long singlePostId);
+
     SinglePostPagingResponse findAllSinglePost(int pageNo, int pageSize, String sortBy, String sortDir);
+
+    Collection<SingleServicePostResponse> filterSingleServiceByPrice(Price price);
 
     Collection<SingleServicePostResponse> findAllSinglePost();
 

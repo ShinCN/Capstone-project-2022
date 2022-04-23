@@ -18,6 +18,8 @@ public class SingleServicePostResponse {
     String serviceName;
     Float price;
     String description;
+    float rate;
     Collection<PhotoResponse> photos;
     String vendorAddress;
+    String singleCategoryName;
 }

@@ -25,7 +25,7 @@ public interface PackagePostService {
 
     PackagePostResponse load(Long packageId, String username);
 
-    List<SingleServicePostResponse> findAllSingleServiceByPackagePost(Long packageId);
+    List<SingleServicePostResponse> findAllSingleServiceByPackagePostAndSingleCategory(Long packageId,Long categoryId);
 
     List<PackagePostResponse> findAllPackagePostByFilter(String keyWord, Long packageId, Float price);
 

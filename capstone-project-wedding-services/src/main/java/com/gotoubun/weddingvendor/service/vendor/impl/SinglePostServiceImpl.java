@@ -1,11 +1,13 @@
 package com.gotoubun.weddingvendor.service.vendor.impl;
 
+import com.gotoubun.weddingvendor.data.Price;
 import com.gotoubun.weddingvendor.data.singleservice.*;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.vendor.Photo;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
+import com.gotoubun.weddingvendor.exception.ServicePackNotFound;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
@@ -74,6 +76,45 @@ public class SinglePostServiceImpl implements SinglePostService {
                 .singleServicePostResponses(singleServicePostResponses)
                 .totalElements(singlePosts.getTotalElements())
                 .build();
+    }
+
+    @Override
+    public List<SingleServicePostResponse> filterSingleServiceByPrice(Price price) {
+        List<SinglePost> singlePosts = new ArrayList<>();
+        short filter = price.asShort();
+        float value = 0;
+        float from = 0;
+        float to = 0;
+
+        if (filter == 0) {
+            value = 10000000;
+            singlePosts = singlePostRepository.filterSingleServiceLessThan(value);
+        }
+        if (filter == 1) {
+            from = 10000000;
+            to=20000000;
+            singlePosts = singlePostRepository.filterSingleServiceBetween(from,to);
+        }
+        if (filter == 2) {
+            from = 20000000;
+            to=30000000;
+            singlePosts = singlePostRepository.filterSingleServiceBetween(from,to);
+        }
+        if (filter == 3) {
+            from = 30000000;
+            to=40000000;
+            singlePosts = singlePostRepository.filterSingleServiceBetween(from,to);
+        }
+        if (filter == 4) {
+            from = 40000000;
+            to=50000000;
+            singlePosts = singlePostRepository.filterSingleServiceBetween(from,to);
+        }
+        if (filter == 5) {
+            value = 50000000;
+            singlePosts = singlePostRepository.filterSingleServiceGreaterThan(value);
+        }
+        return singlePosts.stream().map(this::convertToResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -191,6 +232,32 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
 
     @Override
+    public SingleServicePostResponse load(Long singleId) {
+        return convertToResponse(findById(singleId));
+    }
+
+    SinglePost findById(Long id) {
+        return singlePostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service not found"));
+    }
+
+    SingleServicePostResponse convertToResponse(SinglePost singlePost) {
+        SingleServicePostResponse singleServicePostResponse = new SingleServicePostResponse();
+
+        singleServicePostResponse.setServiceName(singlePost.getServiceName());
+        singleServicePostResponse.setPrice(singlePost.getPrice());
+        singleServicePostResponse.setId(singlePost.getId());
+        singleServicePostResponse.setDescription(singlePost.getAbout());
+        singleServicePostResponse.setRate(singlePost.getRate());
+        singleServicePostResponse.setVendorAddress(singlePost.getVendorProvider().getAddress());
+        singleServicePostResponse.setPhotos(singlePost.getPhotos().stream()
+                .map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()));
+        singleServicePostResponse.setSingleCategoryName(singlePost.getSingleCategory().getCategoryName());
+
+        return singleServicePostResponse;
+    }
+
+
+    @Override
     public Collection<SingleServicePostResponse> findAllByVendors(String username) {
 
         VendorProvider vendorProvider = vendorRepository.findByAccount(accountRepository.findByUsername(username));
@@ -199,16 +266,7 @@ public class SinglePostServiceImpl implements SinglePostService {
         List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
                 .collect(Collectors.toList());
 
-        return singlePostsAfterFilter.stream()
-                .map(singlePost -> SingleServicePostResponse.builder()
-                        .id(singlePost.getId())
-                        .serviceName(singlePost.getServiceName())
-                        .price(singlePost.getPrice())
-                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
-                        .description(singlePost.getAbout())
-                        .vendorAddress(singlePost.getVendorProvider().getAddress())
-                        .build())
-                .collect(Collectors.toList());
+        return singlePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
     }
 
 
@@ -221,15 +279,7 @@ public class SinglePostServiceImpl implements SinglePostService {
                 .collect(Collectors.toList());
 
         return singlePostsAfterFilter.stream()
-                .map(singlePost -> SingleServicePostResponse.builder()
-                        .id(singlePost.getId())
-                        .serviceName(singlePost.getServiceName())
-                        .price(singlePost.getPrice())
-                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
-                        .description(singlePost.getAbout())
-                        .vendorAddress(singlePost.getVendorProvider().getAddress())
-                        .build())
-                .collect(Collectors.toList());
+                .map(this::convertToResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -242,16 +292,7 @@ public class SinglePostServiceImpl implements SinglePostService {
         if (singlePosts.size() == 0) {
             throw new SingleServicePostNotFoundException("You have not added anything yet");
         }
-        return singlePostsAfterFilter.stream()
-                .map(singlePost -> SingleServicePostResponse.builder()
-                        .id(singlePost.getId())
-                        .serviceName(singlePost.getServiceName())
-                        .price(singlePost.getPrice())
-                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
-                        .description(singlePost.getAbout())
-                        .vendorAddress(singlePost.getVendorProvider().getAddress())
-                        .build())
-                .collect(Collectors.toList());
+        return singlePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -264,15 +305,6 @@ public class SinglePostServiceImpl implements SinglePostService {
         if (singlePosts.size() == 0) {
             throw new SingleServicePostNotFoundException("category does not have any one registered");
         }
-        return singlePostsAfterFilter.stream()
-                .map(singlePost -> SingleServicePostResponse.builder()
-                        .id(singlePost.getId())
-                        .serviceName(singlePost.getServiceName())
-                        .price(singlePost.getPrice())
-                        .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
-                        .description(singlePost.getAbout())
-                        .vendorAddress(singlePost.getVendorProvider().getAddress())
-                        .build())
-                .collect(Collectors.toList());
+        return singlePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
     }
 }

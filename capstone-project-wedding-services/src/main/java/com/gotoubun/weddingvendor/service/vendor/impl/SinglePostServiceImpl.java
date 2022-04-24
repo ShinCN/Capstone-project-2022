@@ -218,7 +218,7 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setPrice(singleServicePostRequest.getPrice());
         singlePost.setAbout(singleServicePostRequest.getDescription());
         singlePost.setModifiedDate(getCurrentDate.now());
-        
+
         return singlePost;
     }
     List<Photo> getPhotoBySingleService(SinglePost singlePost)

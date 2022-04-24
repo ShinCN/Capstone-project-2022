@@ -83,8 +83,8 @@ public class KOLServiceImpl implements KOLService {
         keyOpinionLeader.setAccount(account);
         keyOpinionLeader.setEmail(kolRequest.getEmail());
         keyOpinionLeader.setFullName(kolRequest.getFullName());
-        keyOpinionLeader.setPhone(kolRequest.getAddress());
-        keyOpinionLeader.setAddress(kolRequest.getPhone());
+        keyOpinionLeader.setPhone(kolRequest.getPhone());
+        keyOpinionLeader.setAddress(kolRequest.getAddress());
         keyOpinionLeader.setNanoPassword(password);
         keyOpinionLeader.setDescription(kolRequest.getDescription());
         kolRepository.save(keyOpinionLeader);

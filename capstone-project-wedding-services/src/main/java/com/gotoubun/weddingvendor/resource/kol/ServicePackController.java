@@ -258,7 +258,7 @@ public class ServicePackController {
      */
     @GetMapping("/{packagePostId}/single-services")
     public ResponseEntity<?> getAllSinglePostByServicePack(@PathVariable(name = "packagePostId") Long id,
-                                                           @RequestParam Long categoryId) {
+                                                           @RequestParam(required = false) Long categoryId) {
 
         List<SingleServicePostResponse> singleServicePostResponses =
                 packagePostService.findAllSingleServiceByPackagePostAndSingleCategory(id, categoryId);

@@ -69,6 +69,6 @@ public enum Price {
                 return price;
             }
         }
-        throw new IllegalArgumentException("不正なパラメーターです。");
+       return null;
     }
 }

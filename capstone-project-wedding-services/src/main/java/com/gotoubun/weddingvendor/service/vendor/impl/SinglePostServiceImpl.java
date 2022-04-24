@@ -79,42 +79,80 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
 
     @Override
+    public Collection<SingleServicePostResponse> filterSingleService(String scope, Long categoryId, String keyWord) {
+        Price price = Price.of(scope);
+        List<SingleServicePostResponse> filterByPrice = filterSingleServiceByPrice(price);
+        List<SingleServicePostResponse> filterByCategory =  findAllByCategories(categoryId);
+        List<SingleServicePostResponse> filterByKeyWord =filterSingleServiceByKeyword(keyWord);
+
+        List<SingleServicePostResponse> afterFilter= new ArrayList<>();
+        filterByKeyWord.forEach(s1->{
+            filterByCategory.forEach(s2->{
+                filterByPrice.forEach(s3->{
+                    if(s1.getId().equals(s2.getId()) && s2.getId().equals(s3.getId()))
+                    {
+                        afterFilter.add(s1);
+                    }
+                });
+            });
+        });
+
+        return afterFilter;
+    }
+
+    @Override
     public List<SingleServicePostResponse> filterSingleServiceByPrice(Price price) {
         List<SinglePost> singlePosts = new ArrayList<>();
-        short filter = price.asShort();
-        float value = 0;
-        float from = 0;
-        float to = 0;
+        if (price != null) {
+            short filter = price.asShort();
+            float value = 0;
+            float from = 0;
+            float to = 0;
 
-        if (filter == 0) {
-            value = 10000000;
-            singlePosts = singlePostRepository.filterSingleServiceLessThan(value);
+            if (filter == 0) {
+                value = 10000000;
+                singlePosts = singlePostRepository.filterSingleServiceLessThan(value);
+            }
+            if (filter == 1) {
+                from = 10000000;
+                to = 20000000;
+                singlePosts = singlePostRepository.filterSingleServiceBetween(from, to);
+            }
+            if (filter == 2) {
+                from = 20000000;
+                to = 30000000;
+                singlePosts = singlePostRepository.filterSingleServiceBetween(from, to);
+            }
+            if (filter == 3) {
+                from = 30000000;
+                to = 40000000;
+                singlePosts = singlePostRepository.filterSingleServiceBetween(from, to);
+            }
+            if (filter == 4) {
+                from = 40000000;
+                to = 50000000;
+                singlePosts = singlePostRepository.filterSingleServiceBetween(from, to);
+            }
+            if (filter == 5) {
+                value = 50000000;
+                singlePosts = singlePostRepository.filterSingleServiceGreaterThan(value);
+            }
+            return singlePosts.stream().map(this::convertToResponse).collect(Collectors.toList());
+        } else {
+            return (List<SingleServicePostResponse>) findAllSinglePost();
         }
-        if (filter == 1) {
-            from = 10000000;
-            to=20000000;
-            singlePosts = singlePostRepository.filterSingleServiceBetween(from,to);
+
+    }
+
+    public List<SingleServicePostResponse> filterSingleServiceByKeyword(String keyword) {
+
+        if (keyword != null) {
+            return singlePostRepository.filterSingleServiceByTitleOrServiceName(keyword).stream()
+                    .map(this::convertToResponse).collect(Collectors.toList());
+        } else {
+            return (List<SingleServicePostResponse>) findAllSinglePost();
         }
-        if (filter == 2) {
-            from = 20000000;
-            to=30000000;
-            singlePosts = singlePostRepository.filterSingleServiceBetween(from,to);
-        }
-        if (filter == 3) {
-            from = 30000000;
-            to=40000000;
-            singlePosts = singlePostRepository.filterSingleServiceBetween(from,to);
-        }
-        if (filter == 4) {
-            from = 40000000;
-            to=50000000;
-            singlePosts = singlePostRepository.filterSingleServiceBetween(from,to);
-        }
-        if (filter == 5) {
-            value = 50000000;
-            singlePosts = singlePostRepository.filterSingleServiceGreaterThan(value);
-        }
-        return singlePosts.stream().map(this::convertToResponse).collect(Collectors.toList());
+
     }
 
     @Override
@@ -296,15 +334,19 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
 
     @Override
-    public Collection<SingleServicePostResponse> findAllByCategories(Long categoryId) {
+    public List<SingleServicePostResponse> findAllByCategories(Long categoryId) {
+        if (categoryId != null) {
+            List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategory(singleCategoryRepository.getById(categoryId));
+            List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+                    .collect(Collectors.toList());
 
-        List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategory(singleCategoryRepository.getById(categoryId));
-        List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
-                .collect(Collectors.toList());
-
-        if (singlePosts.size() == 0) {
-            throw new SingleServicePostNotFoundException("category does not have any one registered");
+            if (singlePosts.size() == 0) {
+                throw new SingleServicePostNotFoundException("category does not have any one registered");
+            }
+            return singlePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
+        }else {
+            return (List<SingleServicePostResponse>) findAllSinglePost();
         }
-        return singlePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
+
     }
 }

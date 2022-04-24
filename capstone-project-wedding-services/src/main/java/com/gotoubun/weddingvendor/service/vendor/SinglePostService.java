@@ -20,6 +20,8 @@ public interface SinglePostService {
 
     SinglePostPagingResponse findAllSinglePost(int pageNo, int pageSize, String sortBy, String sortDir);
 
+    Collection<SingleServicePostResponse> filterSingleService(String scope,Long categoryId,String keyWord);
+
     Collection<SingleServicePostResponse> filterSingleServiceByPrice(Price price);
 
     Collection<SingleServicePostResponse> findAllSinglePost();

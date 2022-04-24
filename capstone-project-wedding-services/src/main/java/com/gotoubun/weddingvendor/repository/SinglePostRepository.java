@@ -33,6 +33,9 @@ public interface SinglePostRepository  extends JpaRepository<SinglePost, Long> {
     @Query("FROM SinglePost s WHERE s.price < :value")
     List<SinglePost> filterSingleServiceLessThan(@Param("value") Float value);
 
+    @Query("FROM SinglePost s WHERE s.serviceName LIKE %:keyword% or s.about LIKE %:keyword%" )
+    List<SinglePost> filterSingleServiceByTitleOrServiceName(@Param("keyword") String keyword);
+
     @Override
     Optional<SinglePost> findById(Long aLong);
     //    SinglePost findBySinglePostIdentifier(String serviceId);

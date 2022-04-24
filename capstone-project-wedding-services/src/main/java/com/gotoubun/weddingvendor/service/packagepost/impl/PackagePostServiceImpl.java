@@ -19,6 +19,7 @@ import com.gotoubun.weddingvendor.exception.ServicePackNotFound;
 import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
 import com.gotoubun.weddingvendor.service.packagepost.PackagePostService;
+import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.parameters.P;
@@ -142,17 +143,33 @@ public class PackagePostServiceImpl implements PackagePostService {
                 .orElseThrow(() -> new ResourceNotFoundException("Service not found"));
     }
 
+
     @Override
-    public List<SingleServicePostResponse> findAllSingleServiceByPackagePostAndSingleCategory(Long id,Long categoryId) {
+    public List<SingleServicePostResponse> findAllSingleServiceByPackagePostAndSingleCategory(Long id, Long categoryId) {
 
         PackagePost existingServicePack = getPackageServicePostById(id);
 
         List<SinglePost> singlePosts = singlePostRepository.findAllByPackagePosts(existingServicePack);
 
-        List<SinglePost> singlePostsAfterFilter= singlePosts.stream().filter(singlePost -> singlePost.getSingleCategory().getId().equals(categoryId))
-                .collect(Collectors.toList());
+        if (categoryId != null) {
+            List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost ->
+                            singlePost.getSingleCategory().getId().equals(categoryId))
+                    .collect(Collectors.toList());
 
-        return singlePostsAfterFilter.stream()
+            return singlePostsAfterFilter.stream()
+                    .map(singlePost -> SingleServicePostResponse.builder()
+                            .id(singlePost.getId())
+                            .singleCategoryName(singlePost.getSingleCategory().getCategoryName())
+                            .serviceName(singlePost.getServiceName())
+                            .price(singlePost.getPrice())
+                            .photos(singlePost.getPhotos().stream().map(photo -> new PhotoResponse(photo.getId(), photo.getCaption(), photo.getUrl())).collect(Collectors.toList()))
+                            .description(singlePost.getAbout())
+                            .vendorAddress(singlePost.getVendorProvider().getAddress())
+                            .build())
+                    .collect(Collectors.toList());
+        }
+
+        return singlePosts.stream()
                 .map(singlePost -> SingleServicePostResponse.builder()
                         .id(singlePost.getId())
                         .singleCategoryName(singlePost.getSingleCategory().getCategoryName())
@@ -218,6 +235,7 @@ public class PackagePostServiceImpl implements PackagePostService {
     public PackagePost getPackageServicePostById(Long id) {
         return packagePostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service does not exist"));
     }
+
     public SinglePost getSingleServicePostById(Long id) {
         return singlePostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Service does not exist"));
     }

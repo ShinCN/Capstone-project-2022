@@ -84,6 +84,20 @@ public class SingleServiceController {
     }
 
 
+    @GetMapping("/filter")
+    public ResponseEntity<?> filterSingleService(@RequestParam(required = false) String scope,
+                                                 @RequestParam(required = false) Long categoryId,
+                                                 @RequestParam(required = false) String keyword) {
+
+        List<SingleServicePostResponse> singleServicePostResponses= (List<SingleServicePostResponse>) singlePostService.findAllSinglePost();
+        if(singleServicePostResponses.size() ==0)
+        {
+            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(singlePostService.filterSingleService(scope,categoryId,keyword), HttpStatus.OK);
+    }
+
     @GetMapping("/filterPrice")
     public ResponseEntity<?> getAllSingleService(@RequestParam String scope) {
 
@@ -96,6 +110,7 @@ public class SingleServiceController {
 
         return new ResponseEntity<>(singlePostService.filterSingleServiceByPrice(price), HttpStatus.OK);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<SingleServicePostResponse> getSingleService(Principal principal,

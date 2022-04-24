@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.resource.vendor;
 
+import com.gotoubun.weddingvendor.data.Price;
 import com.gotoubun.weddingvendor.data.singleservice.SinglePostPagingResponse;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostRequest;
 import com.gotoubun.weddingvendor.data.singleservice.SingleServicePostResponse;
@@ -48,7 +49,7 @@ public class SingleServiceController {
      * @param principal the principal
      * @return the response entity
      */
-    @PostMapping("{id}")
+    @PostMapping("/customer/{id}")
     public ResponseEntity<?> customerAddSingleService(@PathVariable Long id, Principal principal){
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
@@ -76,23 +77,47 @@ public class SingleServiceController {
     public ResponseEntity<SinglePostPagingResponse> getAllSingleService(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortBy", defaultValue = "price", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
 
         return new ResponseEntity<>(singlePostService.findAllSinglePost(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
-//    @GetMapping
-//    public ResponseEntity<?> getAllSingleService() {
-//
-//        List<SingleServicePostResponse> singleServicePostResponses= (List<SingleServicePostResponse>) singlePostService.findAllSinglePost();
-//        if(singleServicePostResponses.size() ==0)
-//        {
-//            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
-//        }
-//
-//        return new ResponseEntity<>(singlePostService.findAllSinglePost(), HttpStatus.OK);
-//    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> filterSingleService(@RequestParam(required = false) String scope,
+                                                 @RequestParam(required = false) Long categoryId,
+                                                 @RequestParam(required = false) String keyword) {
+
+        List<SingleServicePostResponse> singleServicePostResponses= (List<SingleServicePostResponse>) singlePostService.findAllSinglePost();
+        if(singleServicePostResponses.size() ==0)
+        {
+            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(singlePostService.filterSingleService(scope,categoryId,keyword), HttpStatus.OK);
+    }
+
+    @GetMapping("/filterPrice")
+    public ResponseEntity<?> getAllSingleService(@RequestParam String scope) {
+
+        Price price = Price.of(scope);
+        List<SingleServicePostResponse> singleServicePostResponses= (List<SingleServicePostResponse>) singlePostService.findAllSinglePost();
+        if(singleServicePostResponses.size() ==0)
+        {
+            return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(singlePostService.filterSingleServiceByPrice(price), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SingleServicePostResponse> getSingleService(Principal principal,
+                                                                           @PathVariable Long id) {
+        return  ResponseEntity.ok(singlePostService.load(id));
+    }
+
 
     /**
      * Post single service response entity.

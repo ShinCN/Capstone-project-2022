@@ -5,14 +5,13 @@ import com.gotoubun.weddingvendor.data.customer.CustomerRequestOAuth;
 import com.gotoubun.weddingvendor.data.customer.CustomerResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.Customer;
+import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.domain.weddingtool.Budget;
 import com.gotoubun.weddingvendor.domain.weddingtool.BudgetCategory;
 import com.gotoubun.weddingvendor.domain.weddingtool.CheckList;
-import com.gotoubun.weddingvendor.exception.PhoneAlreadyExistException;
-import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
-import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
+import com.gotoubun.weddingvendor.exception.*;
 import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
 import com.gotoubun.weddingvendor.service.customer.BudgetCategoryService;
@@ -57,6 +56,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private SinglePostRepository singlePostRepository;
+
+    @Autowired
+    private PackagePostRepository packagePostRepository;
 
     @Transactional
     @Override
@@ -161,6 +163,26 @@ public class CustomerServiceImpl implements CustomerService {
         singlePostRepository.save(singlePost.get());
     }
 
+    @Override
+    public void addPackageService(Long id, String username) {
+        Account account = accountRepository.findByUsername(username);
+        Customer customer = findByAccount(account);
+        PackagePost packagePost = packagePostRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Service Pack not found"));
+
+        if (checkServicePostExistedInPackagePost(packagePost, customer)) {
+            throw new ServicePackAlreadyExistedException("This single service has already existed in package service");
+        }
+
+        packagePost.getCustomers().add(customer);
+        customer.getPackagePosts().add(packagePost);
+
+        packagePostRepository.save(packagePost);
+    }
+
+    boolean checkServicePostExistedInPackagePost(PackagePost packagePost, Customer customer) {
+        return customer.getPackagePosts().contains(packagePost);
+    }
 
     @Override
     public void update(CustomerRequest customerRequest, String username) {

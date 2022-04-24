@@ -20,6 +20,7 @@ public class VendorProviderResponse {
     String address;
     String company;
     Long categoryId;
+    boolean status ;
 
 
 }

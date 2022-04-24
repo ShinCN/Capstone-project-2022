@@ -23,6 +23,7 @@ public class KOLResponse {
     String address;
     String password;
     String description;
+    boolean status;
 
 
 }

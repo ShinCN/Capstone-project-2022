@@ -7,12 +7,20 @@ import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.Customer;
 
 public interface CustomerService {
-	void save(CustomerRequest customerRequest);
+    void save(CustomerRequest customerRequest);
+
     void oauthSave(CustomerRequestOAuth customerRequest);
+
     void update(CustomerRequest kolRequest, String username);
+
     CustomerResponse load(String username);
-	Customer findByAccount(Account account);
-    void addService(Long id,  String username);
+
+    Customer findByAccount(Account account);
+
+    void addService(Long id, String username);
+
     void deleteService(Long id, String username);
+
+    void addPackageService(Long id, String username);
 
 }

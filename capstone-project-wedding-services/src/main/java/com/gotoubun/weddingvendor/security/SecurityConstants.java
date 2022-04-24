@@ -19,5 +19,8 @@ public class SecurityConstants {
     public static final String SECRET = "SecretKeyToGenJWTs";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
+    public static final String HOME_FEEDBACK = "/home/feedback";
+    public static final String FACEBOOK_LOGIN = "/facebook-login";
+    public static final String GOOGLE_LOGIN = "/google-login";
     public static final long EXPIRATION_TIME = 30000_000; //3000 seconds
 }

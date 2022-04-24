@@ -32,7 +32,7 @@ public class MyServiceController {
     @Autowired
     private SinglePostService singlePostService;
 
-    @DeleteMapping
+    @DeleteMapping("{serviceId}")
     public ResponseEntity<?> deleteSingleService(@PathVariable Long serviceId, Principal principal){
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);

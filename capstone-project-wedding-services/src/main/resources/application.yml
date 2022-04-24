@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: capstone-project-wedding-services
+security:
+  oauth2:
+    client:
+      clientId: 523649525823680
+      clientSecret: aa583384a81fe48eef2848da52fcd574
+      accessTokenUri: https://graph.facebook.com/oauth/access_token
+      userAuthorizationUri: https://www.facebook.com/dialog/oauth
+      tokenName: oauth_token
+      authenticationScheme: query
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://graph.facebook.com/me

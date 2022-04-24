@@ -86,7 +86,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updatePassword(AccountPasswordRequest password, String username) {
         Account account = accountRepository.findByUsername(username);
-        boolean isPasswordMatch = bCryptPasswordEncoder.matches(password.getOldPassword(), account.getPassword());
+        boolean isPasswordMatch = bCryptPasswordEncoder.matches(password.getOldPassword(),
+                account.getPassword());
         if (!isPasswordMatch) {
             throw new PasswordNotMatchException("Password does not match");
         }

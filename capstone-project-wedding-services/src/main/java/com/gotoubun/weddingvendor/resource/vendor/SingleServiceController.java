@@ -224,7 +224,7 @@ public class SingleServiceController {
         //update service
         singlePostService.update(id, request, principal.getName());
 
-        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+        return new ResponseEntity<>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.OK);
     }
 
 

@@ -7,14 +7,16 @@ import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.vendor.Photo;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
-import com.gotoubun.weddingvendor.exception.ServicePackNotFound;
 import com.gotoubun.weddingvendor.exception.SingleServicePostNotFoundException;
 import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
 import com.gotoubun.weddingvendor.service.packagepost.PackagePostService;
 import com.gotoubun.weddingvendor.service.vendor.SinglePostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -215,16 +217,10 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setPrice(singleServicePostRequest.getPrice());
         singlePost.setAbout(singleServicePostRequest.getDescription());
         singlePost.setModifiedDate(getCurrentDate.now());
-        List<Photo> photos= getPhotoBySingleService(singlePost);
-        photos.forEach(p->photoRepository.delete(p));
+//        Optional<List<Photo>> photos= Optional.ofNullable(getPhotoBySingleService(singlePost));
+//        photos.ifPresent(photoList -> photoList.forEach(p -> photoRepository.delete(p)));
         List<Photo> photosRequest = singleServicePostRequest.getPhotos().stream().map(this::mapToEntity)
                 .collect(Collectors.toList());
-//        List<Photo> photos = (List<Photo>) singlePost.getPhotos();
-//        if (photos == null) {
-//            photos = new ArrayList<>(photos1);
-//        } else {
-//            photos.addAll(photos1);
-//        }
         singlePost.setPhotos(photosRequest);
         singlePost.getPhotos().forEach(c -> {
             c.setSinglePost(singlePost);
@@ -233,7 +229,10 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
     List<Photo> getPhotoBySingleService(SinglePost singlePost)
     {
-        return photoRepository.findAllBySinglePost(singlePost);
+        List<Photo> photos = photoRepository.findAllBySinglePost(singlePost);
+        if(photos.size() != 0) return photos;
+        return null;
+
     }
 
     private Photo mapToEntity(PhotoRequest photoRequest) {

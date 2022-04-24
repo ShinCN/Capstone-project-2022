@@ -23,7 +23,7 @@ public class Photo extends BaseEntity {
     @Column(name = "caption",columnDefinition="NVARCHAR(255)")
     private String caption;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinColumn(name = "single_post_id")
     private SinglePost singlePost;
 

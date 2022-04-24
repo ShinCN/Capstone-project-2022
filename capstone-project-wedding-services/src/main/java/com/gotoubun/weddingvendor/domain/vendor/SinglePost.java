@@ -36,7 +36,7 @@ public class SinglePost extends BasePost{
 	@JoinColumn(name = "category_id")
 	private SingleCategory singleCategory;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singlePost", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singlePost",cascade = CascadeType.ALL)
 	private Collection<Photo> photos;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy ="singlePost", cascade = CascadeType.ALL)

@@ -1,16 +1,13 @@
 package com.gotoubun.weddingvendor.service.vendor.impl;
 
-import com.gotoubun.weddingvendor.data.kol.KOLRequest;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderRequest;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
-import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.exception.PhoneAlreadyExistException;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
 import com.gotoubun.weddingvendor.exception.UsernameAlreadyExistsException;
-import com.gotoubun.weddingvendor.exception.VendorNotFoundException;
 import com.gotoubun.weddingvendor.repository.AccountRepository;
 import com.gotoubun.weddingvendor.repository.SinglePostRepository;
 import com.gotoubun.weddingvendor.repository.VendorRepository;
@@ -21,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static com.gotoubun.weddingvendor.service.common.GenerateRandomPasswordService.GenerateRandomPassword.generateRandomString;
 
@@ -62,7 +57,7 @@ public class VendorServiceImpl implements VendorService {
         account.setRole(2);
         accountRepository.save(account);
 
-        if (checkUserNameExisted(vendor.getUsername())) {
+        if (checkPhoneExisted(vendor.getPhone())) {
             throw new PhoneAlreadyExistException("Phone number already existed");
         }
         //save vendor

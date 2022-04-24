@@ -4,14 +4,16 @@ import com.gotoubun.weddingvendor.data.payment.PaymentHistoryResponse;
 import com.gotoubun.weddingvendor.data.payment.ReceiptDetailResponse;
 import com.gotoubun.weddingvendor.data.payment.SinglePostPaymentResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
+import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
+import com.gotoubun.weddingvendor.domain.weddingtool.Budget;
+import com.gotoubun.weddingvendor.domain.weddingtool.BudgetCategory;
 import com.gotoubun.weddingvendor.domain.weddingtool.PaymentHistory;
 import com.gotoubun.weddingvendor.exception.EmptyPaymentHistoryException;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
-import com.gotoubun.weddingvendor.repository.AccountRepository;
-import com.gotoubun.weddingvendor.repository.PaymentHistoryRepository;
-import com.gotoubun.weddingvendor.repository.SinglePostRepository;
+import com.gotoubun.weddingvendor.repository.*;
 import com.gotoubun.weddingvendor.service.common.GetCurrentDate;
+import com.gotoubun.weddingvendor.service.customer.CustomerService;
 import com.gotoubun.weddingvendor.service.payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,6 +40,14 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private BudgetCategoryRepository budgetCategoryRepository;
+
+    @Autowired
+    private BudgetRepository budgetRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Override
     public void save(String amount, String txnRef, String bankCode, String bankTransNo,
@@ -47,19 +57,32 @@ public class PaymentServiceImpl implements PaymentService {
 
         try {
             Account account = accountRepository.findByUsername(username);
-
+            Customer customer = customerRepository.findByAccount(account);
             if (account.getUsername().equals("")) {
                 throw new UsernameNotFoundException("This user does not exist");
             }
 
             Collection<SinglePost> singlePosts = new ArrayList<>();
             PaymentHistory paymentHistory = new PaymentHistory();
+            Budget budget = budgetRepository.findByCustomerAccount(account);
+            Collection<BudgetCategory> budgetCategories = budgetCategoryRepository.findAllByBudget_Customer_Account(account);
             serviceId.forEach(c -> {
                 Long id = Long.valueOf(c.toString().trim());
                 Optional<SinglePost> singlePost  = singlePostRepository.findById(id);
                 singlePost.get().getPaymentHistories().add(paymentHistory);
                 singlePosts.add(singlePost.get());
+                budgetCategories.forEach(d -> {
+                    if(d.getCategoryName().equalsIgnoreCase(singlePost.get().getSingleCategory().getCategoryName())){
+                        float newPrice = d.getCost() + singlePost.get().getPrice();
+                        d.setCost((long) newPrice);
+                    }
+                });
             });
+
+            budget.setBudgetCategories(budgetCategories);
+            customer.setBudget(budget);
+            budgetRepository.save(budget);
+            customerRepository.save(customer);
 
             paymentHistory.setAmount(Float.parseFloat(amount));
             paymentHistory.setTmnCode(tmnCode);
@@ -102,8 +125,8 @@ public class PaymentServiceImpl implements PaymentService {
                     .id(c.getId())
                     .createdDate(c.getPayDate())
                     .posts(c.getSinglePosts().stream().map(d ->
-                     new SinglePostPaymentResponse(d.getId(), d.getServiceName(),
-                             d.getPrice())).collect(Collectors.toList()))
+                            new SinglePostPaymentResponse(d.getId(), d.getServiceName(),
+                                    d.getPrice())).collect(Collectors.toList()))
                     .build();
             paymentHistoryResponses.add(paymentHistoryResponse);
         });
@@ -134,5 +157,5 @@ public class PaymentServiceImpl implements PaymentService {
                 new SinglePostPaymentResponse(d.getId(), d.getServiceName(),
                         d.getPrice())).collect(Collectors.toList()));
         return  receiptDetailResponse;
-        }
+    }
 }

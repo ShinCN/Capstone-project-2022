@@ -32,7 +32,7 @@ public class BudgetCategoryServiceImpl implements BudgetCategoryService {
     public void save(BudgetCategoryRequest budgetCategoryRequest, String username) {
         Account account = accountRepository.findByUsername(username);
 
-        if (checkBudgetCategoryNameExisted(budgetCategoryRequest.getCategoryName())) {
+        if (!checkBudgetCategoryNameExisted(budgetCategoryRequest.getCategoryName())) {
             throw new BudgetCategoryExisted("This category name: " + budgetCategoryRequest.getCategoryName() + " already existed in your list");
         }
 
@@ -60,10 +60,11 @@ public class BudgetCategoryServiceImpl implements BudgetCategoryService {
 
     @Override
     public Collection<BudgetResponse> findAllByBudget_Customer_Account(String username) {
-        List<BudgetCategory> budgetCategories = budgetCategoryRepository.findAllByBudget_Customer_Account(username);
+        Account account = accountRepository.findByUsername(username);
+        List<BudgetCategory> budgetCategories = budgetCategoryRepository.findAllByBudget_Customer_Account(account);
         List<BudgetResponse> budgetResponses = new ArrayList<>();
         budgetCategories.forEach(c -> {
-            BudgetResponse budgetResponse = BudgetResponse.builder()
+                    BudgetResponse budgetResponse = BudgetResponse.builder()
                             .id(c.getId())
                             .categoryName(c.getCategoryName())
                             .cost(c.getCost())

@@ -170,10 +170,6 @@ public class CustomerServiceImpl implements CustomerService {
         PackagePost packagePost = packagePostRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Service Pack not found"));
 
-        if (checkServicePostExistedInPackagePost(packagePost, customer)) {
-            throw new ServicePackAlreadyExistedException("This single service has already existed in package service");
-        }
-
         packagePost.getCustomers().add(customer);
         customer.getPackagePosts().add(packagePost);
 

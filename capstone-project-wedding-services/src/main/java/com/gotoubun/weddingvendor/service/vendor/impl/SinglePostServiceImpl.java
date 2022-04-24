@@ -79,13 +79,14 @@ public class SinglePostServiceImpl implements SinglePostService {
     }
 
     @Override
-    public Collection<SingleServicePostResponse> filterSingleService(String scope, Long categoryId, String keyWord) {
+    public Collection<SingleServicePostResponse> filterSingleService(String scope, Long categoryId, String keyword) {
         Price price = Price.of(scope);
         List<SingleServicePostResponse> filterByPrice = filterSingleServiceByPrice(price);
         List<SingleServicePostResponse> filterByCategory =  findAllByCategories(categoryId);
-        List<SingleServicePostResponse> filterByKeyWord =filterSingleServiceByKeyword(keyWord);
+        List<SingleServicePostResponse> filterByKeyWord =filterSingleServiceByKeyword(keyword);
 
         List<SingleServicePostResponse> afterFilter= new ArrayList<>();
+
         filterByKeyWord.forEach(s1->{
             filterByCategory.forEach(s2->{
                 filterByPrice.forEach(s3->{

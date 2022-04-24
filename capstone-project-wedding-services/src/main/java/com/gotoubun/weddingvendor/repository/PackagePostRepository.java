@@ -23,8 +23,8 @@ public interface PackagePostRepository extends JpaRepository<PackagePost, Long> 
     @Query("FROM PackagePost p WHERE p.discardedDate IS NULL")
     List<PackagePost> findAllPackagePost();
 
-    @Query("FROM PackagePost p WHERE p.discardedDate IS NULL")
-    List<PackagePost> findAllPackagePostByKeyOpinionLeader(KeyOpinionLeader keyOpinionLeader);
+    @Query("FROM PackagePost p WHERE p.discardedDate IS NULL and p.keyOpinionLeader.id = :kolId")
+    List<PackagePost> findAllPackagePostByKeyOpinionLeader(Long kolId);
 
     @Query("FROM PackagePost p WHERE p.serviceName LIKE %:keyWord%")
     List<PackagePost> filterPackagePostByServiceName(@Param("keyWord") String keyWord);

@@ -258,8 +258,11 @@ public class PackagePostServiceImpl implements PackagePostService {
 
     @Override
     public List<PackagePostResponse> findAllPackagePostByKeyOpinionLeader(String username) {
+
         KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(accountRepository.findByUsername(username));
-        Optional<List<PackagePost>> packagePosts = Optional.ofNullable(packagePostRepository.findAllPackagePostByKeyOpinionLeader(keyOpinionLeader));
+        Optional<List<PackagePost>> packagePosts = Optional.ofNullable(packagePostRepository
+                .findAllPackagePostByKeyOpinionLeader(keyOpinionLeader.getId()));
+
         return packagePosts.map(posts -> posts.stream().map(this::convertToResponse).collect(Collectors.toList())).orElse(null);
     }
 

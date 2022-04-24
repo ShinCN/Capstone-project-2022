@@ -113,6 +113,7 @@ public class KOLServiceImpl implements KOLService {
 
     private KeyOpinionLeader mapToEntity(KOLRequest kolRequest, KeyOpinionLeader keyOpinionLeader) {
         keyOpinionLeader.setFullName(kolRequest.getFullName());
+        keyOpinionLeader.setPhone(kolRequest.getPhone());
         keyOpinionLeader.setAddress(kolRequest.getAddress());
         keyOpinionLeader.setDescription(kolRequest.getDescription());
         keyOpinionLeader.getAccount().setModifiedDate(getCurrentDate.now());

@@ -19,6 +19,7 @@ public class VendorProviderResponse {
     String phone;
     String address;
     String company;
+    Long categoryId;
 
 
 }

@@ -215,18 +215,25 @@ public class SinglePostServiceImpl implements SinglePostService {
         singlePost.setPrice(singleServicePostRequest.getPrice());
         singlePost.setAbout(singleServicePostRequest.getDescription());
         singlePost.setModifiedDate(getCurrentDate.now());
-        List<Photo> photos1 = singleServicePostRequest.getPhotos().stream().map(this::mapToEntity).collect(Collectors.toList());
-        List<Photo> photos = (List<Photo>) singlePost.getPhotos();
-        if (photos == null) {
-            photos = new ArrayList<>(photos1);
-        } else {
-            photos.addAll(photos1);
-        }
-        singlePost.setPhotos(photos);
+        List<Photo> photos= getPhotoBySingleService(singlePost);
+        photos.forEach(p->photoRepository.delete(p));
+        List<Photo> photosRequest = singleServicePostRequest.getPhotos().stream().map(this::mapToEntity)
+                .collect(Collectors.toList());
+//        List<Photo> photos = (List<Photo>) singlePost.getPhotos();
+//        if (photos == null) {
+//            photos = new ArrayList<>(photos1);
+//        } else {
+//            photos.addAll(photos1);
+//        }
+        singlePost.setPhotos(photosRequest);
         singlePost.getPhotos().forEach(c -> {
             c.setSinglePost(singlePost);
         });
         return singlePost;
+    }
+    List<Photo> getPhotoBySingleService(SinglePost singlePost)
+    {
+        return photoRepository.findAllBySinglePost(singlePost);
     }
 
     private Photo mapToEntity(PhotoRequest photoRequest) {

@@ -44,6 +44,7 @@ public class KOLServiceImpl implements KOLService {
         return KOLResponse.builder()
                 .id(keyOpinionLeader.getId())
                 .username(keyOpinionLeader.getEmail())
+                .phone(keyOpinionLeader.getPhone())
                 .fullName(keyOpinionLeader.getFullName())
                 .description(keyOpinionLeader.getDescription())
                 .address(keyOpinionLeader.getAddress())

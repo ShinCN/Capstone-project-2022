@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface FeedBackRepository extends JpaRepository<Feedback, Long> {
     List<Feedback> findAllBySinglePostId(Long id);
+    List<Feedback> findAllBySinglePostRate(Float rate);
 }

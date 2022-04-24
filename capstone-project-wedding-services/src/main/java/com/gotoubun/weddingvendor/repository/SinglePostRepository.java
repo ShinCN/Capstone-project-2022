@@ -23,6 +23,7 @@ public interface SinglePostRepository  extends JpaRepository<SinglePost, Long> {
     List<SinglePost> findAllBySingleCategory(SingleCategory singleCategory);
     List<SinglePost> findAllByPackagePosts(PackagePost packagePost);
     List<SinglePost> findAllBySingleCategoryAndCustomers(SingleCategory singleCategory, Customer customer);
+    List<SinglePost> findAllByCustomers(Customer customer);
 
     @Query("FROM SinglePost s WHERE s.price BETWEEN :from AND :to")
     List<SinglePost> filterSingleServiceBetween(@Param("from") Float from , @Param("to") Float to);

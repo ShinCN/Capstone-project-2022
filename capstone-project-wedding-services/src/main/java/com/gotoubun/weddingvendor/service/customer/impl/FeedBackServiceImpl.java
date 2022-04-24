@@ -1,6 +1,7 @@
 package com.gotoubun.weddingvendor.service.customer.impl;
 
 import com.gotoubun.weddingvendor.data.feedback.FeedBackRequest;
+import com.gotoubun.weddingvendor.data.feedback.FeedBackResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.vendor.Feedback;
 import com.gotoubun.weddingvendor.domain.weddingtool.PaymentHistory;
@@ -14,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FeedBackServiceImpl implements FeedBackService {
@@ -63,5 +67,20 @@ public class FeedBackServiceImpl implements FeedBackService {
             }
         });
         feedBackRepository.save(feedback);
+    }
+
+    @Override
+    public Collection<FeedBackResponse> findGoodRateFeedBack() {
+        Collection<Feedback> feedbacks = feedBackRepository.findAll();
+        Collection<FeedBackResponse> feedBackResponses = new ArrayList<>();
+        feedbacks.forEach(c -> {
+            FeedBackResponse feedBackResponse = FeedBackResponse.builder()
+                    .id(c.getId())
+                    .content(c.getContent())
+                    .createdBy(c.getCreatedBy())
+                    .build();
+            feedBackResponses.add(feedBackResponse);
+        });
+        return feedBackResponses.stream().limit(5L).collect(Collectors.toList());
     }
 }

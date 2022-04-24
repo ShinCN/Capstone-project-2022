@@ -1,6 +1,7 @@
 package com.gotoubun.weddingvendor.service.customer.impl;
 
 import com.gotoubun.weddingvendor.data.customer.CustomerRequest;
+import com.gotoubun.weddingvendor.data.customer.CustomerRequestOAuth;
 import com.gotoubun.weddingvendor.data.customer.CustomerResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.Customer;
@@ -63,9 +64,6 @@ public class CustomerServiceImpl implements CustomerService {
         // TODO Auto-generated method stub
         Account account = new Account();
         Customer guest = new Customer();
-        Budget budget = new Budget();
-        List<SingleCategory> singleCategoryList = singleCategoryRepository.findAll();
-
 
         //check username existed
         if (checkUserNameExisted(customerRequest.getEmail())) {
@@ -85,30 +83,50 @@ public class CustomerServiceImpl implements CustomerService {
             throw new PhoneAlreadyExistException("phone: " + customerRequest.getPhone() + " already exist");
         }
 
-        budget.setCustomer(guest);
-        budget.setBudgetCategories(budgetCategoryRepository.findAll());
-        budgetRepository.save(budget);
-        for(SingleCategory s : singleCategoryList){
-            BudgetCategory budgetCategory = new BudgetCategory();
-            budgetCategory.setCategoryName(s.getCategoryName());
-            budgetCategory.setCost(0L);
-            budgetCategory.setBudget(budget);
-            budgetCategoryRepository.save(budgetCategory);
-        }
-
         //save customer
         guest.setAccount(account);
         guest.setEmail(customerRequest.getEmail());
         guest.setFullName(customerRequest.getFullName());
-        guest.setEmail(customerRequest.getEmail());
         guest.setPhone(customerRequest.getPhone());
         guest.setAddress(customerRequest.getAddress());
         guest.setPlanningDate(LocalDate.parse(customerRequest.getWeddingDate(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
         guest.setCheckList(createCheckList(guest));
         guest.setPlanningBudget(0L);
-        guest.setBudget(budget);
+        guest.setBudget(createBudget(guest));
         customerRepository.save(guest);
 
+    }
+
+    @Override
+    public void oauthSave(CustomerRequestOAuth customerRequest) {
+        // TODO Auto-generated method stub
+        Account account = new Account();
+        Customer fbGuest = new Customer();
+
+        //check username existed
+        if (checkUserNameExisted(customerRequest.getEmail())) {
+            throw new UsernameAlreadyExistsException("email: " + customerRequest.getEmail() + " already exist");
+        }
+
+
+        //save account
+        account.setUsername(customerRequest.getEmail());
+        account.setPassword(bCryptPasswordEncoder.encode(customerRequest.getPassword()));
+        account.setRole(3);
+        account.setStatus(true);
+        account.setCreatedDate(getCurrentDate.now());
+        account.setModifiedDate(getCurrentDate.now());
+        accountRepository.save(account);
+        //save customer
+
+        fbGuest.setAccount(account);
+        fbGuest.setEmail(customerRequest.getEmail());
+        fbGuest.setFullName(customerRequest.getFullName());
+        fbGuest.setCheckList(createCheckList(fbGuest));
+        fbGuest.setBudget(createBudget(fbGuest));
+        fbGuest.setPlanningBudget(0L);
+
+        customerRepository.save(fbGuest);
     }
 
     @Override
@@ -178,6 +196,22 @@ public class CustomerServiceImpl implements CustomerService {
         checkList.setModifiedDate(customer.getAccount().getModifiedDate());
         checkList.setCustomer(customer);
         return  checkList;
+    }
+
+    Budget createBudget(Customer customer){
+        Budget budget = new Budget();
+        List<SingleCategory> singleCategoryList = singleCategoryRepository.findAll();
+        budget.setCustomer(customer);
+        budget.setBudgetCategories(budgetCategoryRepository.findAll());
+        budgetRepository.save(budget);
+        for(SingleCategory s : singleCategoryList){
+            BudgetCategory budgetCategory = new BudgetCategory();
+            budgetCategory.setCategoryName(s.getCategoryName());
+            budgetCategory.setCost(0L);
+            budgetCategory.setBudget(budget);
+            budgetCategoryRepository.save(budgetCategory);
+        }
+        return  budget;
     }
 
     private Customer mapToEntity (CustomerRequest customerRequest, Customer customer)

@@ -30,5 +30,5 @@ public interface SinglePostService {
 
     Collection<SingleServicePostResponse> findAllByCategories(Long categoryId);
 
-    Collection<SingleServicePostResponse> findAllByCategoriesMyService(Long categoryId, String username);
+    Collection<SingleServicePostResponse> findAllByCustomer(String username);
 }

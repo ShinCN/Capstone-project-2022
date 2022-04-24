@@ -32,7 +32,7 @@ public class MyServiceController {
     @Autowired
     private SinglePostService singlePostService;
 
-    @DeleteMapping
+    @DeleteMapping("{serviceId}")
     public ResponseEntity<?> deleteSingleService(@PathVariable Long serviceId, Principal principal){
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
@@ -48,9 +48,8 @@ public class MyServiceController {
     }
 
     //Get all service in my service of customer by category
-    @GetMapping("/category/{id}")
-    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleServiceByCategoryCustomer(Principal principal,
-                                                                                                       @PathVariable Long id) {
+    @GetMapping
+    public ResponseEntity<Collection<SingleServicePostResponse>> getAllSingleServiceByCategoryCustomer(Principal principal) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
@@ -58,6 +57,6 @@ public class MyServiceController {
         if (role != 3) {
             throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
-        return new ResponseEntity<>(singlePostService.findAllByCategoriesMyService(id, principal.getName()),HttpStatus.OK);
+        return new ResponseEntity<>(singlePostService.findAllByCustomer(principal.getName()),HttpStatus.OK);
     }
 }

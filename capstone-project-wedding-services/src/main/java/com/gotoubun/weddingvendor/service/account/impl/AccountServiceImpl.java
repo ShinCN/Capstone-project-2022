@@ -94,4 +94,9 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
+    @Override
+    public Optional<Account> findByUserNameForFaceBook(String username) {
+        return Optional.ofNullable(accountRepository.findByUsername(username));
+    }
+
 }

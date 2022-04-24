@@ -321,18 +321,6 @@ public class SinglePostServiceImpl implements SinglePostService {
                 .map(this::convertToResponse).collect(Collectors.toList());
     }
 
-    @Override
-    public Collection<SingleServicePostResponse> findAllByCategoriesMyService(Long categoryId, String username) {
-        Account account = accountRepository.findByUsername(username);
-
-        List<SinglePost> singlePosts = singlePostRepository.findAllBySingleCategoryAndCustomers(singleCategoryRepository.getById(categoryId), account.getCustomer());
-        List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
-                .collect(Collectors.toList());
-        if (singlePosts.size() == 0) {
-            throw new SingleServicePostNotFoundException("You have not added anything yet");
-        }
-        return singlePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
-    }
 
     @Override
     public List<SingleServicePostResponse> findAllByCategories(Long categoryId) {
@@ -349,5 +337,18 @@ public class SinglePostServiceImpl implements SinglePostService {
             return (List<SingleServicePostResponse>) findAllSinglePost();
         }
 
+    }
+
+    @Override
+    public Collection<SingleServicePostResponse> findAllByCustomer(String username) {
+        Account account = accountRepository.findByUsername(username);
+
+        List<SinglePost> singlePosts = singlePostRepository.findAllByCustomers(account.getCustomer());
+        List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
+                .collect(Collectors.toList());
+        if (singlePosts.size() == 0) {
+            throw new SingleServicePostNotFoundException("You have not added anything yet");
+        }
+        return singlePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
     }
 }

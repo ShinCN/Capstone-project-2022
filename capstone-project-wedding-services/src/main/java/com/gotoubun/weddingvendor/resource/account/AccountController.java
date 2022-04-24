@@ -1,14 +1,17 @@
 package com.gotoubun.weddingvendor.resource.account;
 
 import com.gotoubun.weddingvendor.data.account.AccountPasswordRequest;
+import com.gotoubun.weddingvendor.data.customer.CustomerRequestOAuth;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.payload.JWTLoginSuccessResponse;
 import com.gotoubun.weddingvendor.payload.LoginRequest;
+import com.gotoubun.weddingvendor.payload.OAuthRequest;
 import com.gotoubun.weddingvendor.security.JwtTokenProvider;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
+import com.gotoubun.weddingvendor.service.customer.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 import static com.gotoubun.weddingvendor.resource.MessageConstant.LOGIN_REQUIRED;
 import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
@@ -45,6 +49,8 @@ public class AccountController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private CustomerService customerService;
     /**
      * Authenticate user response entity.
      *
@@ -111,5 +117,56 @@ public class AccountController {
         return new ResponseEntity<Account>(newUser, HttpStatus.CREATED);
     }
 
+    @PostMapping("/facebook-login")
+    public ResponseEntity<?> authenticateUserWithFaceBook(@Valid @RequestBody OAuthRequest request) {
+        Optional<Account> account = accountService.findByUserNameForFaceBook(request.getEmail());
+        String password = request.getEmail()+request.getName();
+        if (!account.isPresent()){
 
+            CustomerRequestOAuth customerRequest = new CustomerRequestOAuth();
+
+            customerRequest.setEmail(request.getEmail());
+            customerRequest.setPassword(password);
+            customerRequest.setFullName(request.getName());
+
+            customerService.oauthSave(customerRequest);
+        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(), password
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
+        int role= 3;
+        String fullName= request.getName();
+        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt, role, fullName));
+    }
+
+
+    @PostMapping("/google-login")
+    public ResponseEntity<?> authenticateUserWithGoogle(@Valid @RequestBody OAuthRequest request) {
+        Optional<Account> account = accountService.findByUserNameForFaceBook(request.getEmail());
+        String password = request.getEmail()+request.getName();
+        if (!account.isPresent()){
+
+            CustomerRequestOAuth customerRequest = new CustomerRequestOAuth();
+
+            customerRequest.setEmail(request.getEmail());
+            customerRequest.setPassword(password);
+            customerRequest.setFullName(request.getName());
+
+            customerService.oauthSave(customerRequest);
+        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(), password
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
+        int role= 3;
+        String fullName= request.getName();
+        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt, role, fullName));
+    }
 }

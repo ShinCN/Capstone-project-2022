@@ -2,8 +2,11 @@ package com.gotoubun.weddingvendor.resource.vendor;
 
 import javax.validation.Valid;
 
+import com.gotoubun.weddingvendor.data.kol.KOLResponse;
 import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderRequest;
+import com.gotoubun.weddingvendor.data.vendorprovider.VendorProviderResponse;
 import com.gotoubun.weddingvendor.exception.AccountNotHaveAccessException;
+import com.gotoubun.weddingvendor.exception.DeactivatedException;
 import com.gotoubun.weddingvendor.exception.LoginRequiredException;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
@@ -15,8 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.gotoubun.weddingvendor.message.MessageToUser;
 import java.security.Principal;
-import static com.gotoubun.weddingvendor.resource.MessageConstant.ADD_SUCCESS;
-import static com.gotoubun.weddingvendor.resource.MessageConstant.UPDATE_SUCCESS;
+
+import static com.gotoubun.weddingvendor.resource.MessageConstant.*;
 
 @RestController
 @CrossOrigin(origins="http://localhost:3000")
@@ -67,9 +70,26 @@ public class VendorController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;
 
-        vendorService.update(vendorProviderRequest);
+        vendorService.update(vendorProviderRequest,principal.getName());
 
         return new ResponseEntity<MessageToUser>(new MessageToUser(UPDATE_SUCCESS), HttpStatus.CREATED);
+    }
+    @GetMapping
+    public ResponseEntity<VendorProviderResponse> getVendorProvider(Principal principal) {
+        // TODO Auto-generated method stub
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 2) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+        boolean status = accountService.getStatus(principal.getName());
+        if (status == Boolean.FALSE) {
+            throw new DeactivatedException(NO_ACTIVATE);
+        }
+
+        return new ResponseEntity<>(vendorService.load(principal.getName()), HttpStatus.OK);
     }
 }
 

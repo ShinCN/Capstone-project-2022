@@ -100,7 +100,9 @@ public class KOLServiceImpl implements KOLService {
         KeyOpinionLeader keyOpinionLeader = kolRepository.findByAccount(accountRepository.findByUsername(username));
 
         //check phone existed
-        if (keyOpinionLeader.getPhone().equals(kolRequest.getPhone())) {
+        if (keyOpinionLeader.getPhone().equals(kolRequest.getPhone()) ||
+                !keyOpinionLeader.getPhone().equals(kolRequest.getPhone())
+                        && !checkPhoneExisted(kolRequest.getPhone())) {
             kolRepository.save(mapToEntity(kolRequest, keyOpinionLeader));
         } else if (checkPhoneExisted(kolRequest.getPhone())) {
             throw new PhoneAlreadyExistException("phone: " + kolRequest.getPhone() + " already existed");
@@ -112,11 +114,13 @@ public class KOLServiceImpl implements KOLService {
     }
 
     private KeyOpinionLeader mapToEntity(KOLRequest kolRequest, KeyOpinionLeader keyOpinionLeader) {
+
         keyOpinionLeader.setFullName(kolRequest.getFullName());
         keyOpinionLeader.setPhone(kolRequest.getPhone());
         keyOpinionLeader.setAddress(kolRequest.getAddress());
         keyOpinionLeader.setDescription(kolRequest.getDescription());
         keyOpinionLeader.getAccount().setModifiedDate(getCurrentDate.now());
+
         return keyOpinionLeader;
     }
 

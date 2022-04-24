@@ -83,7 +83,6 @@ public class AdminServiceImpl implements AdminService {
         Collection<VendorProviderResponse> vendorProviderResponses = vendorProviders.stream().map(c -> VendorProviderResponse.builder()
                         .id(c.getAccount().getId())
                         .username(c.getAccount().getUsername())
-                        .status(c.getAccount().isStatus())
                         .createdDate(c.getAccount().getCreatedDate())
                         .modifiedDate(c.getAccount().getModifiedDate())
                         .fullName(c.getFullName())

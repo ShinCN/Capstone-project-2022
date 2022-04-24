@@ -51,8 +51,8 @@ public class AdminController {
     public ResponseEntity<KOLPagingResponse> getAllKol(
             Principal principal,
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "fullName", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
@@ -79,8 +79,8 @@ public class AdminController {
     public ResponseEntity<VendorProviderPagingResponse> getAllVendor(
             Principal principal,
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "fullName", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);

@@ -301,6 +301,8 @@ public class PackagePostServiceImpl implements PackagePostService {
         packagePostResponse.setDescription(packagePost.getAbout());
         packagePostResponse.setRate(packagePost.getRate());
         packagePostResponse.setPrice(packagePost.getPrice());
+        packagePostResponse.setPackageCategoryId(packagePost.getPackageCategory().getId());
+
         Collection<SinglePost> singlePosts = packagePost.getSinglePosts();
         PhotoResponse photoResponse;
         if (singlePosts.size() != 0) {

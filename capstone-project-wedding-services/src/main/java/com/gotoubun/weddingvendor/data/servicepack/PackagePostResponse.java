@@ -22,4 +22,5 @@ public class PackagePostResponse {
      String description;
      PhotoResponse photo;
      KOLMiniResponse kolMiniResponse;
+     Long packageCategoryId;
 }

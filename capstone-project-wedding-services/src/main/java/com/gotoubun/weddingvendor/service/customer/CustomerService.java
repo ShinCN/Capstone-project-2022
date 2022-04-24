@@ -13,6 +13,7 @@ public interface CustomerService {
     CustomerResponse load(String username);
 	Customer findByAccount(Account account);
     void addService(Long id,  String username);
+    void addPack(Long id, String username);
     void deleteService(Long id, String username);
 
 }

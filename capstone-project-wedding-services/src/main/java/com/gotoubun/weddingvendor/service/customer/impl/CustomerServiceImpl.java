@@ -5,6 +5,7 @@ import com.gotoubun.weddingvendor.data.customer.CustomerRequestOAuth;
 import com.gotoubun.weddingvendor.data.customer.CustomerResponse;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.Customer;
+import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.SingleCategory;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.domain.weddingtool.Budget;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +59,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private SinglePostRepository singlePostRepository;
+
+    @Autowired
+    private PackagePostRepository packagePostRepository;
 
     @Transactional
     @Override
@@ -147,6 +152,26 @@ public class CustomerServiceImpl implements CustomerService {
         singlePost.get().getCustomers().add(customer);
         customerRepository.save(customer);
         singlePostRepository.save(singlePost.get());
+    }
+
+    @Override
+    public void addPack(Long id, String username) {
+        Account account = accountRepository.findByUsername(username);
+        Customer customer = findByAccount(account);
+
+        Optional<PackagePost> packagePost =  packagePostRepository.findById(id);
+
+        Collection<SinglePost> singlePosts = packagePost.get().getSinglePosts();
+
+        singlePosts.forEach(c -> {
+            if(c != null){
+                throw new SingleServicePostNotFoundException("This service does not exist");
+            }
+            customer.getSinglePosts().add(c);
+            c.getCustomers().add(customer);
+            customerRepository.save(customer);
+            singlePostRepository.save(c);
+        });
     }
 
     @Override

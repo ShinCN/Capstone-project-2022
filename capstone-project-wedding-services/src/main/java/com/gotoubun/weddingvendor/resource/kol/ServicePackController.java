@@ -12,6 +12,7 @@ import com.gotoubun.weddingvendor.message.MessageToUser;
 import com.gotoubun.weddingvendor.service.IPageService;
 import com.gotoubun.weddingvendor.service.account.AccountService;
 import com.gotoubun.weddingvendor.service.common.MapValidationErrorService;
+import com.gotoubun.weddingvendor.service.customer.CustomerService;
 import com.gotoubun.weddingvendor.service.packagepost.PackagePostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,9 @@ public class ServicePackController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
+
+    @Autowired
+    private CustomerService customerService;
 
     /**
      * Gets all service pack.
@@ -332,4 +336,18 @@ public class ServicePackController {
         return new ResponseEntity<>(new MessageToUser(DELETE_SUCCESS), HttpStatus.CREATED);
     }
 
+    @PostMapping("/customer/{id}")
+    public ResponseEntity<?> customerAddServicePack(@PathVariable Long id, Principal principal){
+        if (principal == null)
+            throw new LoginRequiredException(LOGIN_REQUIRED);
+        //check role
+        int role = accountService.getRole(principal.getName());
+        if (role != 3) {
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
+        }
+
+        customerService.addService(id, principal.getName());
+
+        return new ResponseEntity<MessageToUser>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
+    }
 }

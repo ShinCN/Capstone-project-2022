@@ -62,6 +62,8 @@ public class VendorServiceImpl implements VendorService {
         }
         //save vendor
         vendorProvider.setAccount(account);
+        vendorProvider.getAccount().setCreatedDate(getCurrentDate.now());
+        vendorProvider.getAccount().setModifiedDate(getCurrentDate.now());
         vendorProvider.setNanoPassword(password);
         vendorProvider.setCompany(vendor.getCompanyName());
         vendorProvider.setFullName(vendor.getRepresentative());
@@ -121,6 +123,7 @@ public class VendorServiceImpl implements VendorService {
                 .fullName(vendorProvider.getFullName())
                 .phone(vendorProvider.getPhone())
                 .address(vendorProvider.getAddress())
+                .categoryId(vendorProvider.getSingleCategory().getId())
                 .company(vendorProvider.getCompany())
                 .build();
 

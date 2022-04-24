@@ -31,15 +31,7 @@ public class VendorController {
     private MapValidationErrorService mapValidationErrorService;
     @Autowired
     private AccountService accountService;
-    /**
-     * Find by id response entity.
-     *
-     * @param id the id
-     * @return the response entity
-     */
-    public ResponseEntity<?> findById(Long id) {
-        return null;
-    }
+
     /**
      * Post vendor response entity.
      *
@@ -57,15 +49,15 @@ public class VendorController {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> putVendor(@Valid @RequestBody VendorProviderRequest vendorProviderRequest, BindingResult bindingResult, Principal principal) {
         // TODO Auto-generated method stub
         //check login
         if (principal == null)
-            throw new LoginRequiredException("you need to login to get access");
+            throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role
         int role = accountService.getRole(principal.getName());
         if (role != 2) {
-            throw new AccountNotHaveAccessException("you don't have permission to access");
+            throw new AccountNotHaveAccessException(NO_PERMISSION);
         }
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
         if (errorMap != null) return errorMap;

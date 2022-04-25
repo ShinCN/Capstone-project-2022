@@ -241,15 +241,40 @@ public class PackagePostServiceImpl implements PackagePostService {
     }
 
     @Override
-    public List<PackagePostResponse> findAllPackagePostByFilter(String keyWord, Long packageId, Float price) {
-        Optional<List<PackagePost>> packagePosts = Optional.ofNullable(packagePostRepository.filterPackagePostByServiceName(keyWord));
-        List<PackagePost> packagePostsAfterFilter;
-        if (packagePosts.isPresent()) {
-            packagePostsAfterFilter = packagePosts.get().stream().filter(c -> c.getPrice().equals(price)
-                    && c.getPackageCategory().getId().equals(packageId)).collect(Collectors.toList());
-            return packagePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
+    public List<PackagePostResponse> findAllPackagePostByFilter(String keyword, Long packageCategoryId) {
+        List<PackagePostResponse> filterByKeyWord = filterPackagePostByKeyword(keyword);
+        List<PackagePostResponse> filterByPackageCategory = filterPackagePostByPackageId(packageCategoryId);
+
+        List<PackagePostResponse> afterFilter = new ArrayList<>();
+
+        filterByKeyWord.forEach(c -> {
+            filterByPackageCategory.forEach(
+                    x -> {
+                        if (c.getId().equals(x.getId())) {
+                            afterFilter.add(x);
+                        }
+                    }
+            );
+        });
+        return afterFilter;
+    }
+
+    public List<PackagePostResponse> filterPackagePostByPackageId(Long id) {
+        if (id == null) {
+            return findAllPackagePost();
         }
-        return null;
+        List<PackagePost> packagePosts = packagePostRepository.findAllByPackageCategory(packageCategoryRepository.getById(id));
+
+        List<PackagePost> packagePostsFilter = packagePosts.stream().filter(p -> p.getDiscardedDate() == null).collect(Collectors.toList());
+        return packagePostsFilter.stream().map(this::convertToResponse).collect(Collectors.toList());
+    }
+
+    public List<PackagePostResponse> filterPackagePostByKeyword(String keyword) {
+        if (keyword == null) {
+            return findAllPackagePost();
+        }
+        return packagePostRepository.filterPackagePostByKeyword(keyword).
+                stream().map(this::convertToResponse).collect(Collectors.toList());
     }
 
     @Override

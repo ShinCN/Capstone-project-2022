@@ -27,7 +27,7 @@ public interface PackagePostService {
 
     List<SingleServicePostResponse> findAllSingleServiceByPackagePostAndSingleCategory(Long packageId,Long categoryId);
 
-    List<PackagePostResponse> findAllPackagePostByFilter(String keyWord, Long packageId, Float price);
+    List<PackagePostResponse> findAllPackagePostByFilter(String keyWord, Long packageId);
 
     List<PackagePostResponse> findAllPackagePostByKeyOpinionLeader(String username);
 

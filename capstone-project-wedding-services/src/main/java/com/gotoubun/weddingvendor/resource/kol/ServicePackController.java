@@ -114,14 +114,14 @@ public class ServicePackController {
      *
      * @param keyword   the keyword
      * @param packageId the package id
-     * @param price     the price
      * @return the all service pack
      */
     @GetMapping("/filter")
-    public ResponseEntity<?> getAllServicePackByFilter(String keyword,
-                                                       Long packageId, Float price) {
+    public ResponseEntity<?> getAllServicePackByFilter(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long packageId) {
 
-        List<PackagePostResponse> packagePostResponseList = packagePostService.findAllPackagePostByFilter(keyword, packageId, price);
+        List<PackagePostResponse> packagePostResponseList = packagePostService.findAllPackagePostByFilter(keyword, packageId);
         if (packagePostResponseList.size() == 0) {
             return new ResponseEntity<>(new MessageToUser(NO_RESULTS), HttpStatus.OK);
         }
@@ -191,7 +191,7 @@ public class ServicePackController {
      * @return the response entity
      */
     @PostMapping("/customer/{id}")
-    public ResponseEntity<?> customerAddPackageService(@PathVariable Long id, Principal principal){
+    public ResponseEntity<?> customerAddPackageService(@PathVariable Long id, Principal principal) {
         if (principal == null)
             throw new LoginRequiredException(LOGIN_REQUIRED);
         //check role

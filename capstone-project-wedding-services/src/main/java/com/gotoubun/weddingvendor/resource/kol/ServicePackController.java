@@ -70,6 +70,12 @@ public class ServicePackController {
         return new ResponseEntity<>(packagePostPagingResponse, HttpStatus.OK);
     }
 
+    /**
+     * Gets all service pack by key opinion leader.
+     *
+     * @param principal the principal
+     * @return the all service pack by key opinion leader
+     */
     @GetMapping("/kol")
     public ResponseEntity<?> getAllServicePackByKeyOpinionLeader(Principal principal) {
         if (principal == null)
@@ -126,29 +132,15 @@ public class ServicePackController {
     /**
      * Post service pack response entity.
      *
-     * @param id        the id
-     * @param principal the principal
+     * @param id the id
      * @return the response entity
      */
     @GetMapping("/{id}")
-    public ResponseEntity<PackagePostResponse> getServicePack(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<PackagePostResponse> getServicePack(@PathVariable Long id) {
         // TODO Auto-generated method stub
-        //check login
-        if (principal == null)
-            throw new LoginRequiredException(LOGIN_REQUIRED);
-        //check role
-        int role = accountService.getRole(principal.getName());
-        if (role != 4) {
-
-            throw new AccountNotHaveAccessException(NO_PERMISSION);
-        }
-        boolean status = accountService.getStatus(principal.getName());
-        if (status == Boolean.FALSE) {
-            throw new DeactivatedException(NO_ACTIVATE);
-        }
 
         //save service pack
-        PackagePostResponse packagePostResponse = packagePostService.load(id, principal.getName());
+        PackagePostResponse packagePostResponse = packagePostService.load(id);
 
         return ResponseEntity.ok(packagePostResponse);
     }
@@ -212,6 +204,7 @@ public class ServicePackController {
 
         return new ResponseEntity<>(new MessageToUser(ADD_SUCCESS), HttpStatus.CREATED);
     }
+
     /**
      * Put service pack response entity.
      *
@@ -278,7 +271,8 @@ public class ServicePackController {
     /**
      * Gets all single post by service pack.
      *
-     * @param id the id
+     * @param id         the id
+     * @param categoryId the category id
      * @return the all single post by service pack
      */
     @GetMapping("/{packagePostId}/single-services")

@@ -128,12 +128,8 @@ public class PackagePostServiceImpl implements PackagePostService {
     }
 
     @Override
-    public PackagePostResponse load(Long packageId, String username) {
+    public PackagePostResponse load(Long packageId) {
         PackagePost existingServicePack = findById(packageId);
-
-        if (!existingServicePack.getKeyOpinionLeader().getAccount().getUsername().equals(username)) {
-            throw new ServicePackNotFound("This service pack is not found in your account");
-        }
 
         return convertToResponse(existingServicePack);
     }

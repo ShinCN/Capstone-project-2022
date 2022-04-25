@@ -4,6 +4,7 @@ import com.gotoubun.weddingvendor.data.Price;
 import com.gotoubun.weddingvendor.data.singleservice.*;
 import com.gotoubun.weddingvendor.domain.user.Account;
 import com.gotoubun.weddingvendor.domain.user.VendorProvider;
+import com.gotoubun.weddingvendor.domain.vendor.PackagePost;
 import com.gotoubun.weddingvendor.domain.vendor.Photo;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import com.gotoubun.weddingvendor.exception.ResourceNotFoundException;
@@ -346,7 +347,11 @@ public class SinglePostServiceImpl implements SinglePostService {
         List<SinglePost> singlePosts = singlePostRepository.findAllByCustomers(account.getCustomer());
         List<SinglePost> singlePostsAfterFilter = singlePosts.stream().filter(singlePost -> singlePost.getDiscardedDate() == null)
                 .collect(Collectors.toList());
-        if (singlePosts.size() == 0) {
+        List<PackagePost> packagePosts =packagePostRepository.findAllByCustomers(account.getCustomer());
+        packagePosts.forEach(s->singlePostsAfterFilter.addAll(s.getSinglePosts()));
+
+
+        if (singlePostsAfterFilter.size() == 0) {
             throw new SingleServicePostNotFoundException("You have not added anything yet");
         }
         return singlePostsAfterFilter.stream().map(this::convertToResponse).collect(Collectors.toList());

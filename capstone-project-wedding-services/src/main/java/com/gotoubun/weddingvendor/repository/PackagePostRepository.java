@@ -1,5 +1,6 @@
 package com.gotoubun.weddingvendor.repository;
 
+import com.gotoubun.weddingvendor.domain.user.Customer;
 import com.gotoubun.weddingvendor.domain.user.KeyOpinionLeader;
 import com.gotoubun.weddingvendor.domain.vendor.SinglePost;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,8 @@ public interface PackagePostRepository extends JpaRepository<PackagePost, Long> 
 
     @Query("FROM PackagePost p WHERE p.serviceName LIKE %:keyWord%")
     List<PackagePost> filterPackagePostByServiceName(@Param("keyWord") String keyWord);
+
+    List<PackagePost> findAllByCustomers(Customer customer);
 
     Page<PackagePost> findAll(Pageable pageable);
 

@@ -81,7 +81,8 @@ public class AdminServiceImpl implements AdminService {
 
         Page<VendorProvider> vendorProviders = vendorRepository.findAll(pageable);
 
-        Collection<VendorProviderResponse> vendorProviderResponses = vendorProviders.stream().map(c -> VendorProviderResponse.builder()
+        Collection<VendorProviderResponse> vendorProviderResponses = vendorProviders.stream().map(c
+                        -> VendorProviderResponse.builder()
                         .id(c.getAccount().getId())
                         .username(c.getAccount().getUsername())
                         .createdDate(c.getAccount().getCreatedDate())

@@ -23,7 +23,7 @@ public interface PackagePostService {
 
     void deleteSinglePost(Long id, Long singlePostId, String username);
 
-    PackagePostResponse load(Long packageId, String username);
+    PackagePostResponse load(Long packageId);
 
     List<SingleServicePostResponse> findAllSingleServiceByPackagePostAndSingleCategory(Long packageId,Long categoryId);
 
